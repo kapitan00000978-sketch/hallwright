@@ -869,6 +869,90 @@ Register-ArgumentCompleter -Native -CommandName @('hallwright', 'artisan') -Scri
     return 0
 
 
+def cmd_taxonomy(args: argparse.Namespace) -> int:
+    """Displays or exports the official 5-tier Hallwright Architecture & Defect Taxonomy (TASNIF)."""
+    taxonomy_data = {
+        "title": "Hallwright Architecture & Defect Taxonomy (Tasnif)",
+        "version": "2.0.0",
+        "pillars": [
+            "Pillar 1: Deterministic Multi-Engine Pre-Commit Gate (Rust, Go, Node.js, Python)",
+            "Pillar 2: Living Scar Tissue & Memory Ledger (.hallwright/memory.json, SQLite WAL)",
+            "Pillar 3: Decoupled Sub-Agent Mesh & Council of Masters (64 Titans)"
+        ],
+        "defects": [
+            {"id": "STUB_TODO_FIXME", "category": "STUB", "severity": "HIGH", "penalty": 20, "description": "Unfinished stub or placeholder"},
+            {"id": "STUB_PASS_PLACEHOLDER", "category": "STUB", "severity": "HIGH", "penalty": 20, "description": "Pass placeholder in function body"},
+            {"id": "STUB_EMPTY_CATCH", "category": "STUB", "severity": "CRITICAL", "penalty": 25, "description": "Empty catch block swallowing errors"},
+            {"id": "STUB_BARE_EXCEPT", "category": "STUB", "severity": "CRITICAL", "penalty": 25, "description": "Silent bare exception suppression"},  # hallwright-ignore
+            {"id": "DANGEROUS_EVAL_EXEC", "category": "DANGEROUS", "severity": "CRITICAL", "penalty": 30, "description": "Dynamic execution via eval/exec"},
+            {"id": "DANGEROUS_SQL_INJECTION", "category": "DANGEROUS", "severity": "CRITICAL", "penalty": 30, "description": "SQL injection via raw string interpolation"},
+            {"id": "DANGEROUS_COMMAND_INJECTION", "category": "DANGEROUS", "severity": "CRITICAL", "penalty": 30, "description": "Command injection via shell=True or dynamic os.system"},
+            {"id": "DANGEROUS_DOM_XSS", "category": "DANGEROUS", "severity": "CRITICAL", "penalty": 25, "description": "DOM Cross-Site Scripting (innerHTML / dangerouslySetInnerHTML)"},
+            {"id": "DANGEROUS_SSRF", "category": "DANGEROUS", "severity": "CRITICAL", "penalty": 25, "description": "Server-Side Request Forgery via unvalidated dynamic URLs"},
+            {"id": "SECRET_ANTHROPIC", "category": "SECRET", "severity": "BLOCKER", "penalty": 35, "description": "Exposed Anthropic API token"},
+            {"id": "SECRET_OPENAI", "category": "SECRET", "severity": "BLOCKER", "penalty": 35, "description": "Exposed OpenAI API key"},
+            {"id": "SECRET_GITHUB", "category": "SECRET", "severity": "BLOCKER", "penalty": 35, "description": "Exposed GitHub Personal Access Token"},
+            {"id": "SECRET_AWS", "category": "SECRET", "severity": "BLOCKER", "penalty": 35, "description": "Exposed AWS Access Key ID"},
+            {"id": "SECRET_SLACK", "category": "SECRET", "severity": "BLOCKER", "penalty": 35, "description": "Exposed Slack bot or webhook token"},
+            {"id": "SECRET_GOOGLE", "category": "SECRET", "severity": "BLOCKER", "penalty": 35, "description": "Exposed Google / Firebase API token"},
+            {"id": "SECRET_PRIVATE_KEY", "category": "SECRET", "severity": "BLOCKER", "penalty": 35, "description": "Plaintext Private Key block"},
+            {"id": "SECRET_JWT", "category": "SECRET", "severity": "BLOCKER", "penalty": 35, "description": "Hardcoded JSON Web Token"},
+            {"id": "SECRET_ASSIGNMENT", "category": "SECRET", "severity": "BLOCKER", "penalty": 35, "description": "Hardcoded password or auth secret assignment"}
+        ],
+        "libraries": [
+            {"domain": "architecture", "path": "src/libraries/architecture/", "modules": ["outbox_pattern.py", "saga_coordinator.py", "invariant_guard.py", "circuit_breaker.py"]},
+            {"domain": "security", "path": "src/libraries/security/", "modules": ["crypto_vault.py", "owasp_guard.py", "redos_sanitizer.py"]},
+            {"domain": "database", "path": "src/libraries/database/", "modules": ["sqli_neutralizer.py"]},
+            {"domain": "performance", "path": "src/libraries/performance/", "modules": ["work_queue.py", "ring_buffer.py", "cache.py"]},
+            {"domain": "resilience", "path": "src/libraries/resilience/", "modules": ["backpressure.py", "chaos_injector.py"]},
+            {"domain": "testing", "path": "src/libraries/testing/", "modules": ["mutation_fuzzer.py"]},
+            {"domain": "copywriting", "path": "src/libraries/copywriting/", "modules": ["dx_linter.py"]},
+            {"domain": "design", "path": "src/libraries/design/", "modules": ["spatial_canvas.py"]}
+        ],
+        "runtimes": [
+            {"name": "Rust Core Engine", "engine": "crates/hallwright-core", "speed": "2 ms", "memory": "< 3 MB"},
+            {"name": "Node Vanilla Core", "engine": "scripts/detector.js", "speed": "15 ms", "memory": "< 12 MB"},
+            {"name": "Go Multi-Core", "engine": "cmd/hallwright/main.go", "speed": "28 ms", "memory": "< 4 MB"},
+            {"name": "Python AST Core", "engine": "scripts/detector.py", "speed": "200 ms", "memory": "< 35 MB"},
+            {"name": "Browser Wasm/JS", "engine": "web/playground.js", "speed": "0.4 ms", "memory": "< 2 MB"}
+        ],
+        "invariants": [
+            "Zero-Defect Self-Inspection: Pre-commit audit before delivery, zero stubs, zero silent catches.",
+            "Defensive Architecture: SQLi, XSS, SSRF, memory leaks, unclosed handles.",
+            "Background Auto-Correction: Resolves and re-verifies before user sees defects.",
+            "Zero Babysitting & Zero Bloat: Production-ready code, zero fluff.",
+            "Constructive Partnership & Zero Negativity: Solutions-oriented, zero hostility."
+        ]
+    }
+
+    if getattr(args, "json", False):
+        print(json.dumps(taxonomy_data, indent=2))
+        return 0
+
+    print("\n" + "=" * 78)
+    print(" 🛡️  HALLWRIGHT MASTER TAXONOMY & CLASSIFICATION MATRIX (TASNIF)")
+    print("=" * 78 + "\n")
+    print("📑 1. DEFECT CLASSIFICATION & QUALITY PENALTIES (Score = 100 - Total Deductions):")
+    for d in taxonomy_data["defects"]:
+        print(f"  • {d['id']:<28} [{d['severity']:<8}] ({d['penalty']:>2} pts) : {d['description']}")
+
+    print("\n📦 2. ENTERPRISE DOMAIN LIBRARIES (Zero External Dependencies):")
+    for lib in taxonomy_data["libraries"]:
+        mods = ", ".join(lib["modules"])
+        print(f"  • {lib['domain'].capitalize():<14} : {mods}")
+
+    print("\n⚡ 3. POLYGLOT RUNTIME SPECTRUM:")
+    for rt in taxonomy_data["runtimes"]:
+        print(f"  • {rt['name']:<20} : ⚡ {rt['speed']:<7} | RAM: {rt['memory']:<8} ({rt['engine']})")
+
+    print("\n🏛️ 4. THE 5 CORE INVARIANTS:")
+    for inv in taxonomy_data["invariants"]:
+        print(f"  • {inv}")
+
+    print(f"\n📖 Detailed documentation available in docs/TAXONOMY.md and docs/TASNIF.md\n")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="hallwright",
@@ -992,6 +1076,10 @@ def main():
     p_comp = subparsers.add_parser("completion", help="Generate shell autocompletion script (bash, zsh, fish, powershell)")
     p_comp.add_argument("shell", nargs="?", default="bash", choices=["bash", "zsh", "fish", "powershell"], help="Target shell")
 
+    # taxonomy / tasnif
+    p_tax = subparsers.add_parser("taxonomy", aliases=["tasnif"], help="Display or export official architecture & defect taxonomy (Tasnif)")
+    p_tax.add_argument("--json", "-j", action="store_true", help="Output taxonomy in JSON format")
+
     args = parser.parse_args()
 
     if not args.subcommand or args.subcommand == "status":
@@ -1028,6 +1116,8 @@ def main():
         return cmd_3d(args)
     elif args.subcommand == "completion":
         return cmd_completion(args)
+    elif args.subcommand in ("taxonomy", "tasnif"):
+        return cmd_taxonomy(args)
     elif args.subcommand == "mcp":
         from server import main as mcp_main
         mcp_main()

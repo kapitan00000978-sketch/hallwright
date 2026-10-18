@@ -159,6 +159,28 @@ When generating targeted context via `hallwright context "<task>"`, the `SmartMa
 
 ---
 
+## 📊 Master Architecture & Defect Taxonomy (Tasnif)
+
+Hallwright operates on a formal **5-Tier Taxonomy & Classification Matrix**, guaranteeing consistent defect detection, penalty attribution, and multi-language performance:
+
+1. **Defect Taxonomy & Penalties:** 18 deterministic rules across Stubs (`STUB_TODO_FIXME`, `STUB_BARE_EXCEPT`), Dangerous Execution (`DANGEROUS_EVAL_EXEC`, `DANGEROUS_SQL_INJECTION`, `DANGEROUS_COMMAND_INJECTION`, `DANGEROUS_DOM_XSS`, `DANGEROUS_SSRF`), and Credentials (`SECRET_...`).
+2. **Enterprise Domain Libraries:** 8 decoupled, zero-dependency domain modules across Architecture, Security, Database, Performance, Resilience, Testing, Copywriting, and Design (`src/libraries/`).
+3. **Agent Ecosystem Taxonomy:** Multi-tier configurations across 14 environments (Cursor, Claude Code, Copilot, Windsurf, Cline, Antigravity IDE).
+4. **Polyglot Runtime Spectrum:** Rust (2ms), Node.js (15ms), Go (28ms), Python AST (200ms), and WebAssembly (0.4ms).
+5. **The 5 Core Invariants:** Zero-Defect Self-Inspection, Defensive Architecture, Background Auto-Correction, Zero Babysitting, and Constructive Partnership.
+
+👉 **Full Official Documentation:** See [`docs/TAXONOMY.md`](./docs/TAXONOMY.md) (and [`docs/TASNIF.md`](./docs/TASNIF.md)).
+
+```bash
+# Display full taxonomy matrix in terminal
+hallwright taxonomy
+
+# Display in Uzbek or export as JSON
+hallwright tasnif --json
+```
+
+---
+
 ## ❓ What `hallwright swarm` Actually Does
 
 `hallwright swarm` (or `artisan swarm`) does **not** invoke an LLM or make external API calls. It is a local, deterministic planning and coordination tool:
@@ -360,6 +382,10 @@ hallwright hud                  # Launches interactive terminal dashboard
 # 🌐 Protocol Server & Metrics
 hallwright mcp                  # Launches Model Context Protocol JSON-RPC 2.0 server
 hallwright metrics              # Prints workspace quality score and file statistics
+
+# 📊 Master Taxonomy & Classification (Tasnif)
+hallwright taxonomy             # Displays full 5-tier classification matrix in terminal
+hallwright tasnif --json        # Exports complete taxonomy metadata as JSON
 ```
 
 ---

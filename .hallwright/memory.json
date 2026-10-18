@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Artisan Engineering Core",
-  "lastUpdated": "2026-10-18T02:37:16.344603+00:00",
+  "lastUpdated": "2026-10-18T03:02:43.605499+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -162,10 +162,10 @@
       "id": "mis-0015",
       "category": "stub",
       "pattern": "Silent exception suppression detected. Log or handle errors.",
-      "lesson": "Rejected in pre-commit audit (.\\web\\playground.js:162). Resolve Silent exception suppression detected. Log or handle errors. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\hallwright_cli.py:886). Resolve Silent exception suppression detected. Log or handle errors. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-18T02:35:32.998172+00:00",
-      "updatedAt": "2026-10-18T02:35:33.049136+00:00"
+      "updatedAt": "2026-10-18T03:02:43.605499+00:00"
     },
     {
       "id": "mis-0016",

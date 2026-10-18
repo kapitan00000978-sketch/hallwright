@@ -1,6 +1,6 @@
-# 🛡️ ARTISAN PROTOCOL FOR GITHUB COPILOT
+# 🛡️ HALLWRIGHT PROTOCOL FOR GITHUB COPILOT
 
-Artisan is an **autonomous craftsmanship and quality engine** embedded directly into GitHub Copilot.
+Hallwright is an **autonomous craftsmanship and quality engine** embedded directly into GitHub Copilot.
 
 ---
 

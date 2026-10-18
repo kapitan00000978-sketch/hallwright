@@ -111,7 +111,7 @@ class BioinformaticsElevationEngine:
                 break
 
             # Clean placeholder markers
-            stub_pattern = re.compile(r"[ \t]*#[^\n]*\b(T" + r"ODO|F" + r"IXME|X" + r"XX)\b[^\n]*\n")  # artisan-ignore
+            stub_pattern = re.compile(r"[ \t]*#[^\n]*\b(T" + r"ODO|F" + r"IXME|X" + r"XX)\b[^\n]*\n")  # hallwright-ignore
             if stub_pattern.search(current_code):
                 current_code = stub_pattern.sub("\n", current_code)
                 actions_taken.append("Eliminated lazy placeholder markers")

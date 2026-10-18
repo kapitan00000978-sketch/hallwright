@@ -1,158 +1,150 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-10-18T16:27:47.260539+00:00",
+  "lastUpdated": "2026-10-18T17:24:46.522201+00:00",
   "active_sessions": [
     {
-      "session_id": "sess_artisan-architect_7cc27d87",
-      "agent_name": "artisan-architect",
+      "session_id": "sess_hallwright-architect_a544f260",
+      "agent_name": "hallwright-architect",
       "intent": "Stage 1: Senior Software Architect - Write documentation and README for payme",
       "active_files": [
         "README.md"
       ],
-      "started_at": "2026-10-18T16:14:55.080684+00:00",
-      "last_heartbeat": "2026-10-18T16:14:55.080684+00:00"
+      "started_at": "2026-10-18T17:23:11.436070+00:00",
+      "last_heartbeat": "2026-10-18T17:23:11.436070+00:00"
     },
     {
-      "session_id": "sess_artisan-security_4601e419",
-      "agent_name": "artisan-security",
+      "session_id": "sess_hallwright-security_72db91d7",
+      "agent_name": "hallwright-security",
       "intent": "Stage 2: Principal Cybersecurity Auditor - Write documentation and README for payme",
       "active_files": [
         "README.md"
       ],
-      "started_at": "2026-10-18T16:14:55.102220+00:00",
-      "last_heartbeat": "2026-10-18T16:14:55.102220+00:00"
+      "started_at": "2026-10-18T17:23:11.456816+00:00",
+      "last_heartbeat": "2026-10-18T17:23:11.456816+00:00"
     },
     {
-      "session_id": "sess_artisan-critic_29a01089",
-      "agent_name": "artisan-critic",
+      "session_id": "sess_hallwright-critic_00917fa5",
+      "agent_name": "hallwright-critic",
       "intent": "Stage 3: Independent Code Auditor - Write documentation and README for payme",
       "active_files": [
         "README.md"
       ],
-      "started_at": "2026-10-18T16:14:55.124477+00:00",
-      "last_heartbeat": "2026-10-18T16:14:55.124477+00:00"
+      "started_at": "2026-10-18T17:23:11.477516+00:00",
+      "last_heartbeat": "2026-10-18T17:23:11.477516+00:00"
     },
     {
-      "session_id": "sess_artisan-copywriter_6c26cc58",
-      "agent_name": "artisan-copywriter",
+      "session_id": "sess_hallwright-copywriter_78ce0b42",
+      "agent_name": "hallwright-copywriter",
       "intent": "Stage 4: Conversion & DX Copywriter - Write documentation and README for payme",
       "active_files": [
         "README.md"
       ],
-      "started_at": "2026-10-18T16:14:55.146290+00:00",
-      "last_heartbeat": "2026-10-18T16:14:55.146290+00:00"
+      "started_at": "2026-10-18T17:23:11.500759+00:00",
+      "last_heartbeat": "2026-10-18T17:23:11.500759+00:00"
     },
     {
-      "session_id": "sess_artisan-architect_8208973b",
-      "agent_name": "artisan-architect",
-      "intent": "Stage 1: Senior Software Architect - Write documentation and README for payme",
-      "active_files": [
-        "README.md"
-      ],
-      "started_at": "2026-10-18T16:26:08.639442+00:00",
-      "last_heartbeat": "2026-10-18T16:26:08.639442+00:00"
-    },
-    {
-      "session_id": "sess_artisan-security_c16dfde4",
-      "agent_name": "artisan-security",
-      "intent": "Stage 2: Principal Cybersecurity Auditor - Write documentation and README for payme",
-      "active_files": [
-        "README.md"
-      ],
-      "started_at": "2026-10-18T16:26:08.660937+00:00",
-      "last_heartbeat": "2026-10-18T16:26:08.660937+00:00"
-    },
-    {
-      "session_id": "sess_artisan-critic_72a32c0c",
-      "agent_name": "artisan-critic",
-      "intent": "Stage 3: Independent Code Auditor - Write documentation and README for payme",
-      "active_files": [
-        "README.md"
-      ],
-      "started_at": "2026-10-18T16:26:08.684788+00:00",
-      "last_heartbeat": "2026-10-18T16:26:08.684788+00:00"
-    },
-    {
-      "session_id": "sess_artisan-copywriter_c578f762",
-      "agent_name": "artisan-copywriter",
-      "intent": "Stage 4: Conversion & DX Copywriter - Write documentation and README for payme",
-      "active_files": [
-        "README.md"
-      ],
-      "started_at": "2026-10-18T16:26:08.706391+00:00",
-      "last_heartbeat": "2026-10-18T16:26:08.706391+00:00"
-    },
-    {
-      "session_id": "sess_artisan-architect_b6f3798f",
-      "agent_name": "artisan-architect",
+      "session_id": "sess_hallwright-architect_54d08c72",
+      "agent_name": "hallwright-architect",
       "intent": "Stage 1: Senior Software Architect - Refactor payment gateway",
       "active_files": [],
-      "started_at": "2026-10-18T16:26:53.849665+00:00",
-      "last_heartbeat": "2026-10-18T16:26:53.849665+00:00"
+      "started_at": "2026-10-18T17:23:14.313406+00:00",
+      "last_heartbeat": "2026-10-18T17:23:14.313406+00:00"
     },
     {
-      "session_id": "sess_artisan-security_64a21378",
-      "agent_name": "artisan-security",
+      "session_id": "sess_hallwright-security_8f12702c",
+      "agent_name": "hallwright-security",
       "intent": "Stage 2: Principal Cybersecurity Auditor - Refactor payment gateway",
       "active_files": [],
-      "started_at": "2026-10-18T16:26:53.871663+00:00",
-      "last_heartbeat": "2026-10-18T16:26:53.871663+00:00"
+      "started_at": "2026-10-18T17:23:14.341023+00:00",
+      "last_heartbeat": "2026-10-18T17:23:14.341023+00:00"
     },
     {
-      "session_id": "sess_artisan-tester_74c79469",
-      "agent_name": "artisan-tester",
+      "session_id": "sess_hallwright-tester_ca9e22f6",
+      "agent_name": "hallwright-tester",
       "intent": "Stage 3: Senior Quality & Mutation Engineer - Refactor payment gateway",
       "active_files": [],
-      "started_at": "2026-10-18T16:26:53.891436+00:00",
-      "last_heartbeat": "2026-10-18T16:26:53.891436+00:00"
+      "started_at": "2026-10-18T17:23:14.363666+00:00",
+      "last_heartbeat": "2026-10-18T17:23:14.363666+00:00"
     },
     {
-      "session_id": "sess_artisan-critic_577f404f",
-      "agent_name": "artisan-critic",
+      "session_id": "sess_hallwright-critic_b7503c58",
+      "agent_name": "hallwright-critic",
       "intent": "Stage 4: Independent Code Auditor - Refactor payment gateway",
       "active_files": [],
-      "started_at": "2026-10-18T16:26:53.915083+00:00",
-      "last_heartbeat": "2026-10-18T16:26:53.915083+00:00"
+      "started_at": "2026-10-18T17:23:14.384688+00:00",
+      "last_heartbeat": "2026-10-18T17:23:14.384688+00:00"
     },
     {
-      "session_id": "sess_artisan-architect_73ed5b93",
-      "agent_name": "artisan-architect",
+      "session_id": "sess_hallwright-architect_0cf89b3c",
+      "agent_name": "hallwright-architect",
       "intent": "Stage 1: Senior Software Architect - Write documentation and README for payme",
       "active_files": [
         "README.md"
       ],
-      "started_at": "2026-10-18T16:27:47.187821+00:00",
-      "last_heartbeat": "2026-10-18T16:27:47.187821+00:00"
+      "started_at": "2026-10-18T17:24:43.963527+00:00",
+      "last_heartbeat": "2026-10-18T17:24:43.963527+00:00"
     },
     {
-      "session_id": "sess_artisan-security_1f6a11fb",
-      "agent_name": "artisan-security",
+      "session_id": "sess_hallwright-security_4a358769",
+      "agent_name": "hallwright-security",
       "intent": "Stage 2: Principal Cybersecurity Auditor - Write documentation and README for payme",
       "active_files": [
         "README.md"
       ],
-      "started_at": "2026-10-18T16:27:47.213292+00:00",
-      "last_heartbeat": "2026-10-18T16:27:47.213292+00:00"
+      "started_at": "2026-10-18T17:24:43.983273+00:00",
+      "last_heartbeat": "2026-10-18T17:24:43.983273+00:00"
     },
     {
-      "session_id": "sess_artisan-critic_acd7b5d7",
-      "agent_name": "artisan-critic",
+      "session_id": "sess_hallwright-critic_842aa1c5",
+      "agent_name": "hallwright-critic",
       "intent": "Stage 3: Independent Code Auditor - Write documentation and README for payme",
       "active_files": [
         "README.md"
       ],
-      "started_at": "2026-10-18T16:27:47.235031+00:00",
-      "last_heartbeat": "2026-10-18T16:27:47.235031+00:00"
+      "started_at": "2026-10-18T17:24:44.001602+00:00",
+      "last_heartbeat": "2026-10-18T17:24:44.001602+00:00"
     },
     {
-      "session_id": "sess_artisan-copywriter_eed6a9fa",
-      "agent_name": "artisan-copywriter",
+      "session_id": "sess_hallwright-copywriter_b9ae199c",
+      "agent_name": "hallwright-copywriter",
       "intent": "Stage 4: Conversion & DX Copywriter - Write documentation and README for payme",
       "active_files": [
         "README.md"
       ],
-      "started_at": "2026-10-18T16:27:47.260539+00:00",
-      "last_heartbeat": "2026-10-18T16:27:47.260539+00:00"
+      "started_at": "2026-10-18T17:24:44.021659+00:00",
+      "last_heartbeat": "2026-10-18T17:24:44.021659+00:00"
+    },
+    {
+      "session_id": "sess_hallwright-architect_cfa54174",
+      "agent_name": "hallwright-architect",
+      "intent": "Stage 1: Senior Software Architect - Refactor payment gateway",
+      "active_files": [],
+      "started_at": "2026-10-18T17:24:46.467828+00:00",
+      "last_heartbeat": "2026-10-18T17:24:46.467828+00:00"
+    },
+    {
+      "session_id": "sess_hallwright-security_eb255b5d",
+      "agent_name": "hallwright-security",
+      "intent": "Stage 2: Principal Cybersecurity Auditor - Refactor payment gateway",
+      "active_files": [],
+      "started_at": "2026-10-18T17:24:46.485572+00:00",
+      "last_heartbeat": "2026-10-18T17:24:46.485572+00:00"
+    },
+    {
+      "session_id": "sess_hallwright-tester_65f85fae",
+      "agent_name": "hallwright-tester",
+      "intent": "Stage 3: Senior Quality & Mutation Engineer - Refactor payment gateway",
+      "active_files": [],
+      "started_at": "2026-10-18T17:24:46.503824+00:00",
+      "last_heartbeat": "2026-10-18T17:24:46.503824+00:00"
+    },
+    {
+      "session_id": "sess_hallwright-critic_deecf94e",
+      "agent_name": "hallwright-critic",
+      "intent": "Stage 4: Independent Code Auditor - Refactor payment gateway",
+      "active_files": [],
+      "started_at": "2026-10-18T17:24:46.522201+00:00",
+      "last_heartbeat": "2026-10-18T17:24:46.522201+00:00"
     }
   ]
 }

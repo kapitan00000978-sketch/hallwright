@@ -1,5 +1,5 @@
 """
-Artisan Council of Masters — Guilds and Squads Registry
+Hallwright Council of Masters — Guilds and Squads Registry
 Organizes the 64 Domain Titans into 8 focused, high-synergy Squads.
 """
 

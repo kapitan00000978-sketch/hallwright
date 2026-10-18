@@ -94,7 +94,7 @@ class MorpheusVanceMaster:
         final_rubric = self.rubric.evaluate(final_report)
         ledger = self.critic.review(current_data)
 
-        # Record decision in persistent Artisan journal
+        # Record decision in persistent Hallwright journal
         self._record_journal_entry(
             initial_score=initial_ledger.score,
             final_score=ledger.score,

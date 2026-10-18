@@ -55,7 +55,7 @@ class StudioOrchestrator:
         """
         start_time = time.time()
         print("\n" + "=" * 80)
-        print("  🎼 ARTISAN STUDIO ORCHESTRATOR — THE CONDUCTOR ACTIVE")
+        print("  🎼 HALLWRIGHT STUDIO ORCHESTRATOR — THE CONDUCTOR ACTIVE")
         print(f"     Target: {os.path.basename(self.target_file)} | Profile: {self.profile_name} | Target: >={self.passing_threshold}/100")
         print("=" * 80)
 

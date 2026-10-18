@@ -1,4 +1,4 @@
-"""Artisan Enterprise Architecture Library: Clean Architecture Ports & Entities.
+"""Hallwright Enterprise Architecture Library: Clean Architecture Ports & Entities.
 
 Provides domain modeling abstractions (Entities, Value Objects, Aggregate Roots)
 and Hexagonal Architecture Port definitions (RepositoryPort, UnitOfWork).

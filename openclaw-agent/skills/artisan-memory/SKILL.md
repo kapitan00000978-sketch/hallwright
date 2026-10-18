@@ -1,11 +1,11 @@
 ---
-name: artisan-memory
+name: hallwright-memory
 description: Project memory retrieval skill. Reads .hallwright/memory.json to recall user preferences, project conventions, and recorded scar tissue to avoid repeating mistakes.
 ---
 
-# 🧠 Artisan Project Memory & Scar Tissue
+# 🧠 Hallwright Project Memory & Scar Tissue
 
-Artisan maintains persistent awareness across sessions by consulting `.hallwright/memory.json`.
+Hallwright maintains persistent awareness across sessions by consulting `.hallwright/memory.json`.
 
 ## Core Memory Directives:
 

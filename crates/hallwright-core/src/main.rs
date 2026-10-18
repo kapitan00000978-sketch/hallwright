@@ -22,7 +22,7 @@ struct Finding {
     deduction: u32,
 }
 
-const IGNORE_MARKERS: &[&str] = &["hallwright-ignore", "artisan-ignore"];
+const IGNORE_MARKERS: &[&str] = &["hallwright-ignore", "hallwright-ignore"];
 
 fn is_ignored(line: &str) -> bool {
     IGNORE_MARKERS.iter().any(|m| line.contains(m))

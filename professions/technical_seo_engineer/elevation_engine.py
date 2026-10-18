@@ -110,7 +110,7 @@ class TechnicalSEOElevationEngine:
         return content
 
     def _remediate_canonical_link(self, content: str) -> str:
-        canonical_tag = '    <link rel="canonical" href="https://artisan.dev/guide">\n'
+        canonical_tag = '    <link rel="canonical" href="https://hallwright.dev/guide">\n'
         if "</head>" in content:
             content = content.replace("</head>", canonical_tag + "</head>", 1)
         else:
@@ -139,8 +139,8 @@ class TechnicalSEOElevationEngine:
             "    {\n"
             '        "@context": "https://schema.org",\n'
             '        "@type": "WebSite",\n'
-            '        "name": "Artisan Sovereign System",\n'
-            '        "url": "https://artisan.dev"\n'
+            '        "name": "Hallwright Sovereign System",\n'
+            '        "url": "https://hallwright.dev"\n'
             "    }\n"
             "    </script>\n"
         )
@@ -151,10 +151,10 @@ class TechnicalSEOElevationEngine:
     def _remediate_meta_and_social(self, content: str) -> str:
         meta_tags = (
             '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-            '    <meta name="description" content="Artisan autonomous craftsmanship protocol engineering zero-defect architectures.">\n'
-            '    <meta property="og:title" content="Artisan — Autonomous Craftsmanship">\n'
-            '    <meta property="og:image" content="https://artisan.dev/og-image.png">\n'
-            '    <meta property="og:url" content="https://artisan.dev/guide">\n'
+            '    <meta name="description" content="Hallwright autonomous craftsmanship protocol engineering zero-defect architectures.">\n'
+            '    <meta property="og:title" content="Hallwright — Autonomous Craftsmanship">\n'
+            '    <meta property="og:image" content="https://hallwright.dev/og-image.png">\n'
+            '    <meta property="og:url" content="https://hallwright.dev/guide">\n'
             '    <meta name="twitter:card" content="summary_large_image">\n'
         )
         if "</head>" in content:

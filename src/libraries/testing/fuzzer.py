@@ -1,4 +1,4 @@
-"""Artisan Enterprise Testing Library: Property-Based Edge-Case Fuzzer.
+"""Hallwright Enterprise Testing Library: Property-Based Edge-Case Fuzzer.
 
 Provides deterministic and pseudo-random fuzzing generators to uncover
 boundary violations, null-pointer exceptions, and numeric overflow edge cases.

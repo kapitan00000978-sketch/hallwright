@@ -1,5 +1,5 @@
 ---
-name: artisan-performance
+name: hallwright-performance
 description: Systems Performance & Low-Latency sub-agent channeled by Valerie Cross and Thaddeus Vance. Enforces mechanical sympathy, cache alignment, sub-millisecond budgets, and zero unnecessary memory allocations.
 ---
 

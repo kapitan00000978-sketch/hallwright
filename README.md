@@ -190,7 +190,7 @@ hallwright tasnif --json
 
 ## ❓ What `hallwright swarm` Actually Does
 
-`hallwright swarm` (or `artisan swarm`) does **not** invoke an LLM or make external API calls. It is a local, deterministic planning and coordination tool:
+`hallwright swarm` does **not** invoke an LLM or make external API calls. It is a local, deterministic planning and coordination tool:
 
 1. **Task Decomposition:** Analyzes the task description and target files using keyword and extension heuristics.
 2. **Role Selection:** Selects relevant sub-agent roles from the definitions above.
@@ -235,18 +235,18 @@ hallwright mcp
 ```
 
 ### Exposed MCP Tools:
-- `hallwright_select_masters` (`artisan_select_masters`) — Context-aware selection of relevant domain leads based on task keywords.
-- `hallwright_inject_prompt` (`artisan_inject_prompt`) — Generates a task-targeted 2K-token prompt (~6x context optimization).
-- `hallwright_inspect_code` (`artisan_inspect_code`) — Pre-commit AST-level flaw and secret leak analysis on code strings.
-- `hallwright_get_lessons` (`artisan_get_lessons`) — Searches past scar tissue and mistakes to prevent repeating bugs.
-- `hallwright_record_learning` (`artisan_record_learning`) — Writes lessons and success patterns into persistent storage.
-- `hallwright_resume_continuity` (`artisan_resume_continuity`) — Retrieves cross-agent continuity state and checkpoints.
-- `hallwright_save_checkpoint` (`artisan_save_checkpoint`) — Saves task progress and blockers across sessions.
-- `hallwright_get_library` (`artisan_get_library`) — Retrieves production implementation modules (`auth`, `db`, `payments`, etc.).
-- `hallwright_review_code` (`artisan_review_code`) — Runs adversarial red-team code review on diffs or source code.
-- `hallwright_get_persona` (`artisan_get_persona`) — Retrieves full discipline criteria and pledge for any Council Master.
-- `hallwright_list_council` (`artisan_list_council`) — Lists the Council roster.
-- `hallwright_recall_memory` (`artisan_recall_memory`) — Direct query interface for memory ledger.
+- `hallwright_select_masters` — Context-aware selection of relevant domain leads based on task keywords.
+- `hallwright_inject_prompt` — Generates a task-targeted 2K-token prompt (~6x context optimization).
+- `hallwright_inspect_code` — Pre-commit AST-level flaw and secret leak analysis on code strings.
+- `hallwright_get_lessons` — Searches past scar tissue and mistakes to prevent repeating bugs.
+- `hallwright_record_learning` — Writes lessons and success patterns into persistent storage.
+- `hallwright_resume_continuity` — Retrieves cross-agent continuity state and checkpoints.
+- `hallwright_save_checkpoint` — Saves task progress and blockers across sessions.
+- `hallwright_get_library` — Retrieves production implementation modules (`auth`, `db`, `payments`, etc.).
+- `hallwright_review_code` — Runs adversarial red-team code review on diffs or source code.
+- `hallwright_get_persona` — Retrieves full discipline criteria and pledge for any Council Master.
+- `hallwright_list_council` — Lists the Council roster.
+- `hallwright_recall_memory` — Direct query interface for memory ledger.
 
 ---
 

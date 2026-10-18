@@ -1,4 +1,4 @@
-"""Artisan Enterprise Architecture Library: Circuit Breaker.
+"""Hallwright Enterprise Architecture Library: Circuit Breaker.
 
 Provides resilient fault-tolerance for distributed calls, network requests,
 and unreliable subsystems, preventing cascading failures with exponential backoff.

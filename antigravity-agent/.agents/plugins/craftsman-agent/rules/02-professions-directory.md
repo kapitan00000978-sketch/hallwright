@@ -1,6 +1,6 @@
 # 🎭 THE COUNCIL OF MASTERS: OFFICIAL CHARACTER DIRECTORY
 
-Artisan provides specialized heuristics, work ethics, and craftsmanship checklists embodied by 8 elite veteran practitioners:
+Hallwright provides specialized heuristics, work ethics, and craftsmanship checklists embodied by 8 elite veteran practitioners:
 
 ---
 

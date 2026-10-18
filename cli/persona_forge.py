@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Artisan Persona Forge
+Hallwright Persona Forge
 CLI tool to generate and register new professional personas with character names and rigorous craftsmanship checklists.
 """
 
@@ -78,7 +78,7 @@ def create_persona(title, character_name=None, archetype=None, domain="general")
     return template
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Artisan Persona Forge")
+    parser = argparse.ArgumentParser(description="Hallwright Persona Forge")
     parser.add_argument("--create", help="Profession title (e.g. 'Cloud Security Architect')")
     parser.add_argument("--name", help="Character name (e.g. 'Julian Vance')")
     parser.add_argument("--archetype", help="Character archetype (e.g. 'Zero-Trust Bastion')")

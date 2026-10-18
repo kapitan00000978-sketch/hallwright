@@ -314,23 +314,23 @@ def elevate_html_to_world_class(html_path: str) -> str:
 
     # 2. Inject World-Class Liquid Glass & Ambient Glow Styles
     studio_styles = """
-    <!-- Artisan Studio World-Class Design System Enhancement -->
-    <style id="artisan-studio-elevation">
+    <!-- Hallwright Studio World-Class Design System Enhancement -->
+    <style id="hallwright-studio-elevation">
         :root {
-            --artisan-bg: #090b10;
-            --artisan-glass-bg: rgba(255, 255, 255, 0.04);
-            --artisan-glass-border: rgba(255, 255, 255, 0.12);
-            --artisan-glass-glow: rgba(0, 240, 255, 0.25);
-            --artisan-accent: #00f0ff;
-            --artisan-accent-gradient: linear-gradient(135deg, #00f0ff 0%, #7000ff 100%);
-            --artisan-text-primary: #ffffff;
-            --artisan-text-muted: #94a3b8;
+            --hallwright-bg: #090b10;
+            --hallwright-glass-bg: rgba(255, 255, 255, 0.04);
+            --hallwright-glass-border: rgba(255, 255, 255, 0.12);
+            --hallwright-glass-glow: rgba(0, 240, 255, 0.25);
+            --hallwright-accent: #00f0ff;
+            --hallwright-accent-gradient: linear-gradient(135deg, #00f0ff 0%, #7000ff 100%);
+            --hallwright-text-primary: #ffffff;
+            --hallwright-text-muted: #94a3b8;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
-            background-color: var(--artisan-bg) !important;
-            color: var(--artisan-text-primary) !important;
+            background-color: var(--hallwright-bg) !important;
+            color: var(--hallwright-text-primary) !important;
             background-image: 
                 radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.08) 0%, transparent 40%),
                 radial-gradient(circle at 85% 85%, rgba(112, 0, 255, 0.08) 0%, transparent 40%) !important;
@@ -344,10 +344,10 @@ def elevate_html_to_world_class(html_path: str) -> str:
 
         /* World-Class Liquid Glass Cards */
         .card, .container, .box, section, article {
-            background: var(--artisan-glass-bg);
+            background: var(--hallwright-glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--artisan-glass-border);
+            border: 1px solid var(--hallwright-glass-border);
             border-radius: 16px;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -361,7 +361,7 @@ def elevate_html_to_world_class(html_path: str) -> str:
 
         /* 60fps Magnetic Interactive Buttons */
         button, .btn, a.btn, input[type="submit"] {
-            background: var(--artisan-accent-gradient) !important;
+            background: var(--hallwright-accent-gradient) !important;
             color: #000000 !important;
             font-weight: 700 !important;
             border: none !important;
@@ -409,7 +409,7 @@ def elevate_html_to_world_class(html_path: str) -> str:
 def print_studio_report(target_file: str, critique: Dict[str, Any], metrics: Dict[str, Any]):
     """Renders high-signal, beautiful terminal report showcasing the Council's review."""
     print("\n" + "=" * 80)
-    print("  🎨 ARTISAN STUDIO — AUTONOMOUS MULTI-SPECIALIST VISUAL CRITIQUE")
+    print("  🎨 HALLWRIGHT STUDIO — AUTONOMOUS MULTI-SPECIALIST VISUAL CRITIQUE")
     print(f"     Target: {target_file} | Composite Quality Score: {critique['composite_score']}/100")
     print("=" * 80)
 
@@ -460,7 +460,7 @@ def print_studio_report(target_file: str, critique: Dict[str, Any], metrics: Dic
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Artisan Studio — Visual Critique & Elevation Engine")
+    parser = argparse.ArgumentParser(description="Hallwright Studio — Visual Critique & Elevation Engine")
     parser.add_argument("target", help="HTML file to audit and critique (e.g. index.html)")
     parser.add_argument("--elevate", "-e", action="store_true", help="Autonomously elevate to world-class standards")
     parser.add_argument("--loop", "-l", action="store_true", help="Execute complete autonomous feedback loop with Orchestrator, Blind Critic & Active Memory")
@@ -481,7 +481,7 @@ def main():
         sys.exit(0 if result["status"] == "CERTIFIED" else 1)
 
 
-    print(f"🔍 [Artisan Studio] Launching headless browser & visual inspection on {args.target}...")
+    print(f"🔍 [Hallwright Studio] Launching headless browser & visual inspection on {args.target}...")
     metrics = capture_visual_metrics(args.target, output_dir=args.screenshots_dir)
     critique = run_studio_critique(args.target, metrics)
 
@@ -493,11 +493,11 @@ def main():
     print_studio_report(args.target, critique, metrics)
 
     if args.elevate:
-        print(f"🚀 [Artisan Studio Elevation] Activating Council to transform {args.target} into world-class tier...")
+        print(f"🚀 [Hallwright Studio Elevation] Activating Council to transform {args.target} into world-class tier...")
         elevate_html_to_world_class(args.target)
         
         # Re-audit elevated page
-        print("📸 [Artisan Studio] Re-rendering and capturing post-elevation proof...")
+        print("📸 [Hallwright Studio] Re-rendering and capturing post-elevation proof...")
         new_metrics = capture_visual_metrics(args.target, output_dir=args.screenshots_dir)
         new_critique = run_studio_critique(args.target, new_metrics)
         

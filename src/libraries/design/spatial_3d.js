@@ -1,5 +1,5 @@
 /**
- * Artisan Spatial 3D Engine — Zero-Dependency Standalone 3D Engine
+ * Hallwright Spatial 3D Engine — Zero-Dependency Standalone 3D Engine
  * 
  * Provides hardware-accelerated 3D vector mathematics, perspective projection,
  * particle swarm dynamics, interactive orbit controls, and geometric mesh rendering.
@@ -198,7 +198,7 @@ class SpatialScene {
             this.ctx.fillStyle = '#00F5FF';
             this.ctx.font = '600 12px Inter, sans-serif';
             this.ctx.textAlign = 'center';
-            this.ctx.fillText('ARTISAN SWARM CORE', coreProj.x, coreProj.y + 4);
+            this.ctx.fillText('HALLWRIGHT SWARM CORE', coreProj.x, coreProj.y + 4);
         }
 
         // Transform and sort particles by depth

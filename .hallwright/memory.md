@@ -1,4 +1,4 @@
-# 🧠 ARTISAN EXPERIENCE & MEMORY LEDGER
+# 🧠 HALLWRIGHT EXPERIENCE & MEMORY LEDGER
 
 This document serves as persistent operational memory for AI Agents. Prior to executing tasks, the agent recalls these directives:
 

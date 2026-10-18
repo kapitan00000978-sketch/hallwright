@@ -1,6 +1,6 @@
 """
-Artisan Multi-Agent Swarm Orchestrator Engine.
-Part of the Artisan Autonomous Craftsmanship Protocol (Phase 4).
+Hallwright Multi-Agent Swarm Orchestrator Engine.
+Part of the Hallwright Autonomous Craftsmanship Protocol (Phase 4).
 
 Coordinates specialized sub-agents (architect, security, critic, tester, performance, copywriter, healer)
 to execute complex software engineering tasks collaboratively with zero context pollution,
@@ -28,43 +28,43 @@ except ImportError:
 
 
 SUBAGENTS_ROSTER = {
-    "artisan-architect": {
+    "hallwright-architect": {
         "persona": "Marcus Sterling",
         "role": "Senior Software Architect",
         "description": "Modular system design, clean abstractions, domain modeling, and zero technical debt.",
         "domains": ["architecture", "api", "database", "backend", "refactor", "system", "structure", "design"]
     },
-    "artisan-security": {
+    "hallwright-security": {
         "persona": "Gabriel Frost",
         "role": "Principal Cybersecurity Auditor",
         "description": "Zero-trust threat modeling, credential protection, OWASP Top 10 defense, and sanitization.",
         "domains": ["auth", "security", "jwt", "login", "payment", "crypto", "token", "password", "permission"]
     },
-    "artisan-critic": {
+    "hallwright-critic": {
         "persona": "Adversarial Red-Team Critic",
         "role": "Independent Code Auditor",
         "description": "Objective red-team review, defect ledger compilation, and independent veto/approval decisions.",
         "domains": ["review", "audit", "diff", "pr", "quality", "veto", "gatekeeper"]
     },
-    "artisan-tester": {
+    "hallwright-tester": {
         "persona": "Mutation & Test Lead",
         "role": "Senior Quality & Mutation Engineer",
         "description": "Test suite authoring, AST mutation analysis, boundary assertions, and fuzzing.",
         "domains": ["test", "mutation", "coverage", "benchmark", "assert", "mock", "spec"]
     },
-    "artisan-performance": {
+    "hallwright-performance": {
         "persona": "Valerie Cross & Thaddeus Vance",
         "role": "Low-Latency Systems Architect",
         "description": "Mechanical sympathy, CPU cache alignment, low tail-latency, and non-blocking I/O.",
         "domains": ["performance", "speed", "latency", "async", "cache", "memory", "profiling", "fast"]
     },
-    "artisan-copywriter": {
+    "hallwright-copywriter": {
         "persona": "Diana Drake",
         "role": "Conversion & DX Copywriter",
         "description": "Direct-response developer experience, high-conversion READMEs, and crystal-clear documentation.",
         "domains": ["doc", "readme", "copy", "landing", "marketing", "changelog", "guide"]
     },
-    "artisan-healer": {
+    "hallwright-healer": {
         "persona": "Autonomous Remediator",
         "role": "Self-Correction & AST Repair Engineer",
         "description": "Automatic remediation of silent exceptions, unfinished stubs, and syntax regressions.",
@@ -100,36 +100,36 @@ class SwarmOrchestrator:
             # Check file extensions
             for f in files:
                 ext = os.path.splitext(f)[1].lower()
-                if ext in (".md", ".txt") and agent_id == "artisan-copywriter":
+                if ext in (".md", ".txt") and agent_id == "hallwright-copywriter":
                     score += 3
-                elif ext in (".py", ".ts", ".js", ".go", ".rs") and agent_id in ("artisan-architect", "artisan-critic", "artisan-tester"):
+                elif ext in (".py", ".ts", ".js", ".go", ".rs") and agent_id in ("hallwright-architect", "hallwright-critic", "hallwright-tester"):
                     score += 1
             scores[agent_id] = score
 
         # Always include architect for system-level implementation
         if any(w in task_lower for w in ["build", "create", "implement", "feature", "add", "develop"]):
-            scores["artisan-architect"] = max(scores.get("artisan-architect", 0), 3)
+            scores["hallwright-architect"] = max(scores.get("hallwright-architect", 0), 3)
 
         # Always include security if authentication, keys, or endpoints are touched
         if any(w in task_lower for w in ["auth", "login", "jwt", "token", "payment", "api", "key", "secret"]):
-            scores["artisan-security"] = max(scores.get("artisan-security", 0), 4)
+            scores["hallwright-security"] = max(scores.get("hallwright-security", 0), 4)
 
         # Always include tester for implementation tasks
         if any(w in task_lower for w in ["build", "create", "fix", "implement", "refactor"]):
-            scores["artisan-tester"] = max(scores.get("artisan-tester", 0), 2)
+            scores["hallwright-tester"] = max(scores.get("hallwright-tester", 0), 2)
 
         # Always include critic as the final gatekeeper
-        scores["artisan-critic"] = max(scores.get("artisan-critic", 0), 3)
+        scores["hallwright-critic"] = max(scores.get("hallwright-critic", 0), 3)
 
         # Order agents sequentially into clear stages
         execution_order = [
-            "artisan-architect",
-            "artisan-security",
-            "artisan-performance",
-            "artisan-tester",
-            "artisan-critic",
-            "artisan-healer",
-            "artisan-copywriter"
+            "hallwright-architect",
+            "hallwright-security",
+            "hallwright-performance",
+            "hallwright-tester",
+            "hallwright-critic",
+            "hallwright-healer",
+            "hallwright-copywriter"
         ]
 
         stage_num = 1
@@ -195,7 +195,7 @@ class SwarmOrchestrator:
     def format_cli_pipeline(self, pipeline_data: Dict[str, Any]) -> str:
         """Visualizes the swarm delegation pipeline in a formatted terminal graph."""
         lines = [
-            "\n🤖 [HALLWRIGHT / ARTISAN MULTI-AGENT SWARM ORCHESTRATOR]",
+            "\n🤖 [HALLWRIGHT MULTI-AGENT SWARM ORCHESTRATOR]",
             f"🎯 Mission: \"{pipeline_data['task']}\"",
             f"📋 Delegated Stages: {pipeline_data['stages_count']} sub-agent stages\n",
             "────────────────────────────────────────────────────────────────────────"
@@ -210,5 +210,5 @@ class SwarmOrchestrator:
             lines.append("")
 
         lines.append("────────────────────────────────────────────────────────────────────────")
-        lines.append("✅ Swarm coordination active. Sessions synchronized via Hallwright / Artisan AgentRegistry.")
+        lines.append("✅ Swarm coordination active. Sessions synchronized via Hallwright AgentRegistry.")
         return "\n".join(lines)

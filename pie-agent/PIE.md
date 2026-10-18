@@ -1,6 +1,6 @@
-# 🛡️ ARTISAN — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL FOR PIE
+# 🛡️ HALLWRIGHT — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL FOR PIE
 
-Artisan is an **autonomous craftsmanship and quality protocol** embedded into the Pie agent runtime.
+Hallwright is an **autonomous craftsmanship and quality protocol** embedded into the Pie agent runtime.
 
 ---
 

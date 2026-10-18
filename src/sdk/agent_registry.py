@@ -1,6 +1,6 @@
 """
-Artisan Multi-Agent State Synchronization & Session Registry.
-Part of the Artisan Autonomous Craftsmanship Protocol (Phase 2).
+Hallwright Multi-Agent State Synchronization & Session Registry.
+Part of the Hallwright Autonomous Craftsmanship Protocol (Phase 2).
 
 Maintains a synchronized, conflict-free ledger of active AI agents
 (Claude Code, Cursor, Copilot, Antigravity, Hermes) operating concurrently

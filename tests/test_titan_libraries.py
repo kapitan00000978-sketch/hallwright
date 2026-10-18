@@ -27,7 +27,7 @@ def test_agent_mesh_publish_subscribe():
         received.append(msg.payload)
         return AgentMessage(
             topic="mesh:security:verdict",
-            sender="artisan-security",
+            sender="hallwright-security",
             payload={"status": "CLEAN", "scanned_keys": list(msg.payload.keys())}
         )
 
@@ -35,14 +35,14 @@ def test_agent_mesh_publish_subscribe():
 
     responses = mesh.dispatch(
         topic="mesh:code:analyze",
-        sender="artisan-architect",
+        sender="hallwright-architect",
         payload={"file": "auth.py", "lines": 42}
     )
 
     assert len(received) == 1
     assert received[0]["file"] == "auth.py"
     assert len(responses) == 1
-    assert responses[0].sender == "artisan-security"
+    assert responses[0].sender == "hallwright-security"
     assert responses[0].payload["status"] == "CLEAN"
     assert responses[0].parent_id is not None
 

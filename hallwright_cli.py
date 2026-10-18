@@ -838,7 +838,7 @@ def cmd_completion(args: argparse.Namespace) -> int:
     shell = getattr(args, "shell", "bash")
     commands = "init audit fix status memory doctor mcp agents metrics context prompt mutate review swarm resume checkpoint lib 3d hud watch completion"
     if shell == "bash":
-        print(f'''# Bash completion for Hallwright / Artisan
+        print(f'''# Bash completion for Hallwright / Hallwright
 _hallwright_completions() {{
     local cur="${{COMP_WORDS[COMP_CWORD]}}"
     local commands="{commands}"
@@ -856,12 +856,12 @@ _hallwright() {{
 compdef _hallwright hallwright artisan
 ''')
     elif shell == "fish":
-        print(f'''# Fish completion for Hallwright / Artisan
+        print(f'''# Fish completion for Hallwright / Hallwright
 complete -c hallwright -f -a "{commands}"
 complete -c artisan -f -a "{commands}"
 ''')
     elif shell == "powershell":
-        print(f'''# PowerShell completion for Hallwright / Artisan
+        print(f'''# PowerShell completion for Hallwright / Hallwright
 Register-ArgumentCompleter -Native -CommandName @('hallwright', 'artisan') -ScriptBlock {{
     param($wordToComplete, $commandAst, $cursorPosition)
     $commands = @('{commands}'.Split(' '))

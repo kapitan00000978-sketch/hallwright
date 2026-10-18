@@ -47,7 +47,7 @@ def test_studio_elevation_enhancement(tmp_path):
     
     # Assert world-class features injected
     assert "fonts.googleapis.com" in elevated_content
-    assert "artisan-studio-elevation" in elevated_content
+    assert "hallwright-studio-elevation" in elevated_content
     assert "backdrop-filter" in elevated_content
     assert "rel=\"noopener noreferrer\"" in elevated_content
     assert "Discover the Future of the product" in elevated_content

@@ -1,13 +1,13 @@
 """
-Artisan Adversarial Code Reviewer & Critic Engine.
-Part of the Artisan Autonomous Craftsmanship Protocol (Phase 3.2).
+Hallwright Adversarial Code Reviewer & Critic Engine.
+Part of the Hallwright Autonomous Guardrail Protocol (Phase 3.2).
 
 Performs ruthless red-team peer review on code modifications, pull requests,
 and git diffs through the lenses of The Council of Masters:
 - Gabriel Frost: Principal Cybersecurity Auditor (Zero-Trust & Threat Modeling)
 - Marcus Sterling: Senior Software Architect (Systems Architecture & Resilience)
 - Valerie Cross: Principal Systems Performance Architect (Latency & Resource Efficiency)
-- Artisan Living Memory: Cross-references changes against recorded scar tissue and past mistakes.
+- Hallwright Living Memory: Cross-references changes against recorded scar tissue and past mistakes.
 """
 
 import os
@@ -156,7 +156,7 @@ class AdversarialReviewer:
                     if isinstance(node, ast.Call):
                         func = node.func
                         # Dynamic evaluation audit
-                        if isinstance(func, ast.Name) and func.id in ("ev" + "al", "ex" + "ec"):  # artisan-ignore
+                        if isinstance(func, ast.Name) and func.id in ("ev" + "al", "ex" + "ec"):  # hallwright-ignore
                             findings.append({
                                 "file": file_path,
                                 "line": l_no,
@@ -217,7 +217,7 @@ class AdversarialReviewer:
                                 "suggestion": "Log exception traceback, raise custom domain error, or implement recovery logic."
                             })
             except (SyntaxError, ValueError, OverflowError):
-                tree = None  # artisan-ignore: malformed fragment or diff slice can fail ast.parse
+                tree = None  # hallwright-ignore: malformed fragment or diff slice can fail ast.parse
 
         # ---------------------------------------------------------
         # 2. LINE-BASED CHECKS: SECRETS, STUBS, SQLi, AND NON-PYTHON
@@ -226,12 +226,12 @@ class AdversarialReviewer:
             line_no = line_numbers[idx] if line_numbers and idx < len(line_numbers) else idx + 1
             stripped = line.strip()
 
-            if not stripped or "artisan-ignore" in line:
+            if not stripped or "hallwright-ignore" in line or "artisan-ignore" in line:
                 continue
 
             # Line-based eval/exec and catch checks across files
             if not ("re.search" in line or "re.compile" in line or '"message"' in line or "'message'" in line or "RULES" in line):
-                if re.search(r"\b(?:ev" + r"al|ex" + r"ec)\s*\(", line):  # artisan-ignore
+                if re.search(r"\b(?:ev" + r"al|ex" + r"ec)\s*\(", line):  # hallwright-ignore
                     findings.append({
                         "file": file_path,
                         "line": line_no,
@@ -281,7 +281,7 @@ class AdversarialReviewer:
                     })
 
             # Stubs and Incomplete Work
-            if re.search(r"(?:#|//|/\*)\s*(?:TO" + r"DO|FIXME|HACK|TBD|STUB:)\b", line, re.IGNORECASE):  # artisan-ignore
+            if re.search(r"(?:#|//|/\*)\s*(?:TO" + r"DO|FIXME|HACK|TBD|STUB:)\b", line, re.IGNORECASE):  # hallwright-ignore
                 findings.append({
                     "file": file_path,
                     "line": line_no,
@@ -330,7 +330,7 @@ class AdversarialReviewer:
                         findings.append({
                             "file": file_path,
                             "line": l_no,
-                            "persona": "Artisan Memory Ledger",
+                            "persona": "Hallwright Memory Ledger",
                             "category": "SCAR_TISSUE",
                             "severity": "CRITICAL",
                             "message": f"Regression of past scar tissue [{mid}]: '{pattern}'.",
@@ -392,7 +392,7 @@ class AdversarialReviewer:
         """Formats the review report into a GitHub PR ready markdown comment."""
         status_badge = "🟢 **APPROVED**" if report["passed"] else "🔴 **VETO / REVISION REQUIRED**"
         lines = [
-            "## 🛡️ Artisan Adversarial Code Review",
+            "## 🛡️ Hallwright Adversarial Code Review",
             f"> **Verdict:** {status_badge} | **Score:** `{report['score']}/100` (Threshold: {report['threshold']})",
             "",
             f"**Audited Files:** {len(report['audited_files'])} | **Defects Identified:** {report['defects_count']}",
@@ -415,5 +415,5 @@ class AdversarialReviewer:
             sev_icon = {"BLOCKER": "🚨 BLOCKER", "CRITICAL": "🔥 CRITICAL", "MAJOR": "⚠️ MAJOR", "MINOR": "ℹ️ MINOR"}.get(f["severity"], f["severity"])
             lines.append(f"| `{f['file']}:{f['line']}` | {f['persona']} | {sev_icon} | {f['message']} | **{f['suggestion']}** |")
 
-        lines.append("\n> *Autonomous Red-Team Audit by The Council of Masters & Artisan Living Memory Protocol.*")
+        lines.append("\n> *Autonomous Red-Team Audit by The Council of Masters & Hallwright Living Memory Protocol.*")
         return "\n".join(lines)

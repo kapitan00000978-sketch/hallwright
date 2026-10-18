@@ -1,6 +1,6 @@
 """
-Artisan Autonomous Mutation Testing Engine (Phase 3).
-Part of the Artisan Autonomous Craftsmanship Protocol.
+Hallwright Autonomous Mutation Testing Engine (Phase 3).
+Part of the Hallwright Autonomous Craftsmanship Protocol.
 
 Generates controlled AST mutations (boundary flips, comparison swaps, operator modifications,
 and return alterations) to empirically evaluate the true regression-detection strength of test suites.

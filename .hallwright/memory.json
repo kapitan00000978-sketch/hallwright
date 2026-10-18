@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
-  "project": "Artisan Engineering Core",
-  "lastUpdated": "2026-10-18T16:27:31.104526+00:00",
+  "project": "Hallwright Engineering Core",
+  "lastUpdated": "2026-10-18T17:26:18.837582+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -60,7 +60,7 @@
       "lesson": "Always enforce pagination limits.",
       "severity": "high",
       "recordedAt": "2026-10-15T15:08:39.779478+00:00",
-      "updatedAt": "2026-10-18T16:26:26.669661+00:00"
+      "updatedAt": "2026-10-18T17:26:18.837582+00:00"
     },
     {
       "id": "mis-0004",
@@ -69,7 +69,7 @@
       "lesson": "Always verify algorithm is HS256/RS256",
       "severity": "high",
       "recordedAt": "2026-10-15T18:30:24.182735+00:00",
-      "updatedAt": "2026-10-18T16:27:31.104526+00:00"
+      "updatedAt": "2026-10-18T17:24:26.510224+00:00"
     },
     {
       "id": "mis-0005",
@@ -229,7 +229,7 @@
     }
   ],
   "domainKnowledge": {
-    "framework": "Artisan Quality Protocol",
+    "framework": "Hallwright Quality Protocol",
     "notes": "Project-specific conventions and persistent learning memory preventing repeat mistakes."
   }
 }

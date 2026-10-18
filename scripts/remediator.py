@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Artisan Auto-Remediation Engine (artisan fix)
+Hallwright Auto-Remediation Engine (hallwright fix)
 Autonomously repairs common code quality and safety defects:
 - Converts silent exception suppressions to structured logging.  # hallwright-ignore
 - Converts empty JavaScript catch blocks to console error reporting.

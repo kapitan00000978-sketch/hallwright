@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Artisan Quality & Security Detection Engine
+Hallwright Quality & Security Detection Engine
 Shared rule-based detector for pre-commit gatekeeper, live watchdog, and MCP server.
 Supports full repository auditing, staged git diff scanning, and single-file inspections.
 """
@@ -403,7 +403,7 @@ def scan_code(code: str, filename: str = "", config: Optional[Dict[str, Any]] = 
                 findings.append({
                     "rule_id": rule_id,
                     "category": category,
-                    "auditor": COUNCIL_AUDITORS.get(category, "Artisan Council"),
+                    "auditor": COUNCIL_AUDITORS.get(category, "Hallwright Council"),
                     "file": filename,
                     "line": line_idx,
                     "matched_text": line.strip()[:80],
@@ -862,7 +862,7 @@ def to_sarif_v2(scan_result: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Artisan Quality & Security Detection Engine")
+    parser = argparse.ArgumentParser(description="Hallwright Quality & Security Detection Engine")
     parser.add_argument("--file", "-f", help="Scan a specific file")
     parser.add_argument("--staged", "-s", action="store_true", help="Scan only git staged files")
     parser.add_argument("--all", "-a", action="store_true", help="Scan entire project (default)")
@@ -909,20 +909,20 @@ def main():
     else:
         scope = "staged files" if args.staged else "all files"
         if result["mode"] == "vibe":
-            print(f"⚡ [ARTISAN VIBE MODE ACTIVE]: Rapid development mode. Advisory scan over {result['scanned_files']} {scope}.")
+            print(f"⚡ [HALLWRIGHT VIBE MODE ACTIVE]: Rapid development mode. Advisory scan over {result['scanned_files']} {scope}.")
             if result["findings"]:
                 print(f"⚡ Advisory notices ({len(result['findings'])} items, Score: {result['score']}/100 - Non-blocking):")
                 for f in result["findings"][:10]:
-                    auditor = f.get("auditor", "Artisan Council")
+                    auditor = f.get("auditor", "Hallwright Council")
                     print(f"  • {f['file']}:{f['line']} [{f['category']}] [{auditor}] -> {f['message']}")
             else:
-                print(f"✅ [ARTISAN VERIFIED]: Clean code. Gate Score: 100/100")
+                print(f"✅ [HALLWRIGHT VERIFIED]: Clean code. Gate Score: 100/100")
         elif result["passed"]:
-            print(f"✅ [ARTISAN VERIFIED]: Scanned {result['scanned_files']} {scope}. Gate Score: {result['score']}/100")
+            print(f"✅ [HALLWRIGHT VERIFIED]: Scanned {result['scanned_files']} {scope}. Gate Score: {result['score']}/100")
         else:
-            print(f"❌ [ARTISAN REJECTED]: Defects detected across {scope}. Gate Score: {result['score']}/100")
+            print(f"❌ [HALLWRIGHT REJECTED]: Defects detected across {scope}. Gate Score: {result['score']}/100")
             for f in result["findings"][:10]:
-                auditor = f.get("auditor", "Artisan Council")
+                auditor = f.get("auditor", "Hallwright Council")
                 print(f"  • {f['file']}:{f['line']} [{f['category']}] [{auditor}] -> {f['message']}")
 
     sys.exit(0 if result["passed"] else 1)

@@ -54,15 +54,15 @@ class RemediatorAgent:
                     else:
                         content = font_link + "\n" + content
                 
-                h1_style = "\n<style id='artisan-typo-scale'>h1 { font-family: 'Outfit', sans-serif !important; font-size: 56px !important; line-height: 1.15 !important; letter-spacing: -0.02em !important; margin-bottom: 24px !important; }</style>"
-                if "</head>" in content and "artisan-typo-scale" not in content:
+                h1_style = "\n<style id='hallwright-typo-scale'>h1 { font-family: 'Outfit', sans-serif !important; font-size: 56px !important; line-height: 1.15 !important; letter-spacing: -0.02em !important; margin-bottom: 24px !important; }</style>"
+                if "</head>" in content and "hallwright-typo-scale" not in content:
                     content = content.replace("</head>", f"{h1_style}\n</head>")
                 repaired_actions.append("Applied commanding 56px H1 typography scale and Outfit display font")
 
             # 4. Visual Depth Modernity & Contrast Fix
             elif dim in ("visual_depth_modernity", "contrast_accessibility", "spatial_grid_harmony"):
                 glass_style = """
-<style id='artisan-remediator-depth'>
+<style id='hallwright-remediator-depth'>
     body {
         background-color: #090b10 !important;
         color: #f8fafc !important;
@@ -82,7 +82,7 @@ class RemediatorAgent:
     }
 </style>
 """
-                if "</head>" in content and "artisan-remediator-depth" not in content:
+                if "</head>" in content and "hallwright-remediator-depth" not in content:
                     content = content.replace("</head>", f"{glass_style}\n</head>")
                     repaired_actions.append("Injected layered frosted glass elevation and verified 8pt spatial margins")
 

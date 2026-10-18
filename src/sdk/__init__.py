@@ -1,5 +1,5 @@
 """
-Artisan SDK & Craftsmanship Engine
+Hallwright SDK & Craftsmanship Engine
 """
 
 from .craftsman import CraftsmanAgent, COUNCIL_MEMBERS

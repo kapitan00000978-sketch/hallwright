@@ -1,4 +1,4 @@
-"""Artisan Enterprise Architecture Library: Finite State Machine (FSM).
+"""Hallwright Enterprise Architecture Library: Finite State Machine (FSM).
 
 Provides a deterministic, transition-guarded finite state machine with
 audit logging, state history, rollbacks, and hook listeners.

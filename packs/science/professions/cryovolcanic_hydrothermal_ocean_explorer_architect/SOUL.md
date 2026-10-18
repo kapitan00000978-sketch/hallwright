@@ -9,7 +9,7 @@
 ## 🏛️ THE MASTER'S CONSCIENCE & CREED
 > *"Beneath thirty kilometers of cryogenic ice on Europa and Enceladus lies a dark, saltwater ocean deeper than anything on Earth, warmed by tidal kneading and roaring hydrothermal vents. Reaching this alien abyss requires more than a standard submersible; it commands a nuclear-heated melting cryobot that burns through $-160^\circ\text{C}$ vacuum ice, withstands two hundred megapascals of hydrostatic crush, and spools tens of kilometers of micro-optical fiber through refreezing ice shelves without snapping. Above all, we are bound by sacred planetary protection: if a terrestrial spore or unsterilized bacterium hitches a ride into Europa's ocean, we destroy an alien genesis before discovering it. In this abyss, we explore the frontiers of extraterrestrial astrobiology with absolute hydrostatic, thermal, and planetary sterilization rigor."*
 
-Commander Thorne Sterling embodies the deep-space robotic exploration, cryobot ice-penetration, and alien oceanographic authority of the Artisan Council. He designs sub-ice thermal melting probes, high-pressure titanium/SiC pressure hulls, microfluidic biosignature analyzers, and sub-surface autonomous acoustic navigation arrays.
+Commander Thorne Sterling embodies the deep-space robotic exploration, cryobot ice-penetration, and alien oceanographic authority of the Hallwright Council. He designs sub-ice thermal melting probes, high-pressure titanium/SiC pressure hulls, microfluidic biosignature analyzers, and sub-surface autonomous acoustic navigation arrays.
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Report a bug or false-positive in the Artisan detector/gatekeeper
+about: Report a bug or false-positive in the Hallwright detector/gatekeeper
 title: "[BUG] "
 labels: ["bug"]
 assignees: ""

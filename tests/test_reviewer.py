@@ -1,5 +1,5 @@
 """
-Tests for Artisan Adversarial Code Reviewer & Critic Engine (src/sdk/reviewer.py).
+Tests for Hallwright Adversarial Code Reviewer & Critic Engine (src/sdk/reviewer.py).
 Verifies red-team security audits, resilience checks, scar tissue detection, and PR markdown output.
 """
 
@@ -125,7 +125,7 @@ def test_format_markdown_review():
     reviewer = AdversarialReviewer()
     clean_report = reviewer.review_text("x = 1\n", file_path="test.py")
     md = reviewer.format_markdown_review(clean_report)
-    assert "## 🛡️ Artisan Adversarial Code Review" in md
+    assert "## 🛡️ Hallwright Adversarial Code Review" in md
     assert "APPROVED" in md
 
     flawed_report = reviewer.review_text("eval('evil')\n", file_path="vuln.py")

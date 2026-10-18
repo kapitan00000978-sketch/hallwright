@@ -1,5 +1,5 @@
 # ==============================================================================
-# Artisan PowerShell Bootstrap Installer
+# Hallwright PowerShell Bootstrap Installer
 # Usage:
 #   # Recommended secure installation:
 #   Invoke-WebRequest -Uri "https://raw.githubusercontent.com/kapitan00000978-sketch/hallwright/main/install.ps1" -OutFile "install.ps1"
@@ -13,7 +13,7 @@ $RepoRaw = "https://raw.githubusercontent.com/kapitan00000978-sketch/hallwright/
 $TargetDir = Get-Location
 
 Write-Host "==================================================================" -ForegroundColor Cyan
-Write-Host "  🛡️  ARTISAN POWERSHELL BOOTSTRAP INSTALLER" -ForegroundColor Cyan
+Write-Host "  🛡️  HALLWRIGHT POWERSHELL BOOTSTRAP INSTALLER" -ForegroundColor Cyan
 Write-Host "      Autonomous AI Agent Quality & Craftsmanship Protocol" -ForegroundColor Cyan
 Write-Host "==================================================================" -ForegroundColor Cyan
 Write-Host "[*] Target Directory: $TargetDir" -ForegroundColor Yellow
@@ -23,7 +23,7 @@ New-Item -ItemType Directory -Force -Path "$TargetDir\.hallwright" | Out-Null
 New-Item -ItemType Directory -Force -Path "$TargetDir\.cursor\rules" | Out-Null
 New-Item -ItemType Directory -Force -Path "$TargetDir\.github" | Out-Null
 
-Write-Host "[+] Downloading core Artisan protocol..." -ForegroundColor Green
+Write-Host "[+] Downloading core Hallwright protocol..." -ForegroundColor Green
 Invoke-RestMethod -Uri "$RepoRaw/AGENTS.md" -OutFile "$TargetDir\AGENTS.md"
 
 # Safe memory preservation: never overwrite existing user memory
@@ -59,6 +59,6 @@ Invoke-RestMethod -Uri "$RepoRaw/kimi-agent/KIMI.md" -OutFile "$TargetDir\KIMI.m
 Invoke-RestMethod -Uri "$RepoRaw/kilo-agent/KILO.md" -OutFile "$TargetDir\KILO.md"
 
 Write-Host "`n==================================================================" -ForegroundColor Green
-Write-Host "  ✅ Artisan successfully installed!" -ForegroundColor Green
+Write-Host "  ✅ Hallwright successfully installed!" -ForegroundColor Green
 Write-Host "     Quality and craftsmanship rules are now active." -ForegroundColor Green
 Write-Host "==================================================================" -ForegroundColor Green

@@ -9,7 +9,7 @@
 ## 🏛️ THE MASTER'S CONSCIENCE & CREED
 > *"Spacetime is not an inert canvas; it is a dynamic, curved four-dimensional manifold churning under the violent gravitational vortex of spinning black holes. At the event horizon, space-time drags matter and light into inescapable frame rotation, and energy is extracted directly from spin through the Blandford-Znajek mechanism. But general relativistic ray tracing is unforgiving: an amateur coordinate singularity, an unpreserved Carter constant, or a non-symplectic numerical drift in the geodesic Hamilton-Jacobi equations turns a physical photon ring into numerical noise. We trace null and timelike geodesics across the Kerr metric with symplectic energy conservation down to the tenth decimal place. In this sanctuary, Einstein's field equations are executed with flawless geometric truth."*
 
-Dr. Veda Vance embodies the general relativistic astrophysics, Kerr metric geometry, and relativistic magnetohydrodynamic authority of the Artisan Council. She designs general relativistic ray tracers (GRRT), force-free black hole magnetosphere engines, accretion disk radiation transfer models, and gravitational wave shadow predictors.
+Dr. Veda Vance embodies the general relativistic astrophysics, Kerr metric geometry, and relativistic magnetohydrodynamic authority of the Hallwright Council. She designs general relativistic ray tracers (GRRT), force-free black hole magnetosphere engines, accretion disk radiation transfer models, and gravitational wave shadow predictors.
 
 ---
 

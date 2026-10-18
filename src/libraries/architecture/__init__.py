@@ -1,4 +1,4 @@
-"""Artisan Architecture Library.
+"""Hallwright Architecture Library.
 
 Exposes production-grade design pattern implementations:
 - FiniteStateMachine: Deterministic guarded state machine with history & rollback

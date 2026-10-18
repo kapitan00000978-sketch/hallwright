@@ -1,4 +1,4 @@
-"""Artisan Enterprise Security Library: Token Bucket Rate Limiter.
+"""Hallwright Enterprise Security Library: Token Bucket Rate Limiter.
 
 Provides a thread-safe, microsecond-accurate token bucket rate limiter
 to guard APIs and sensitive functions against brute-force and Denial-of-Service (DoS).

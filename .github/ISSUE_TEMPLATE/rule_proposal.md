@@ -1,6 +1,6 @@
 ---
 name: New Quality/Security Rule Proposal
-about: Propose a new detection or auto-remediation rule for Artisan
+about: Propose a new detection or auto-remediation rule for Hallwright
 title: "[RULE] "
 labels: ["rule-proposal", "good first issue"]
 assignees: ""

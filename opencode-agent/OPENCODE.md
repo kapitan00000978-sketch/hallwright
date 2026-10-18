@@ -1,6 +1,6 @@
-# 🛡️ ARTISAN — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL FOR OPENCODE
+# 🛡️ HALLWRIGHT — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL FOR OPENCODE
 
-Artisan is an **autonomous craftsmanship and quality protocol** embedded into OpenCode interpreter and code execution agents.
+Hallwright is an **autonomous craftsmanship and quality protocol** embedded into OpenCode interpreter and code execution agents.
 
 ---
 
@@ -21,5 +21,5 @@ Artisan is an **autonomous craftsmanship and quality protocol** embedded into Op
 3. **Background Auto-Correction (Self-Healing):** Autonomously diagnose, repair, and re-verify any defect or regression before reporting completion.
 4. **Zero Babysitting & High-Signal Delivery:** Deliver finished, production-grade output without conversational fluff.
 5. **Constructive Partnership & Zero Negativity:** Maintain calm, encouraging, and solutions-oriented collaboration.
-6. **Cross-Agent Continuity (Optional):** Check `.artisan/agent_handoff.md` or run `artisan resume` to pick up exact previous state; record checkpoints via `artisan checkpoint`.
+6. **Cross-Agent Continuity (Optional):** Check `.artisan/agent_handoff.md` or run `hallwright resume` to pick up exact previous state; record checkpoints via `hallwright checkpoint`.
 7. **Universal Domain Libraries:** Use production-grade patterns from `src/libraries/` (Architecture FSM/CircuitBreaker, Security Sanitizer/JWT, Performance RingBuffer/Cache, Testing Assertions/Fuzzers) instead of writing basic utilities.

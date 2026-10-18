@@ -131,7 +131,7 @@ class DeepSeaRubric:
         for v in inspection.violations:
             if "Lazy stub" in v or "Empty pass" in v:
                 code_score = 0.0
-                veto_reasons.append("VETO: Unfinished stub violates Artisan zero-defect standard")
+                veto_reasons.append("VETO: Unfinished stub violates Hallwright zero-defect standard")
 
         total = crush_score + acoustic_score + comp_score + buoyancy_score + code_score
         total = max(0.0, min(100.0, total))

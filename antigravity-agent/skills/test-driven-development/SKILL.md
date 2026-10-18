@@ -5,7 +5,7 @@ description: Strict Test-Driven Development (TDD) cycle: write a failing test fi
 
 # 🧪 Strict Test-Driven Development (TDD)
 
-In the Artisan protocol, untested code is incomplete code. We adhere strictly to the Red-Green-Refactor discipline.
+In the Hallwright protocol, untested code is incomplete code. We adhere strictly to the Red-Green-Refactor discipline.
 
 ## TDD Lifecycle:
 

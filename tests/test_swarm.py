@@ -1,5 +1,5 @@
 """
-Tests for Artisan Multi-Agent Swarm Orchestrator Engine (src/sdk/swarm.py).
+Tests for Hallwright Multi-Agent Swarm Orchestrator Engine (src/sdk/swarm.py).
 Verifies task decomposition, subagent delegation, session locking, and pipeline execution.
 """
 
@@ -21,13 +21,13 @@ from agent_registry import AgentRegistry
 def test_subagents_roster():
     assert len(SUBAGENTS_ROSTER) == 7
     expected = [
-        "artisan-architect",
-        "artisan-security",
-        "artisan-critic",
-        "artisan-tester",
-        "artisan-performance",
-        "artisan-copywriter",
-        "artisan-healer"
+        "hallwright-architect",
+        "hallwright-security",
+        "hallwright-critic",
+        "hallwright-tester",
+        "hallwright-performance",
+        "hallwright-copywriter",
+        "hallwright-healer"
     ]
     for agent_id in expected:
         assert agent_id in SUBAGENTS_ROSTER
@@ -41,10 +41,10 @@ def test_plan_swarm_pipeline_security_task():
     pipeline = orchestrator.plan_swarm_pipeline(task)
 
     agent_ids = [s["agent_id"] for s in pipeline]
-    assert "artisan-architect" in agent_ids
-    assert "artisan-security" in agent_ids
-    assert "artisan-critic" in agent_ids
-    assert "artisan-tester" in agent_ids
+    assert "hallwright-architect" in agent_ids
+    assert "hallwright-security" in agent_ids
+    assert "hallwright-critic" in agent_ids
+    assert "hallwright-tester" in agent_ids
 
 
 def test_plan_swarm_pipeline_copywriting_task():
@@ -53,8 +53,8 @@ def test_plan_swarm_pipeline_copywriting_task():
     pipeline = orchestrator.plan_swarm_pipeline(task, files=["README.md"])
 
     agent_ids = [s["agent_id"] for s in pipeline]
-    assert "artisan-copywriter" in agent_ids
-    assert "artisan-critic" in agent_ids
+    assert "hallwright-copywriter" in agent_ids
+    assert "hallwright-critic" in agent_ids
 
 
 def test_execute_pipeline_registers_sessions():
@@ -77,6 +77,6 @@ def test_format_cli_pipeline():
     orchestrator = SwarmOrchestrator()
     pipeline_data = orchestrator.execute_pipeline("Refactor payment gateway")
     formatted = orchestrator.format_cli_pipeline(pipeline_data)
-    assert "ARTISAN MULTI-AGENT SWARM ORCHESTRATOR" in formatted
+    assert "HALLWRIGHT MULTI-AGENT SWARM ORCHESTRATOR" in formatted
     assert "Delegated Stages" in formatted
-    assert "artisan-critic" in formatted
+    assert "hallwright-critic" in formatted

@@ -1,5 +1,5 @@
 """
-Concurrency-Safe SQLite Storage Engine for Hallwright / Artisan Memory.
+Concurrency-Safe SQLite Storage Engine for Hallwright / Hallwright Memory.
 
 Replaces fragile concurrent JSON file rewrites with ACID SQLite transactions
 operating in WAL (Write-Ahead Logging) mode with automatic retry handling,

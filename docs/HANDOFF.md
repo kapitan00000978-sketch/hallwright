@@ -1,7 +1,7 @@
 # Hallwright Project Handover & Briefing (docs/HANDOFF.md)
 
 ## What This Project Is
-Hallwright (repo `kapitan00000978-sketch/hallwright`; formerly Artisan, formerly Humanpowers) is a **GUARDRAIL LAYER** for existing AI coding agents (Claude Code, Cursor, Copilot, Antigravity, etc.). It is NOT an AI agent, NOT an operating system, and it calls no model itself. The host agent is the LLM.
+Hallwright (repo `kapitan00000978-sketch/hallwright`; formerly Hallwright, formerly Humanpowers) is a **GUARDRAIL LAYER** for existing AI coding agents (Claude Code, Cursor, Copilot, Antigravity, etc.). It is NOT an AI agent, NOT an operating system, and it calls no model itself. The host agent is the LLM.
 
 ### What it actually provides:
 1. A deterministic pre-commit/CI gate (`scripts/detector.py`, `scripts/pre-commit-gatekeeper.py`) that blocks stubs (TODO/FIXME), silent catches, dangerous eval/exec and hardcoded secrets.

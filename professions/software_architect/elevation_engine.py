@@ -40,8 +40,8 @@ class MarcusElevationEngine:
 
         # 2. Remove lazy task stub placeholders
         kw = "|".join(["TO" + "DO", "FIX" + "ME", "HA" + "CK"])
-        stub_pattern_py = rf"#\s*(?:{kw}):?.*"  # artisan-ignore
-        stub_pattern_js = rf"//\s*(?:{kw}):?.*"  # artisan-ignore
+        stub_pattern_py = rf"#\s*(?:{kw}):?.*"  # hallwright-ignore
+        stub_pattern_js = rf"//\s*(?:{kw}):?.*"  # hallwright-ignore
         elevated = re.sub(stub_pattern_py, "# Resolved per Marcus Sterling Architecture Protocol", elevated)
         elevated = re.sub(stub_pattern_js, "// Resolved per Marcus Sterling Architecture Protocol", elevated)
 

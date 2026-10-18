@@ -1,4 +1,4 @@
-"""Artisan Enterprise Performance Library.
+"""Hallwright Enterprise Performance Library.
 
 Exposes high-throughput components:
 - LRUCache, cached: Thread-safe O(1) LRU & TTL cache with hit-ratio metrics

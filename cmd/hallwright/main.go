@@ -52,7 +52,7 @@ type Config struct {
 }
 
 var (
-	ignoreMarkers = []string{"hallwright-ignore", "artisan-ignore"}
+	ignoreMarkers = []string{"hallwright-ignore", "hallwright-ignore"}
 
 	rules = []Rule{
 		// 1. Stubs & Placeholders (hallwright-ignore)

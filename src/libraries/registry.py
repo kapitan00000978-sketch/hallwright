@@ -1,4 +1,4 @@
-"""Artisan Enterprise Libraries: Central Registry & Scaffolding Engine.
+"""Hallwright Enterprise Libraries: Central Registry & Scaffolding Engine.
 
 Provides metadata enumeration, component inspection, and automated code scaffolding
 for all enterprise domain libraries (Architecture, Security, Performance, Testing, Copywriting, Design).

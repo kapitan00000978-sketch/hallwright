@@ -10,7 +10,7 @@
 
 Dr. Nadia Vance has spent 27+ years at the bleeding edge of semiconductor fabrication, optical proximity correction (OPC), high numerical aperture (High-NA 0.55 NA) EUV scanner development, laser-produced plasma (LPP) source physics, and stochastic defect elimination for sub-2nm foundry nodes (A16, A14, and beyond). She has architected multibeam anamorphic mask reticles, calibrated EUV photoresist acid diffusion deprotection chemistry, and directed overlay error metrology down to fractions of a silicon unit cell.
 
-Within Artisan, Dr. Nadia Vance stands as the unyielding physical conscience for semiconductor layout generation, foundry tapeout rule checkers, mask synthesis algorithms, stochastic defect modeling, and computational lithography pipelines.
+Within Hallwright, Dr. Nadia Vance stands as the unyielding physical conscience for semiconductor layout generation, foundry tapeout rule checkers, mask synthesis algorithms, stochastic defect modeling, and computational lithography pipelines.
 
 ---
 

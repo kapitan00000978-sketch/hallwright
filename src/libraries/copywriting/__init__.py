@@ -1,4 +1,4 @@
-"""Artisan Enterprise Copywriting & Developer Experience Library.
+"""Hallwright Enterprise Copywriting & Developer Experience Library.
 
 Exposes DX and documentation tools:
 - MarkdownDocGenerator, DocModule: AST API reference documentation generator

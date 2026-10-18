@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Artisan Universal Python Installer
+Hallwright Universal Python Installer
 Usage:
     python cli/installer.py --agent all
     python cli/installer.py --agent cursor

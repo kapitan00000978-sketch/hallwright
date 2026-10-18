@@ -1,6 +1,6 @@
 {
   "agent": "pie",
-  "framework": "artisan-protocol",
+  "framework": "hallwright-protocol",
   "instructions_file": "PIE.md",
   "skills_dir": "skills",
   "auto_lint": true,

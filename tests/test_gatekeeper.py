@@ -134,8 +134,8 @@ def test_secrets_literal_assignments():
 
 # --- TASK 2: Inline ignore marker ---
 
-def test_artisan_ignore_marker():
-    code = 'password = "hunter2" # artisan-ignore\n'
+def test_hallwright_ignore_marker():
+    code = 'password = "hunter2" # hallwright-ignore\n'
     res = scan_code(code)
     assert res["status"] == "CERTIFIED"
     assert res["score"] == 100
@@ -240,13 +240,13 @@ def test_remediator_js_empty_catch():
     assert count == 1
     assert "console.error" in fixed
 
-def test_artisan_config_loader():
-    from detector import load_artisan_config
-    cfg = load_artisan_config(".")
+def test_hallwright_config_loader():
+    from detector import load_hallwright_config
+    cfg = load_hallwright_config(".")
     assert "rules" in cfg
     assert "exclude_dirs" in cfg
 
-def test_artisan_config_rule_disable():
+def test_hallwright_config_rule_disable():
     from detector import scan_code
     code = "def todo_func():\n    # TODO: implement later\n    pass\n"
     # When enabled (default)
@@ -266,7 +266,7 @@ def test_benchmark_suite():
     spec.loader.exec_module(bench_mod)
     summary = bench_mod.run_benchmark()
     assert summary["total_tasks"] == 10
-    assert summary["artisan_passed"] == 10
+    assert summary["hallwright_passed"] == 10
     assert summary["total_defects_repaired"] > 0
 
 def test_claude_hook_check_and_heal(tmp_path):

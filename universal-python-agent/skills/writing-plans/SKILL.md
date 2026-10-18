@@ -5,7 +5,7 @@ description: Converts approved specifications into actionable, sequential micro-
 
 # 📋 Implementation Planning
 
-An unorganized agent produces chaotic, buggy code. The Artisan planning discipline transforms specifications into verifiable, bite-sized micro-tasks.
+An unorganized agent produces chaotic, buggy code. The Hallwright planning discipline transforms specifications into verifiable, bite-sized micro-tasks.
 
 ## Planning Structure:
 

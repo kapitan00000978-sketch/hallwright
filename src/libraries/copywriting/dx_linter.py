@@ -1,4 +1,4 @@
-"""Artisan Enterprise Copywriting Library: Developer Experience (DX) Linter.
+"""Hallwright Enterprise Copywriting Library: Developer Experience (DX) Linter.
 
 Audits documentation, CLI messages, and error diagnostics against readability,
 empathy, and actionable ergonomics standards.

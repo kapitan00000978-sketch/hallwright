@@ -1,6 +1,6 @@
 # 💉 VACCINES AGAINST AMATEUR AI ANTI-PATTERNS
 
-Artisan immunizes the agent against common generative AI pathologies:
+Hallwright immunizes the agent against common generative AI pathologies:
 
 1. **The "TODO" Epidemic:**
    - *Pathology:* Leaving `// TODO: implement this logic later` in critical code paths.

@@ -1,4 +1,4 @@
-"""Artisan Enterprise Security Library: Zero-Dependency JWT Engine.
+"""Hallwright Enterprise Security Library: Zero-Dependency JWT Engine.
 
 Provides cryptographically secure JSON Web Token (JWT) creation, decoding,
 and signature verification using Python standard library HMAC-SHA256.

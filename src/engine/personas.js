@@ -1,4 +1,4 @@
-// Artisan - The Council of Masters: Synthetic Domain Archetypes & Heuristic Quality Checklists
+// Hallwright - The Council of Masters: Synthetic Domain Archetypes & Heuristic Quality Checklists
 // Transparency Disclaimer: Personas are synthetic role-based heuristic models derived from industry standards,
 // not real living individuals or claimed corporate employment affiliations.
 

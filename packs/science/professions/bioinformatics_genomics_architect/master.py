@@ -92,7 +92,7 @@ class AstridVanceMaster:
         final_critique = self.critic.evaluate(current_data)
         is_certified = final_critique["passed"] and (final_critique["fatal_defects_count"] == 0)
 
-        # Record decision in persistent Artisan journal
+        # Record decision in persistent Hallwright journal
         self._record_journal_entry(
             initial_score=initial_critique["score"],
             final_score=final_critique["score"],

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# Artisan Bootstrap Installer
+# Hallwright Bootstrap Installer
 # Usage:
 #   # Recommended secure installation:
 #   curl -fsSL https://raw.githubusercontent.com/kapitan00000978-sketch/hallwright/main/install.sh -o install.sh
@@ -27,7 +27,7 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 echo "=================================================================="
-echo "  🛡️  ARTISAN BOOTSTRAP INSTALLER"
+echo "  🛡️  HALLWRIGHT BOOTSTRAP INSTALLER"
 echo "      Autonomous AI Agent Quality & Craftsmanship Protocol"
 echo "=================================================================="
 echo "[*] Target Directory : ${TARGET_DIR}"
@@ -35,7 +35,7 @@ echo "[*] Target Agent(s)  : ${AGENT_TARGET}"
 
 mkdir -p "${TARGET_DIR}/.hallwright"
 
-echo "[+] Downloading core Artisan protocol..."
+echo "[+] Downloading core Hallwright protocol..."
 curl -fsSL "${REPO_RAW}/AGENTS.md" -o "${TARGET_DIR}/AGENTS.md"
 
 # Safe memory preservation: never overwrite existing user memory
@@ -94,6 +94,6 @@ fi
 
 echo ""
 echo "=================================================================="
-echo "  ✅ Artisan successfully installed!"
+echo "  ✅ Hallwright successfully installed!"
 echo "     Quality and craftsmanship rules are now active."
 echo "=================================================================="

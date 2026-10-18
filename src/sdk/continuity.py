@@ -1,4 +1,4 @@
-"""Artisan Enterprise SDK: Universal Cross-Agent Continuity & Checkpoint Memory Engine.
+"""Hallwright Enterprise SDK: Universal Cross-Agent Continuity & Checkpoint Memory Engine.
 
 Allows any connected AI agent (Cursor, Claude Code, GitHub Copilot, Antigravity,
 Hermes, OpenCode, Codex, Aider) to instantly understand previous accomplishments,
@@ -148,7 +148,7 @@ class ContinuityManager:
     def save_checkpoint(
         self,
         last_task: str,
-        last_agent: str = "artisan-agent",
+        last_agent: str = "hallwright-agent",
         stopped_at_file: Optional[str] = None,
         stopped_at_line: Optional[int] = None,
         completed_milestones: Optional[List[str]] = None,
@@ -237,7 +237,7 @@ class ContinuityManager:
         """Write human and AI-readable handoff document."""
         date_str = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(cp.last_updated))
         lines = [
-            "# 🤝 Hallwright / Artisan Universal Agent Handoff",
+            "# 🤝 Hallwright Universal Agent Handoff",
             "",
             f"> **Last Agent Active:** `{cp.last_agent}`",
             f"> **Last Checkpoint:** {date_str}",
@@ -289,13 +289,13 @@ class ContinuityManager:
         cp = self.load_checkpoint()
         if not cp:
             return (
-                "No previous Artisan checkpoint found or continuity is disabled.\n"
-                "Starting with a fresh context. Run 'artisan status' to inspect current project."
+                "No previous Hallwright checkpoint found or continuity is disabled.\n"
+                "Starting with a fresh context. Run 'hallwright status' to inspect current project."
             )
 
         date_str = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(cp.last_updated))
         prompt_parts = [
-            f"=== HALLWRIGHT / ARTISAN CONTINUITY HANDOFF ({date_str}) ===",
+            f"=== HALLWRIGHT CONTINUITY HANDOFF ({date_str}) ===",
             f"PREVIOUS AGENT: {cp.last_agent}",
             f"LAST COMPLETED TASK: {cp.last_task}",
         ]

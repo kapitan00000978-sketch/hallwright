@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Artisan Pre-Commit Gatekeeper
+Hallwright Pre-Commit Gatekeeper
 Audits repository files for secrets, lazy stubs, and empty error catches using the shared detector.
 Supports both full repository audit and fast staged git diff checks.
 """

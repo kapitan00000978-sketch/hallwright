@@ -22,29 +22,29 @@ SCHEMA_ORG_CANONICAL_ENTITIES: Dict[str, Dict[str, Any]] = {
     "organization": {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "Artisan Technologies",
-        "url": "https://artisan.dev",
-        "logo": "https://artisan.dev/assets/logo.png",
+        "name": "Hallwright Systems",
+        "url": "https://hallwright.dev",
+        "logo": "https://hallwright.dev/assets/logo.png",
         "sameAs": [
-            "https://twitter.com/artisan_dev",
-            "https://github.com/artisan-agent"
+            "https://twitter.com/hallwright_dev",
+            "https://github.com/kapitan00000978-sketch/hallwright"
         ]
     },
     "website": {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "Artisan Software Studio",
-        "url": "https://artisan.dev",
+        "name": "Hallwright Software Studio",
+        "url": "https://hallwright.dev",
         "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://artisan.dev/search?q={search_term_string}",
+            "target": "https://hallwright.dev/search?q={search_term_string}",
             "query-input": "required name=search_term_string"
         }
     },
     "software_application": {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        "name": "Artisan Autonomous Studio",
+        "name": "Hallwright Autonomous Studio",
         "operatingSystem": "All",
         "applicationCategory": "DeveloperApplication",
         "offers": {
@@ -94,36 +94,36 @@ CANONICAL_SEO_HEAD_CORE: str = (
     "<head>\n"
     '    <meta charset="UTF-8">\n'
     '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-    "    <title>Artisan — Autonomous Craftsmanship & Engineering Protocol</title>\n"
-    '    <meta name="description" content="Artisan is an autonomous quality protocol embedding Principal-level software, security, and design craftsmanship.">\n'
-    '    <link rel="canonical" href="https://artisan.dev/guide">\n'
+    "    <title>Hallwright — Autonomous Craftsmanship & Engineering Protocol</title>\n"
+    '    <meta name="description" content="Hallwright is an autonomous quality protocol embedding Principal-level software, security, and design craftsmanship.">\n'
+    '    <link rel="canonical" href="https://hallwright.dev/guide">\n'
     '    <meta name="robots" content="index, follow, max-image-preview:large">\n'
     '    <!-- OpenGraph Social Protocol -->\n'
-    '    <meta property="og:title" content="Artisan — Autonomous Craftsmanship">\n'
+    '    <meta property="og:title" content="Hallwright — Autonomous Craftsmanship">\n'
     '    <meta property="og:description" content="Principal-level autonomous craftsmanship protocol.">\n'
-    '    <meta property="og:url" content="https://artisan.dev/guide">\n'
-    '    <meta property="og:image" content="https://artisan.dev/og-image.png">\n'
+    '    <meta property="og:url" content="https://hallwright.dev/guide">\n'
+    '    <meta property="og:image" content="https://hallwright.dev/og-image.png">\n'
     '    <meta property="og:type" content="website">\n'
     '    <!-- Twitter Card Protocol -->\n'
     '    <meta name="twitter:card" content="summary_large_image">\n'
-    '    <meta name="twitter:title" content="Artisan — Autonomous Craftsmanship">\n'
+    '    <meta name="twitter:title" content="Hallwright — Autonomous Craftsmanship">\n'
     '    <meta name="twitter:description" content="Principal-level autonomous craftsmanship protocol.">\n'
-    '    <meta name="twitter:image" content="https://artisan.dev/og-image.png">\n'
+    '    <meta name="twitter:image" content="https://hallwright.dev/og-image.png">\n'
     '    <!-- Structured Data (JSON-LD) -->\n'
     '    <script type="application/ld+json">\n'
     "    {\n"
     '        "@context": "https://schema.org",\n'
     '        "@type": "SoftwareApplication",\n'
-    '        "name": "Artisan Protocol",\n'
+    '        "name": "Hallwright Protocol",\n'
     '        "applicationCategory": "DeveloperApplication",\n'
-    '        "url": "https://artisan.dev"\n'
+    '        "url": "https://hallwright.dev"\n'
     "    }\n"
     "    </script>\n"
     "</head>\n"
     "<body>\n"
     "    <main>\n"
     "        <h1>Autonomous Craftsmanship Architecture</h1>\n"
-    '        <img src="hero.webp" width="1200" height="630" alt="Artisan Engineering Architecture" loading="lazy">\n'
+    '        <img src="hero.webp" width="1200" height="630" alt="Hallwright Engineering Architecture" loading="lazy">\n'
     "        <p>Zero-defect autonomous development protocol.</p>\n"
     "    </main>\n"
     "</body>\n"

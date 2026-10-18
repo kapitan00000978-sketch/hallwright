@@ -1,6 +1,6 @@
 {
   "agent": "codex",
-  "methodology": "artisan-protocol",
+  "methodology": "hallwright-protocol",
   "rules": ["../CODEX.md"],
   "enforce_tdd": true,
   "zero_babysitting": true

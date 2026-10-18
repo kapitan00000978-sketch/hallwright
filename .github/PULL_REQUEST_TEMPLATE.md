@@ -1,4 +1,4 @@
-## 🛡️ Artisan Pull Request Verification
+## 🛡️ Hallwright Pull Request Verification
 
 ### Description of Changes
 Briefly describe the rationale and architecture of your changes.

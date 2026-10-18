@@ -1,4 +1,4 @@
-"""Artisan Enterprise Performance Library: High-Concurrency Cache.
+"""Hallwright Enterprise Performance Library: High-Concurrency Cache.
 
 Provides LRU (Least Recently Used) and TTL-aware in-memory caching with
 thread-safety, hit/miss telemetry, and clean decorator ergonomics.

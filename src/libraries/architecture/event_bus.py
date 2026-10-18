@@ -1,4 +1,4 @@
-"""Artisan Enterprise Architecture Library: Event Bus.
+"""Hallwright Enterprise Architecture Library: Event Bus.
 
 Provides a thread-safe, decoupled event broker supporting sync/async dispatch,
 topic wildcard matching, priority ordering, and dead-letter queues.

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Artisan Claude Code Post-Tool Execution Hook
-# Runs Artisan gatekeeper and auto-remediator after Claude edits a file
+# Hallwright Claude Code Post-Tool Execution Hook
+# Runs Hallwright gatekeeper and auto-remediator after Claude edits a file
 
 MODIFIED_FILE="$1"
 python scripts/claude_hook.py "$MODIFIED_FILE"

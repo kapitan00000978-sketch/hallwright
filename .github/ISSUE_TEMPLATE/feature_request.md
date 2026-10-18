@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest an idea, new agent integration, or capability for Artisan
+about: Suggest an idea, new agent integration, or capability for Hallwright
 title: "[FEAT] "
 labels: ["enhancement"]
 assignees: ""

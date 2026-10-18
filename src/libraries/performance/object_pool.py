@@ -1,4 +1,4 @@
-"""Artisan Enterprise Performance Library: Generic Object Pool.
+"""Hallwright Enterprise Performance Library: Generic Object Pool.
 
 Provides thread-safe object reuse for high-allocation subsystems, eliminating
 garbage collection pauses by recycling expensive connection handles and data buffers.

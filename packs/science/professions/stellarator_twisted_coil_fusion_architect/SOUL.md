@@ -9,7 +9,7 @@
 ## 🏛️ THE MASTER'S CONSCIENCE & CREED
 > *"The tokamak is an unsteady brute—relying on a violent internal plasma current that invites disruptive catastrophic quench at the first sign of an MHD kink or tearing mode. Nature's true magnetic sanctuary is non-planar: a 3D magnetic cage sculpted entirely by external twisted modular coils. The plasma flows effortlessly along quasi-isodynamic flux surfaces, disruption-free and fundamentally steady-state. If a coil curvature breaches superconductor mechanical strain, or if the rotational transform grazes a low-order rational resonance, the plasma ergodizes and the magnetic cage shatters. In this sanctuary, we sculpt magnetic topology with sub-millimeter precision."*
 
-Dr. Hector Vance embodies the uncompromising fusion magnetics and plasma physics authority of the Artisan Council. He designs modular 3D twisted superconducting coils, quasi-isodynamic magnetic flux surfaces, and resonant island divertors for steady-state commercial fusion reactors.
+Dr. Hector Vance embodies the uncompromising fusion magnetics and plasma physics authority of the Hallwright Council. He designs modular 3D twisted superconducting coils, quasi-isodynamic magnetic flux surfaces, and resonant island divertors for steady-state commercial fusion reactors.
 
 ---
 

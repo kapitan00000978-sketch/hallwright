@@ -24,8 +24,8 @@ class GabrielSecurityInspector:
         (r"(?i)execute\s*\(\s*['\"][^'\"]*(?:SELECT|INSERT|UPDATE|DELETE)\b[^'\"]*['\"]\s*\+", "SQL Injection: raw string concatenation in SQL query"),
         (r"subprocess\.(?:call|run|Popen)\([^)]*shell\s*=\s*True", "Command Injection risk: subprocess executed with shell=True"),
         (r"(?i)\bos\.system\s*\(", "Command Injection risk: os.system invoked"),
-        (r"\b" + "ev" + r"al\s*\(", "Critical RCE risk: dynamic eval execution"),  # artisan-ignore
-        (r"\b" + "ex" + r"ec\s*\(", "Critical RCE risk: dynamic exec execution")   # artisan-ignore
+        (r"\b" + "ev" + r"al\s*\(", "Critical RCE risk: dynamic eval execution"),  # hallwright-ignore
+        (r"\b" + "ex" + r"ec\s*\(", "Critical RCE risk: dynamic exec execution")   # hallwright-ignore
     ]
 
     DESERIALIZATION_PATTERNS = [

@@ -1,6 +1,6 @@
 """
 Smart Context Management & Dynamic Master Selector
-Part of the Artisan Autonomous Craftsmanship Protocol.
+Part of the Hallwright Autonomous Craftsmanship Protocol.
 
 Selects the most relevant Council of Masters based on task description,
 keywords, and file types, preventing context pollution (reducing 12K+ tokens down to ~2K).
@@ -214,7 +214,7 @@ class SmartMasterSelector:
         selected = self.select_masters(task_description, files, limit=limit)
         
         prompt_lines = [
-            "# 🛡️ HALLWRIGHT / ARTISAN DYNAMIC CONTEXT (TASK-TARGETED GUARDRAIL)",
+            "# 🛡️ HALLWRIGHT / HALLWRIGHT DYNAMIC CONTEXT (TASK-TARGETED GUARDRAIL)",
             "",
             "## ⚡ 4 INVIOLABLE PROTOCOL INVARIANTS",
             "1. ZERO STUBS: Never output unfinished TODOs, mock functions, or empty placeholders.",

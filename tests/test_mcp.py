@@ -39,7 +39,7 @@ def test_mcp_initialize_schema():
     req = {"jsonrpc": "2.0", "id": 1, "method": "initialize"}
     res = server.dispatch_request(req)
     assert res["result"]["protocolVersion"] == "2024-11-05"
-    assert res["result"]["serverInfo"]["name"] in ("hallwright-mcp", "artisan-mcp")
+    assert res["result"]["serverInfo"]["name"] in ("hallwright-mcp", "hallwright-mcp")
 
 def test_mcp_tools_list_distilled_canonical_tools():
     req = {"jsonrpc": "2.0", "id": 2, "method": "tools/list"}

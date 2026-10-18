@@ -1,4 +1,4 @@
-"""Artisan Enterprise Security Library: AST Dynamic Code Scanner.
+"""Hallwright Enterprise Security Library: AST Dynamic Code Scanner.
 
 Performs static abstract syntax tree (AST) audits on Python code to identify
 critical vulnerabilities, hardcoded credentials, insecure deserialization, and dangerous execution.

@@ -1,4 +1,4 @@
-"""Artisan Enterprise Copywriting Library: Keep-A-Changelog Builder.
+"""Hallwright Enterprise Copywriting Library: Keep-A-Changelog Builder.
 
 Constructs semantic, auditable changelogs conforming to the Keep-a-Changelog
 and Semantic Versioning (SemVer) specifications.

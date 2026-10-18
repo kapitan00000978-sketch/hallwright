@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const IGNORE_MARKERS = ['hallwright-ignore', 'artisan-ignore'];
+const IGNORE_MARKERS = ['hallwright-ignore', 'hallwright-ignore'];
 
 function isIgnored(text) {
   if (!text) return false;

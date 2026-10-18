@@ -1,6 +1,6 @@
-# 🛡️ ARTISAN — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL FOR KIMI CODE
+# 🛡️ HALLWRIGHT — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL FOR KIMI CODE
 
-Artisan is an **autonomous craftsmanship and quality protocol** embedded directly into Moonshot AI Kimi Code workflows.
+Hallwright is an **autonomous craftsmanship and quality protocol** embedded directly into Moonshot AI Kimi Code workflows.
 
 ---
 

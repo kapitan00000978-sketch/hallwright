@@ -1,6 +1,6 @@
-# 🛡️ ARTISAN — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL
+# 🛡️ HALLWRIGHT — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL
 
-Artisan is an **autonomous quality and craftsmanship protocol** embedded directly into the AI agent workflow.
+Hallwright is an **autonomous quality and craftsmanship protocol** embedded directly into the AI agent workflow.
 
 ---
 

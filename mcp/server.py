@@ -156,7 +156,7 @@ COUNCIL_MEMBERS = {
     }
 }
 
-# Dynamically merge all registered council members from the Artisan SDK
+# Dynamically merge all registered council members from the Hallwright SDK
 try:
     from sdk.craftsman import COUNCIL_MEMBERS as SDK_COUNCIL_MEMBERS
 except ImportError:
@@ -209,8 +209,8 @@ master_selector = SmartMasterSelector(COUNCIL_MEMBERS) if SmartMasterSelector el
 
 TOOLS = [
     {
-        "name": "artisan_inspect_code",
-        "description": "Audits code against Artisan Council of Masters quality and security benchmarks before presenting it to the user.",
+        "name": "hallwright_inspect_code",
+        "description": "Audits code against Hallwright Council of Masters quality and security benchmarks before presenting it to the user.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -221,7 +221,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_get_persona",
+        "name": "hallwright_get_persona",
         "description": "Retrieves the exact character profile, work ethic, pledge, and checklist from The Council of Masters.",
         "inputSchema": {
             "type": "object",
@@ -235,7 +235,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_list_council",
+        "name": "hallwright_list_council",
         "description": "Lists all members of The Council of Masters, their names, archetypes, and signature mottos.",
         "inputSchema": {
             "type": "object",
@@ -243,7 +243,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_recall_memory",
+        "name": "hallwright_recall_memory",
         "description": "Retrieves past user preferences and recorded project conventions to prevent repeating mistakes.",
         "inputSchema": {
             "type": "object",
@@ -253,7 +253,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_select_masters",
+        "name": "hallwright_select_masters",
         "description": "Context-aware selection of the top relevant Council Masters for a specific task or files, preventing context bloat.",
         "inputSchema": {
             "type": "object",
@@ -266,7 +266,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_get_lessons",
+        "name": "hallwright_get_lessons",
         "description": "Searches persistent learning memory for past mistakes, scar tissue, and lessons learned relevant to the current task.",
         "inputSchema": {
             "type": "object",
@@ -279,7 +279,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_record_learning",
+        "name": "hallwright_record_learning",
         "description": "Records a new mistake, success pattern, convention, or lesson into persistent project memory (.hallwright/memory.json) to prevent repeating errors.",
         "inputSchema": {
             "type": "object",
@@ -302,7 +302,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_inject_prompt",
+        "name": "hallwright_inject_prompt",
         "description": "Generates a laser-targeted system prompt (~1.5K-2K tokens) combining selected masters and relevant lessons for the task (6x token reduction).",
         "inputSchema": {
             "type": "object",
@@ -315,7 +315,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_list_guilds",
+        "name": "hallwright_list_guilds",
         "description": "Lists all 8 specialized Council Guilds (Squads), their leads, member counts, and focus areas.",
         "inputSchema": {
             "type": "object",
@@ -323,7 +323,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_resume_continuity",
+        "name": "hallwright_resume_continuity",
         "description": "Reads the cross-agent continuity checkpoint and returns handoff context, the last agent, where work stopped, completed tasks, and next steps.",
         "inputSchema": {
             "type": "object",
@@ -333,7 +333,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_save_checkpoint",
+        "name": "hallwright_save_checkpoint",
         "description": "Records an atomic progress checkpoint to .hallwright/checkpoints.json and updates .hallwright/agent_handoff.md for future AI agents.",
         "inputSchema": {
             "type": "object",
@@ -351,7 +351,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_get_library",
+        "name": "hallwright_get_library",
         "description": "Retrieves metadata, modules, and class interfaces for universal enterprise domain libraries (architecture, security, performance, testing, copywriting, design).",
         "inputSchema": {
             "type": "object",
@@ -365,7 +365,7 @@ TOOLS = [
         }
     },
     {
-        "name": "artisan_review_code",
+        "name": "hallwright_review_code",
         "description": "Performs ruthless adversarial red-team peer review (Gabriel Frost & Marcus Sterling) on source code, identifying architectural and security defects.",
         "inputSchema": {
             "type": "object",
@@ -379,14 +379,13 @@ TOOLS = [
 ]
 
 # Canonical Hallwright tools (distilled 13 tools for zero bloat)
-CANONICAL_HALLWRIGHT_TOOLS = []
+CANONICAL_HALLWRIGHT_TOOLS = TOOLS
+LEGACY_ARTISAN_TOOLS = []
 for _t in TOOLS:
-    _hw_t = dict(_t)
-    _hw_t["name"] = _t["name"].replace("artisan_", "hallwright_")
-    _hw_t["description"] = _t["description"].replace("Artisan", "Hallwright")
-    CANONICAL_HALLWRIGHT_TOOLS.append(_hw_t)
+    _leg = dict(_t)
+    _leg["name"] = _t["name"].replace("hallwright_", "artisan_")
+    LEGACY_ARTISAN_TOOLS.append(_leg)
 
-LEGACY_ARTISAN_TOOLS = TOOLS
 ALL_MCP_TOOLS = CANONICAL_HALLWRIGHT_TOOLS
 
 
@@ -677,7 +676,7 @@ def dispatch_request(req):
         args = params.get("arguments", {})
 
         hw_name = (tool_name or "").replace("artisan_", "hallwright_")
-        norm_tool = (tool_name or "").replace("hallwright_", "artisan_")
+        # legacy alias resolved via hw_name
         tool_def = next((t for t in ALL_MCP_TOOLS if t["name"] == hw_name), None)
         if not tool_def:
             return {
@@ -700,31 +699,31 @@ def dispatch_request(req):
                 }
             }
 
-        if norm_tool == "artisan_inspect_code":
+        if hw_name == "hallwright_inspect_code":
             output = handle_inspect_code(args)
-        elif norm_tool == "artisan_get_persona":
+        elif hw_name == "hallwright_get_persona":
             output = handle_get_persona(args)
-        elif norm_tool == "artisan_list_council":
+        elif hw_name == "hallwright_list_council":
             output = handle_list_council(args)
-        elif norm_tool == "artisan_recall_memory":
+        elif hw_name == "hallwright_recall_memory":
             output = handle_recall_memory(args)
-        elif norm_tool == "artisan_select_masters":
+        elif hw_name == "hallwright_select_masters":
             output = handle_select_masters(args)
-        elif norm_tool == "artisan_get_lessons":
+        elif hw_name == "hallwright_get_lessons":
             output = handle_get_lessons(args)
-        elif norm_tool == "artisan_record_learning":
+        elif hw_name == "hallwright_record_learning":
             output = handle_record_learning(args)
-        elif norm_tool == "artisan_inject_prompt":
+        elif hw_name == "hallwright_inject_prompt":
             output = handle_inject_prompt(args)
-        elif norm_tool == "artisan_list_guilds":
+        elif hw_name == "hallwright_list_guilds":
             output = handle_list_guilds(args)
-        elif norm_tool == "artisan_resume_continuity":
+        elif hw_name == "hallwright_resume_continuity":
             output = handle_resume_continuity(args)
-        elif norm_tool == "artisan_save_checkpoint":
+        elif hw_name == "hallwright_save_checkpoint":
             output = handle_save_checkpoint(args)
-        elif norm_tool == "artisan_get_library":
+        elif hw_name == "hallwright_get_library":
             output = handle_get_library(args)
-        elif norm_tool == "artisan_review_code":
+        elif hw_name == "hallwright_review_code":
             output = handle_review_code(args)
         else:
             return {

@@ -1,4 +1,4 @@
-"""Artisan Enterprise Security Library: Input Sanitizer & Defensive Guard.
+"""Hallwright Enterprise Security Library: Input Sanitizer & Defensive Guard.
 
 Provides zero-trust recursive payload sanitization against Cross-Site Scripting (XSS),
 SQL injection markers, path traversal attacks, and OS command injection vectors.

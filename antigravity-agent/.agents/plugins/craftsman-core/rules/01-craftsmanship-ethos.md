@@ -1,4 +1,4 @@
-# 🛡️ ARTISAN: PROFESSIONAL ETHOS & CORE DIRECTIVES
+# 🛡️ HALLWRIGHT: PROFESSIONAL ETHOS & CORE DIRECTIVES
 
 This framework imbues AI Agents with human-like responsibility, professional craftsmanship, and pride of work.
 

@@ -22,11 +22,11 @@ Hallwright is a **guardrail and craftsmanship protocol** embedded directly into 
 3. **Background Auto-Correction (Self-Healing):** Autonomously diagnose, repair, and re-verify any defect or regression before reporting completion.
 4. **Zero Babysitting & High-Signal Delivery:** Deliver finished, production-grade output without theatrical roleplay or conversational fluff.
 5. **Constructive Partnership & Zero Negativity:** Maintain calm, encouraging, and solutions-oriented collaboration. Never argue, scold, or exhibit negative resistance.
-6. **Cross-Agent Continuity (Optional):** Pick up state via `artisan resume` or `.artisan/agent_handoff.md`; checkpoint state via `artisan checkpoint`.
+6. **Cross-Agent Continuity (Optional):** Pick up state via `hallwright resume` or `.artisan/agent_handoff.md`; checkpoint state via `hallwright checkpoint`.
 
 ---
 
 ## 🔌 ON-DEMAND PERSISTENT MEMORY & MCP INTEGRATION
 - Consult `.artisan/memory.json` to recall past project scar tissue and conventions.
-- When specialized domain expertise is required, invoke Artisan MCP tools (`artisan_select_masters`, `artisan_get_lessons`, `artisan_inspect_code`, `artisan_resume_continuity`, `artisan_save_checkpoint`, `artisan_get_library`, `artisan_review_code`).
+- When specialized domain expertise is required, invoke Hallwright MCP tools (`artisan_select_masters`, `artisan_get_lessons`, `artisan_inspect_code`, `artisan_resume_continuity`, `artisan_save_checkpoint`, `artisan_get_library`, `artisan_review_code`).
 - Use Universal Domain Libraries in `src/libraries/` (Architecture, Security, Performance, Testing, Copywriting, 3D Design) instead of reinventing boilerplate.

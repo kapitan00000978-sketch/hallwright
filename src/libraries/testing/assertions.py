@@ -1,4 +1,4 @@
-"""Artisan Enterprise Testing Library: Fluent Assertion Suite.
+"""Hallwright Enterprise Testing Library: Fluent Assertion Suite.
 
 Provides expressive, readable, and diagnostic assertion helpers with
 actionable failure messages and structured diff formatting.

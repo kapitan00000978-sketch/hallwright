@@ -1,6 +1,6 @@
 # 🛡️ VERIFICATION & QUALITY STANDARDS
 
-In the Artisan protocol, all outputs must satisfy objective quality standards before delivery.
+In the Hallwright protocol, all outputs must satisfy objective quality standards before delivery.
 
 ## Quality Scoring Rubric (0 - 100):
 

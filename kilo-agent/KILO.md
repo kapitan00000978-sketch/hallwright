@@ -1,6 +1,6 @@
-# 🛡️ ARTISAN — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL FOR KILO CODE
+# 🛡️ HALLWRIGHT — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL FOR KILO CODE
 
-Artisan is an **autonomous quality and craftsmanship protocol** embedded directly into Kilo Code agent workflows.
+Hallwright is an **autonomous quality and craftsmanship protocol** embedded directly into Kilo Code agent workflows.
 
 ---
 

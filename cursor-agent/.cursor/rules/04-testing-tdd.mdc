@@ -5,7 +5,7 @@ globs: *test*, *spec*, tests/**/*, __tests__/**/*
 
 # 🧪 Test-Driven Development (TDD) Directives
 
-In the Artisan protocol, untested code is incomplete code:
+In the Hallwright protocol, untested code is incomplete code:
 
 1. **Red-Green-Refactor Cycle:**
    - First, write a deterministic failing test for the target functionality or bug.

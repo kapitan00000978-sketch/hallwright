@@ -1,4 +1,4 @@
-"""Tests for Artisan Universal Cross-Agent Continuity & Checkpoint Memory Engine.
+"""Tests for Hallwright Universal Cross-Agent Continuity & Checkpoint Memory Engine.
 
 Validates:
 - Checkpoint persistence (.artisan/checkpoints.json)
@@ -101,13 +101,13 @@ def test_continuity_markdown_and_resumption_prompt(temp_workspace):
     assert os.path.exists(handoff_path)
     with open(handoff_path, "r", encoding="utf-8") as f:
         md = f.read()
-    assert "Artisan Universal Agent Handoff" in md
+    assert "Hallwright Universal Agent Handoff" in md
     assert "antigravity" in md
     assert "dashboard_3d.html" in md
 
     # Verify resumption prompt
     prompt = mgr.generate_resumption_prompt()
-    assert "ARTISAN CONTINUITY HANDOFF" in prompt
+    assert "HALLWRIGHT CONTINUITY HANDOFF" in prompt
     assert "PREVIOUS AGENT: antigravity" in prompt
     assert "STOPPED AT FILE: src/libraries/design/dashboard_3d.html:100" in prompt
     assert "3D Engine" in prompt

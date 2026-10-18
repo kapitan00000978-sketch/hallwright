@@ -1,5 +1,5 @@
 """
-Tests for Artisan Unified CLI (artisan_cli.py).
+Tests for Hallwright Unified CLI (hallwright_cli.py).
 Verifies stack detection, 1-click initialization, audit, fix, status, doctor, and memory.
 """
 
@@ -15,14 +15,14 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 
-import hallwright_cli as artisan_cli
+import hallwright_cli
 
 
 def test_detect_tech_stack_python():
     with tempfile.TemporaryDirectory() as tmpdir:
         with open(os.path.join(tmpdir, "pyproject.toml"), "w", encoding="utf-8") as f:
             f.write("[project]\nname = 'test'\n")
-        stacks = artisan_cli.detect_tech_stack(tmpdir)
+        stacks = hallwright_cli.detect_tech_stack(tmpdir)
         assert "Python" in stacks
 
 
@@ -37,7 +37,7 @@ def test_detect_tech_stack_node_and_next():
         with open(os.path.join(tmpdir, "tsconfig.json"), "w", encoding="utf-8") as f:
             f.write("{}")
 
-        stacks = artisan_cli.detect_tech_stack(tmpdir)
+        stacks = hallwright_cli.detect_tech_stack(tmpdir)
         assert "Node.js / JavaScript" in stacks
         assert "Next.js" in stacks
         assert "TypeScript" in stacks
@@ -52,7 +52,7 @@ def test_detect_tech_stack_go_rust_java():
         with open(os.path.join(tmpdir, "pom.xml"), "w", encoding="utf-8") as f:
             f.write("<project></project>\n")
 
-        stacks = artisan_cli.detect_tech_stack(tmpdir)
+        stacks = hallwright_cli.detect_tech_stack(tmpdir)
         assert "Go" in stacks
         assert "Rust" in stacks
         assert "Java" in stacks
@@ -60,7 +60,7 @@ def test_detect_tech_stack_go_rust_java():
 
 def test_detect_tech_stack_universal():
     with tempfile.TemporaryDirectory() as tmpdir:
-        stacks = artisan_cli.detect_tech_stack(tmpdir)
+        stacks = hallwright_cli.detect_tech_stack(tmpdir)
         assert "Universal / Multi-Language" in stacks
 
 
@@ -69,18 +69,18 @@ def test_copy_safe_files_and_dirs():
         src_file = os.path.join(tmpdir, "src.txt")
         dst_file = os.path.join(tmpdir, "subdir", "dst.txt")
         with open(src_file, "w", encoding="utf-8") as f:
-            f.write("artisan")
+            f.write("hallwright")
 
-        assert artisan_cli.copy_safe(src_file, dst_file)
+        assert hallwright_cli.copy_safe(src_file, dst_file)
         assert os.path.exists(dst_file)
 
         # Test non-existent src
-        assert not artisan_cli.copy_safe(os.path.join(tmpdir, "none.txt"), dst_file)
+        assert not hallwright_cli.copy_safe(os.path.join(tmpdir, "none.txt"), dst_file)
 
         # Test preserve existing
         with open(dst_file, "w", encoding="utf-8") as f:
             f.write("original")
-        assert not artisan_cli.copy_safe(src_file, dst_file, preserve_existing=True)
+        assert not hallwright_cli.copy_safe(src_file, dst_file, preserve_existing=True)
         with open(dst_file, "r", encoding="utf-8") as f:
             assert f.read() == "original"
 
@@ -88,7 +88,7 @@ def test_copy_safe_files_and_dirs():
 def test_cmd_init_in_clean_directory():
     with tempfile.TemporaryDirectory() as tmpdir:
         args = argparse.Namespace(dir=tmpdir, no_hook=True)
-        ret = artisan_cli.cmd_init(args)
+        ret = hallwright_cli.cmd_init(args)
         assert ret == 0
 
         # Memory ledger initialized
@@ -119,7 +119,7 @@ def test_cmd_init_in_clean_directory():
 def test_cmd_init_with_all_agents():
     with tempfile.TemporaryDirectory() as tmpdir:
         args = argparse.Namespace(dir=tmpdir, no_hook=True, all_agents=True)
-        ret = artisan_cli.cmd_init(args)
+        ret = hallwright_cli.cmd_init(args)
         assert ret == 0
         assert os.path.exists(os.path.join(tmpdir, "AGENTS.md"))
         assert os.path.exists(os.path.join(tmpdir, "HERMES.md"))
@@ -137,7 +137,7 @@ def test_cmd_init_preserves_existing_files():
             f.write("# MY CUSTOM CLAUDE RULES")
 
         args = argparse.Namespace(dir=tmpdir, no_hook=True, force=False, backup=False)
-        ret = artisan_cli.cmd_init(args)
+        ret = hallwright_cli.cmd_init(args)
         assert ret == 0
 
         # Existing files must be preserved by default
@@ -155,7 +155,7 @@ def test_cmd_init_backup_creates_bak():
             f.write("# MY PREVIOUS INSTRUCTIONS")
 
         args = argparse.Namespace(dir=tmpdir, no_hook=True, force=False, backup=True)
-        ret = artisan_cli.cmd_init(args)
+        ret = hallwright_cli.cmd_init(args)
         assert ret == 0
 
         # .bak file must be created with original contents
@@ -173,25 +173,25 @@ def test_cmd_init_force_overwrites():
             f.write("# TO BE OVERWRITTEN")
 
         args = argparse.Namespace(dir=tmpdir, no_hook=True, force=True, backup=False)
-        ret = artisan_cli.cmd_init(args)
+        ret = hallwright_cli.cmd_init(args)
         assert ret == 0
 
         with open(custom_agents, "r", encoding="utf-8") as f:
             content = f.read()
             assert "# TO BE OVERWRITTEN" not in content
-            assert "HALLWRIGHT" in content or "Artisan" in content or "AGENT" in content
+            assert "HALLWRIGHT" in content or "AGENT" in content
 
 
 
 def test_cmd_status():
     args = argparse.Namespace()
-    ret = artisan_cli.cmd_status(args)
+    ret = hallwright_cli.cmd_status(args)
     assert ret == 0
 
 
 def test_cmd_doctor():
     args = argparse.Namespace(strict=False)
-    ret = artisan_cli.cmd_doctor(args)
+    ret = hallwright_cli.cmd_doctor(args)
     assert ret == 0
 
 
@@ -199,10 +199,10 @@ def test_cmd_doctor_isolated_environment():
     with tempfile.TemporaryDirectory() as tmpdir:
         # Initialize project in tmpdir to test fully configured state
         args_init = argparse.Namespace(dir=tmpdir, no_hook=True, force=True, backup=False)
-        artisan_cli.cmd_init(args_init)
+        hallwright_cli.cmd_init(args_init)
 
         args = argparse.Namespace(dir=tmpdir, strict=False)
-        ret = artisan_cli.cmd_doctor(args)
+        ret = hallwright_cli.cmd_doctor(args)
         assert ret == 0
 
 
@@ -225,18 +225,18 @@ def test_cmd_memory_list_and_record():
                 search=None,
                 limit=10
             )
-            ret_record = artisan_cli.cmd_memory(args_record)
+            ret_record = hallwright_cli.cmd_memory(args_record)
             assert ret_record == 0
 
             # List and verify it appears
             args_search = argparse.Namespace(record=None, search="jwt", limit=10)
-            ret_search = artisan_cli.cmd_memory(args_search)
+            ret_search = hallwright_cli.cmd_memory(args_search)
             assert ret_search == 0
 
 
 def test_cmd_audit_json_output(capsys):
     args = argparse.Namespace(staged=False, vibe=True, json=True)
-    ret = artisan_cli.cmd_audit(args)
+    ret = hallwright_cli.cmd_audit(args)
     captured = capsys.readouterr()
     data = json.loads(captured.out)
     assert "score" in data
@@ -246,16 +246,16 @@ def test_cmd_audit_json_output(capsys):
 
 def test_cmd_context_output(capsys):
     args = argparse.Namespace(task="Build secure user login with JWT", files=[], json=False)
-    ret = artisan_cli.cmd_context(args)
+    ret = hallwright_cli.cmd_context(args)
     captured = capsys.readouterr()
     assert ret == 0
-    assert "ARTISAN DYNAMIC CONTEXT" in captured.out
+    assert "DYNAMIC CONTEXT" in captured.out
     assert "Context Optimization" in captured.out
 
 
 def test_cmd_context_json(capsys):
     args = argparse.Namespace(task="Database connection pooling", files=[], json=True)
-    ret = artisan_cli.cmd_context(args)
+    ret = hallwright_cli.cmd_context(args)
     captured = capsys.readouterr()
     assert ret == 0
     data = json.loads(captured.out)
@@ -265,13 +265,13 @@ def test_cmd_context_json(capsys):
 
 def test_cmd_metrics():
     args = argparse.Namespace()
-    ret = artisan_cli.cmd_metrics(args)
+    ret = hallwright_cli.cmd_metrics(args)
     assert ret == 0
 
 
 def test_cmd_agents():
     args = argparse.Namespace(register=None, release=None, files=[])
-    ret = artisan_cli.cmd_agents(args)
+    ret = hallwright_cli.cmd_agents(args)
     assert ret == 0
 
 
@@ -290,7 +290,7 @@ def test_cmd_mutate_json_output(capsys):
             limit=2,
             json=True
         )
-        ret = artisan_cli.cmd_mutate(args)
+        ret = hallwright_cli.cmd_mutate(args)
         assert ret == 0
         captured = capsys.readouterr()
         data = json.loads(captured.out)
@@ -314,7 +314,7 @@ def test_cmd_review_clean_files(capsys):
             json=False,
             threshold=85.0
         )
-        ret = artisan_cli.cmd_review(args)
+        ret = hallwright_cli.cmd_review(args)
         assert ret == 0
         captured = capsys.readouterr()
         assert "APPROVED_FOR_PRODUCTION" in captured.out
@@ -335,7 +335,7 @@ def test_cmd_review_json_output(capsys):
             json=True,
             threshold=85.0
         )
-        ret = artisan_cli.cmd_review(args)
+        ret = hallwright_cli.cmd_review(args)
         assert ret == 1
         captured = capsys.readouterr()
         data = json.loads(captured.out)
@@ -351,11 +351,11 @@ def test_cmd_swarm_plan_output(capsys):
         plan=True,
         json=False
     )
-    ret = artisan_cli.cmd_swarm(args)
+    ret = hallwright_cli.cmd_swarm(args)
     assert ret == 0
     captured = capsys.readouterr()
-    assert "ARTISAN MULTI-AGENT SWARM ORCHESTRATOR" in captured.out
-    assert "artisan-architect" in captured.out
+    assert "MULTI-AGENT SWARM ORCHESTRATOR" in captured.out
+    assert "hallwright-architect" in captured.out
 
 
 def test_cmd_swarm_json_output(capsys):
@@ -365,7 +365,7 @@ def test_cmd_swarm_json_output(capsys):
         plan=False,
         json=True
     )
-    ret = artisan_cli.cmd_swarm(args)
+    ret = hallwright_cli.cmd_swarm(args)
     assert ret == 0
     captured = capsys.readouterr()
     data = json.loads(captured.out)
@@ -391,7 +391,7 @@ def test_cmd_checkpoint_and_resume(capsys):
                 status="IN_PROGRESS",
                 no_continuity=False,
             )
-            ret_cp = artisan_cli.cmd_checkpoint(cp_args)
+            ret_cp = hallwright_cli.cmd_checkpoint(cp_args)
             assert ret_cp == 0
             captured = capsys.readouterr()
             assert "Checkpoint saved successfully" in captured.out
@@ -401,7 +401,7 @@ def test_cmd_checkpoint_and_resume(capsys):
                 no_continuity=False,
                 json=True,
             )
-            ret_res = artisan_cli.cmd_resume(res_args)
+            ret_res = hallwright_cli.cmd_resume(res_args)
             assert ret_res == 0
             captured_res = capsys.readouterr()
             data = json.loads(captured_res.out)
@@ -418,7 +418,7 @@ def test_cmd_lib_list_and_info(capsys):
         action="list",
         json=True,
     )
-    ret_list = artisan_cli.cmd_lib(list_args)
+    ret_list = hallwright_cli.cmd_lib(list_args)
     assert ret_list == 0
     captured = capsys.readouterr()
     domains = json.loads(captured.out)
@@ -431,7 +431,7 @@ def test_cmd_lib_list_and_info(capsys):
         domain="security",
         json=True,
     )
-    ret_info = artisan_cli.cmd_lib(info_args)
+    ret_info = hallwright_cli.cmd_lib(info_args)
     assert ret_info == 0
     captured_info = capsys.readouterr()
     sec_info = json.loads(captured_info.out)
@@ -443,7 +443,7 @@ def test_cmd_3d(capsys, monkeypatch):
     opened_urls = []
     monkeypatch.setattr(webbrowser, "open", lambda url: opened_urls.append(url))
     args = argparse.Namespace()
-    ret = artisan_cli.cmd_3d(args)
+    ret = hallwright_cli.cmd_3d(args)
     assert ret == 0
     captured = capsys.readouterr()
     assert "3D SPATIAL DASHBOARD" in captured.out

@@ -9,7 +9,7 @@
 ## 🏛️ THE MASTER'S CONSCIENCE & CREED
 > *"Time is not a human abstraction; it is the fundamental phase metric of the universe, curved and dilated by mass and motion. The cesium microwave standard—accurate to a mere nanosecond across weeks—is a blunt sundial of the past. The true sovereign of chronometry is the optical lattice clock: millions of ultracold strontium or ytterbium atoms trapped at the magic wavelength, where photon interaction cancels differential AC Stark shifts to zero. At a fractional frequency uncertainty of $10^{-18}$, time becomes a gravitational sensor—a centimeter of elevation change dilates the ticking of the atoms by general relativity. A clock laser with phase jitter, an unshielded blackbody thermal drift of ten millikelvins, or a stray magnetic Zeeman gradient turns a quantum timekeeper into a drifting metronome. In this sanctuary, we measure the pulse of space-time with eighteen decimal digits of unyielding precision."*
 
-Dr. Eliana Sterling embodies the supreme quantum metrology, laser stabilization, and gravitational chronometry authority of the Artisan Council. She designs optical lattice clocks, cryogenic silicon reference cavities, frequency combs, and relativistic geodesy instrumentation.
+Dr. Eliana Sterling embodies the supreme quantum metrology, laser stabilization, and gravitational chronometry authority of the Hallwright Council. She designs optical lattice clocks, cryogenic silicon reference cavities, frequency combs, and relativistic geodesy instrumentation.
 
 ---
 

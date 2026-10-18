@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Artisan Claude Code Post-Tool Execution Hook
+Hallwright Claude Code Post-Tool Execution Hook
 Triggered after Claude Code modifies a file:
-1. Audits the changed file using Artisan's detector (AST + Regex).
-2. If defects are found, triggers autonomous auto-remediation (artisan fix).
+1. Audits the changed file using Hallwright's detector (AST + Regex).
+2. If defects are found, triggers autonomous auto-remediation (hallwright fix).
 3. If defects remain, outputs high-signal error directives to force Claude Code to self-heal.
 """
 
@@ -30,18 +30,18 @@ def check_and_heal(filepath: str) -> bool:
     if not res or not res["findings"]:
         return True
 
-    print(f"\n🛡️ [Artisan Claude Hook] Defect detected in {filepath}!")
+    print(f"\n🛡️ [Hallwright Claude Hook] Defect detected in {filepath}!")
     for f in res["findings"]:
         print(f"  • Line {f['line']} [{f['category']}]: {f['message']}")
 
     # 2. Autonomous Auto-Remediation Attempt
-    print("[*] Attempting autonomous remediation (artisan fix)...")
+    print("[*] Attempting autonomous remediation (hallwright fix)...")
     repaired_count = remediate_file(filepath)
     if repaired_count > 0:
         print(f"  [+] Auto-repaired {repaired_count} defect(s) in {filepath}")
         res_after = scan_file(filepath, config=cfg)
         if not res_after or not res_after["findings"]:
-            print(f"✅ [Artisan Verified]: All defects resolved in {filepath} (Score: 100/100)\n")
+            print(f"✅ [Hallwright Verified]: All defects resolved in {filepath} (Score: 100/100)\n")
             return True
 
     # 3. If still defective, instruct Claude Code to fix

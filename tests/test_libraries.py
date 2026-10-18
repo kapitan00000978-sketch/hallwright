@@ -1,4 +1,4 @@
-"""Tests for Artisan Universal Enterprise Domain Libraries.
+"""Tests for Hallwright Universal Enterprise Domain Libraries.
 
 Validates:
 - Architecture (FSM, EventBus, CircuitBreaker, Clean Ports)
@@ -220,7 +220,7 @@ def test_token_bucket_rate_limiter():
 
 def test_jwt_engine_roundtrip_and_expiration():
     """Verify zero-dependency JWT encoding, decoding, and tamper resistance."""
-    secret = "artisan-super-secret-key-32-bytes!"
+    secret = "hallwright-super-secret-key-32-bytes!"
     payload = {"sub": "user_42", "role": "admin"}
 
     token = JWTEngine.encode(payload, secret=secret, expires_in_sec=100)
@@ -330,7 +330,7 @@ def test_object_pool_lifecycle():
 def test_fluent_assertions():
     """Verify assert_that fluent chaining."""
     assert_that(42).is_equal_to(42).is_between(40, 50)
-    assert_that("Artisan Protocol").contains("Artisan").matches_regex(r"^Artisan")
+    assert_that("Hallwright Protocol").contains("Hallwright").matches_regex(r"^Hallwright")
     assert_that([1, 2, 3]).has_length(3).contains(2)
 
     with pytest.raises(FluentAssertionError):
@@ -374,10 +374,10 @@ class Worker:
 
 def test_changelog_builder():
     """Verify Keep-A-Changelog builder markdown rendering."""
-    cb = ChangelogBuilder("Artisan")
+    cb = ChangelogBuilder("Hallwright")
     cb.add_release("2.0.0", added=["Universal Domain Libraries", "3D Spatial Engine"])
     md = cb.render_markdown()
-    assert "# Changelog: Artisan" in md
+    assert "# Changelog: Hallwright" in md
     assert "## [2.0.0]" in md
     assert "### Added" in md
     assert "- Universal Domain Libraries" in md
@@ -410,7 +410,7 @@ def test_design_assets_exist():
     assert os.path.exists(html_path)
 
     html = get_dashboard_html()
-    assert "Artisan 3D Swarm" in html
+    assert "Hallwright 3D Swarm" in html
     assert "spatial_3d.js" in html
 
 

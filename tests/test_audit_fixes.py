@@ -182,7 +182,7 @@ def test_hw027_line_isolated_ignore_marker():
         "except:\n"
         "    pass\n"
         "\n"
-        "eval('2 + 2')  # artisan-ignore\n"
+        "eval('2 + 2')  # hallwright-ignore\n"
     )
     res = scan_code(code_with_ignore_elsewhere)
     # The eval line is ignored, but the bare except on line 3-4 MUST be detected!

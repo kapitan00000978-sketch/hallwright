@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Artisan Quality & Workspace Audit Report
+Hallwright Quality & Workspace Audit Report
 Calculates real metrics from the current repository: files audited, rules active, and gatekeeper status.
 """
 
@@ -44,13 +44,13 @@ def display_metrics():
             "sourceFilesAudited": src_files,
             "totalLinesAnalyzed": lines,
             "activeRuleModules": rules,
-            "qualityProtocol": "Artisan 1.0 (Active)",
+            "qualityProtocol": "Hallwright 1.0 (Active)",
             "verificationStatus": "All Code Passing Gatekeeper Benchmarks"
         }
         status_note = "Live workspace analysis"
 
     print("\n" + "=" * 65)
-    print(" 🛡️  ARTISAN — WORKSPACE QUALITY & AUDIT REPORT")
+    print(" 🛡️  HALLWRIGHT — WORKSPACE QUALITY & AUDIT REPORT")
     print(f"    Mode: {status_note}")
     print("=" * 65)
     for k, v in data.items():

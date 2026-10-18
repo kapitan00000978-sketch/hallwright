@@ -22,9 +22,9 @@ Hallwright is a **guardrail layer and craftsmanship protocol** embedded directly
 
 ## 🔌 ON-DEMAND DOMAIN HEURISTICS (MCP POWERED)
 The Council of Masters (64 Domain Titans) and Persistent Learning Memory are accessible on-demand via standard MCP tools:
-- Use `hallwright_select_masters({"task": "..."})` (or `artisan_select_masters`) or `hallwright_inject_prompt` when specialized domain heuristics are required.
-- Use `hallwright_get_lessons({"task": "..."})` (or `artisan_get_lessons`) to consult past scar tissue and mistakes before writing sensitive code.
-- Use `hallwright_inspect_code({"code": "..."})` (or `artisan_inspect_code`) for AST-level pre-commit verification.
+- Use `hallwright_select_masters({"task": "..."})` or `hallwright_inject_prompt` when specialized domain heuristics are required.
+- Use `hallwright_get_lessons({"task": "..."})` to consult past scar tissue and mistakes before writing sensitive code.
+- Use `hallwright_inspect_code({"code": "..."})` for AST-level pre-commit verification.
 - Use `hallwright_resume_continuity()` or `hallwright_save_checkpoint({"task": "..."})` for cross-agent session continuity.
-- Use `hallwright_get_library({"domain": "..."})` (or `artisan_get_library`) or `src/libraries/` to leverage production-grade enterprise modules.
-- Use `hallwright_review_code({"code": "..."})` (or `artisan_review_code`) for adversarial red-team peer review.
+- Use `hallwright_get_library({"domain": "..."})` or `src/libraries/` to leverage production-grade enterprise modules.
+- Use `hallwright_review_code({"code": "..."})` for adversarial red-team peer review.

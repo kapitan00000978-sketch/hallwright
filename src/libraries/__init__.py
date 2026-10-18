@@ -1,4 +1,4 @@
-"""Artisan Universal Enterprise Libraries.
+"""Hallwright Universal Enterprise Libraries.
 
 Comprehensive, production-ready toolkits across key software craftsmanship domains:
 - architecture: FSM, EventBus, CircuitBreaker, Clean Ports

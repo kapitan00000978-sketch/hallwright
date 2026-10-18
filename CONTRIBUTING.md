@@ -1,13 +1,13 @@
-# Contributing to Artisan 🛡️
+# Contributing to Hallwright 🛡️
 
-Thank you for your interest in contributing to **Artisan**! Artisan is an open-source engineering quality and craftsmanship protocol for AI coding assistants.
+Thank you for your interest in contributing to **Hallwright**! Hallwright is an open-source engineering quality and craftsmanship protocol for AI coding assistants.
 
 ---
 
 ## 🎯 Ground Rules & Invariants
 
 1. **Deterministic Quality Gate:** All code modifications must satisfy the pre-commit gatekeeper with a score of 100/100 (`python scripts/pre-commit-gatekeeper.py`).
-2. **Zero Unfinished Stubs:** Never commit unfinished placeholders (`# TODO`, `// FIXME`, empty catches, or bare `except: pass`). Complete all logic end-to-end or use `# artisan-ignore` if strictly justified.
+2. **Zero Unfinished Stubs:** Never commit unfinished placeholders (`# TODO`, `// FIXME`, empty catches, or bare `except: pass`). Complete all logic end-to-end or use `# hallwright-ignore` if strictly justified.
 3. **Automated Test Coverage:** Add or update unit tests in `tests/` for every behavior or rule you change.
 4. **No Unverified Marketing Claims:** Avoid hyperbolic claims ("100% bug-free", "0% mistakes", "24/7"). Document empirical, measured facts.
 

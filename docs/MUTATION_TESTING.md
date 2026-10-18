@@ -14,7 +14,7 @@ Mutation testing actively introduces controlled faults (mutants) into your sourc
 
 ## 🔬 Mutation Operators
 
-Artisan applies three deterministic AST mutation classes:
+Hallwright applies three deterministic AST mutation classes:
 1. **Comparison Mutation:** Swaps comparison operators (`==` ↔ `!=`, `<` ↔ `<=`, `>` ↔ `>=`).
 2. **Binary Operator Mutation:** Inverts arithmetic and bitwise operations (`+` ↔ `-`, `*` ↔ `/`).
 3. **Boolean Mutation:** Flips boolean literals (`True` ↔ `False`).

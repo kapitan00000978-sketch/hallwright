@@ -1,4 +1,4 @@
-"""Artisan Enterprise Testing Library.
+"""Hallwright Enterprise Testing Library.
 
 Exposes test engineering components:
 - EdgeCaseGenerator, FuzzRunner: Property-based edge case & boundary fuzzer

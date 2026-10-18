@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Artisan Benchmark Suite (bench/)
+Hallwright Benchmark Suite (bench/)
 Empirical evaluation of 10 realistic code generation tasks:
-Compares Baseline (Raw Agent output with common stubs/leaks) vs Artisan (Gatekeeper + Auto-Remediation).
+Compares Baseline (Raw Agent output with common stubs/leaks) vs Hallwright (Gatekeeper + Auto-Remediation).
 """
 
 import os
@@ -90,7 +90,7 @@ def run_benchmark() -> Dict[str, Any]:
     print("==================================================================\n")
 
     baseline_passed = 0
-    artisan_passed = 0
+    hallwright_passed = 0
     total_remediated_defects = 0
     total_remediation_cycles = 0
 
@@ -102,7 +102,7 @@ def run_benchmark() -> Dict[str, Any]:
         ext = ".py" if lang == "python" else ".js"
         fname = f"{task['id'].lower()}{ext}"
 
-        # 1. Baseline Evaluation (Without Artisan)
+        # 1. Baseline Evaluation (Without Hallwright)
         baseline_res = scan_code(code, filename=fname)
         passed_baseline = baseline_res["status"] == "CERTIFIED"
         if passed_baseline:
@@ -122,7 +122,7 @@ def run_benchmark() -> Dict[str, Any]:
         artisan_res = scan_code(current_code, filename=fname)
         passed_artisan = artisan_res["status"] == "CERTIFIED"
         if passed_artisan:
-            artisan_passed += 1
+            hallwright_passed += 1
 
         total_remediated_defects += repaired_in_task
         total_remediation_cycles += cycles
@@ -147,9 +147,9 @@ def run_benchmark() -> Dict[str, Any]:
         "total_tasks": len(TASKS),
         "baseline_passed": baseline_passed,
         "baseline_pass_rate": f"{(baseline_passed / len(TASKS)) * 100:.1f}%",
-        "hallwright_passed": artisan_passed,
-        "artisan_passed": artisan_passed,
-        "hallwright_pass_rate": f"{(artisan_passed / len(TASKS)) * 100:.1f}%",
+        "hallwright_passed": hallwright_passed,
+        "hallwright_passed": hallwright_passed,
+        "hallwright_pass_rate": f"{(hallwright_passed / len(TASKS)) * 100:.1f}%",
         "total_defects_repaired": total_remediated_defects,
         "average_remediation_cycles": round(total_remediation_cycles / len(TASKS), 1),
         "results": results

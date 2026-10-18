@@ -1,4 +1,4 @@
-"""Artisan Enterprise Security Library.
+"""Hallwright Enterprise Security Library.
 
 Exposes security hardening components:
 - InputSanitizer: Deep recursive XSS, SQLi, and path traversal sanitizer

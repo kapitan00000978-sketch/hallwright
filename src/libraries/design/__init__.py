@@ -1,4 +1,4 @@
-"""Artisan Enterprise Design & 3D Spatial Library.
+"""Hallwright Enterprise Design & 3D Spatial Library.
 
 Exposes file paths and static asset helpers for:
 - spatial_3d.js: Standalone zero-dependency 3D canvas engine

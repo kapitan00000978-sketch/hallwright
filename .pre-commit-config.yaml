@@ -2,8 +2,8 @@
 repos:
   - repo: local
     hooks:
-      - id: artisan-gatekeeper
-        name: Artisan Pre-Commit Gatekeeper
+      - id: hallwright-gatekeeper
+        name: Hallwright Pre-Commit Gatekeeper
         entry: python scripts/pre-commit-gatekeeper.py --staged
         language: system
         types: [text]

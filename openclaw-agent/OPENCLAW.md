@@ -1,6 +1,6 @@
-# 🛡️ ARTISAN — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL FOR OPENCLAW
+# 🛡️ HALLWRIGHT — AUTONOMOUS CRAFTSMANSHIP & QUALITY PROTOCOL FOR OPENCLAW
 
-Artisan is an **autonomous craftsmanship and quality protocol** embedded directly into OpenClaw autonomous agent workflows.
+Hallwright is an **autonomous craftsmanship and quality protocol** embedded directly into OpenClaw autonomous agent workflows.
 
 ---
 

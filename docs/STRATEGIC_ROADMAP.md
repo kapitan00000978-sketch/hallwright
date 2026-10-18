@@ -1,4 +1,4 @@
-# 🗺️ ARTISAN: Strategic Roadmap & Architecture Evolution (2026–2031)
+# 🗺️ HALLWRIGHT: Strategic Roadmap & Architecture Evolution (2026–2031)
 
 > **Vision:** Universal AI Agent Quality & Intelligence Protocol — empowering developers and autonomous AI coding assistants (Claude Code, Cursor, Copilot, Antigravity, Windsurf, Kimi) with deterministic quality enforcement, persistent memory, and collective intelligence.
 
@@ -27,7 +27,7 @@
 
 ```mermaid
 timeline
-    title Artisan Multi-Year Strategic Journey
+    title Hallwright Multi-Year Strategic Journey
     2026 Q4 : Phase 1 Foundation : Smart Context : Persistent Memory : 9 MCP Tools : Multi-lang Guard
     2027 H1 : Phase 2 Intelligence : Semantic Vector Memory : Multi-Agent State Sync : Quality Metrics HUD
     2027 H2 - 2028 H1 : Phase 3 Ecosystem : Plugin Marketplace : Domain Extensions : Enterprise RBAC
@@ -80,11 +80,11 @@ timeline
 ## Phase 3: Plugin Ecosystem & Domain Extensions (2027 H2 – 2028 H1)
 **Goal:** Community extensibility and enterprise team management.
 
-### 3.1 Plugin SDK (`artisan-plugin-*`)
-- Standardized manifest (`artisan-plugin.json`) allowing third parties to publish domain packs:
-  - `artisan-plugin-solidity`: Smart contract security & gas optimization.
-  - `artisan-plugin-godot`: GDScript & game physics invariants.
-  - `artisan-plugin-bioinformatics`: Genomic pipeline standards.
+### 3.1 Plugin SDK (`hallwright-plugin-*`)
+- Standardized manifest (`hallwright-plugin.json`) allowing third parties to publish domain packs:
+  - `hallwright-plugin-solidity`: Smart contract security & gas optimization.
+  - `hallwright-plugin-godot`: GDScript & game physics invariants.
+  - `hallwright-plugin-bioinformatics`: Genomic pipeline standards.
 - Sandboxed execution and integrity verification.
 
 ### 3.2 Enterprise Governance
@@ -115,7 +115,7 @@ timeline
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                        ARTISAN ECOSYSTEM TIERS                         │
+│                        HALLWRIGHT ECOSYSTEM TIERS                         │
 ├──────────────────────────┬──────────────────────────┬──────────────────┤
 │ Free Community (Open)    │ Pro Developer            │ Enterprise Team  │
 ├──────────────────────────┼──────────────────────────┼──────────────────┤
@@ -128,4 +128,4 @@ timeline
 
 ---
 
-*Authored as part of the Artisan Autonomous Craftsmanship & Quality Protocol.*
+*Authored as part of the Hallwright Autonomous Craftsmanship & Quality Protocol.*

@@ -135,7 +135,7 @@ class DatabaseElevationEngine:
                 target_cols.append("created_at")
 
             projected = ", ".join(f"{table}.{col}" for col in target_cols)
-            return f"SELECT {projected} FROM {table}"  # artisan-ignore
+            return f"SELECT {projected} FROM {table}"  # hallwright-ignore
 
         remediated = re.sub(
             r"SELECT\s+\*\s+FROM\s+(\w+)",

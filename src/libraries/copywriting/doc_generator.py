@@ -1,4 +1,4 @@
-"""Artisan Enterprise Copywriting Library: AST Documentation Generator.
+"""Hallwright Enterprise Copywriting Library: AST Documentation Generator.
 
 Parses Python source code and generates publication-grade GitHub Flavored Markdown
 reference documentation including signatures, types, docstrings, and usage tables.

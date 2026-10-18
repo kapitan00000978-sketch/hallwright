@@ -1,5 +1,5 @@
 """
-ARTISAN - Universal Python SDK for Autonomous Craftsmanship & Self-Critique
+HALLWRIGHT - Universal Python SDK for Autonomous Craftsmanship & Self-Critique
 Empowered by The Council of Masters
 
 Usage:
@@ -425,7 +425,7 @@ class CraftsmanAgent:
         archetype = self.member["archetype"]
         motto = self.member["motto"]
 
-        print(f"[Artisan Council] Activated Master: {name}")
+        print(f"[Hallwright Council] Activated Master: {name}")
         print(f"                      Archetype: {archetype}")
         print(f"                      Motto: \"{motto}\"")
         print(f"[{name}] Stage 1: Drafting primary skeleton...")

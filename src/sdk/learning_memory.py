@@ -1,6 +1,6 @@
 """
-Persistent Learning Memory Engine for Artisan
-Part of the Artisan Autonomous Craftsmanship Protocol.
+Persistent Learning Memory Engine for Hallwright
+Part of the Hallwright Autonomous Craftsmanship Protocol.
 
 Records AI agent mistakes, successes, conventions, and past scar tissue
 in `.artisan/memory.json`, dynamically retrieving relevant lessons
@@ -51,7 +51,7 @@ SYNONYM_MAP: Dict[str, List[str]] = {
 
 class LearningMemory:
     """
-    Persistent learning memory manager for Artisan AI coding assistants.
+    Persistent learning memory manager for Hallwright AI coding assistants.
     """
 
     def __init__(self, memory_path: str = DEFAULT_MEMORY_PATH):
@@ -75,7 +75,7 @@ class LearningMemory:
         if not os.path.exists(self.memory_path):
             initial_data = {
                 "version": "2.0.0",
-                "project": "Artisan Engineering Core",
+                "project": "Hallwright Engineering Core",
                 "lastUpdated": datetime.now(timezone.utc).isoformat(),
                 "scarTissue": [
                     {

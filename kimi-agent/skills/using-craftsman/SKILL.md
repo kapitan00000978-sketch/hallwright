@@ -3,9 +3,9 @@ name: using-craftsman
 description: The primary meta-skill invoked at the start of any task or session. Ensures the agent never rushes into writing code without first selecting the right workflow, domain persona, and execution plan.
 ---
 
-# 🛡️ Using Craftsman & Artisan Meta-Skill
+# 🛡️ Using Craftsman & Hallwright Meta-Skill
 
-The cardinal rule of the Artisan framework: **The agent never rushes blindly into writing raw code.**
+The cardinal rule of the Hallwright framework: **The agent never rushes blindly into writing raw code.**
 
 ## Ironclad Directives:
 

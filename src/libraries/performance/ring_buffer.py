@@ -1,4 +1,4 @@
-"""Artisan Enterprise Performance Library: Single-Producer Single-Consumer (SPSC) Ring Buffer.
+"""Hallwright Enterprise Performance Library: Single-Producer Single-Consumer (SPSC) Ring Buffer.
 
 Provides a fixed-size, zero-allocation circular buffer optimized for high-throughput
 pipelining between concurrent worker threads without dynamic heap allocations.

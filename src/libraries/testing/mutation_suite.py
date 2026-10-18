@@ -1,4 +1,4 @@
-"""Artisan Enterprise Testing Library: AST Mutation Testing Harness.
+"""Hallwright Enterprise Testing Library: AST Mutation Testing Harness.
 
 Generates synthetic programmatic mutants by systematically altering AST nodes
 (operators, comparison guards, booleans) to measure test suite killing fidelity.

@@ -1,5 +1,5 @@
 """
-Unit tests for Artisan Autonomous Mutation Testing Engine (src/sdk/mutator.py).
+Unit tests for Hallwright Autonomous Mutation Testing Engine (src/sdk/mutator.py).
 Verifies AST mutation generation, comparison swapping, operator flips, and mutation execution.
 """
 

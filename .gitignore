@@ -6,7 +6,7 @@ __pycache__/
 .venv/
 dist/
 build/
-hallwright-*/
+/hallwright-*/
 .DS_Store
 Thumbs.db
 .aider*
@@ -19,4 +19,6 @@ bin/hallwright-*
 bin/hallwright
 bin/hallwright.exe
 !bin/hallwright.js
+target/
+crates/**/target/
 

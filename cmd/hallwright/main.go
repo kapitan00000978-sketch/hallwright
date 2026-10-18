@@ -10,7 +10,9 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -213,6 +215,8 @@ func scanFile(fpath string) ([]Finding, error) {
 
 	var findings []Finding
 	scanner := bufio.NewScanner(file)
+	buf := make([]byte, 64*1024)
+	scanner.Buffer(buf, 1024*1024)
 	lineNum := 0
 
 	for scanner.Scan() {
@@ -264,9 +268,11 @@ func getStagedFiles() []string {
 
 func main() {
 	stagedFlag := flag.Bool("staged", false, "Scan only staged git changes")
+	workspaceFlag := flag.Bool("workspace", false, "Scan full workspace (default)")
 	jsonFlag := flag.Bool("json", false, "Output results in JSON format")
 	versionFlag := flag.Bool("version", false, "Print version")
 	flag.BoolVar(stagedFlag, "s", false, "Scan only staged git changes (shorthand)")
+	flag.BoolVar(workspaceFlag, "w", false, "Scan full workspace (shorthand)")
 	flag.BoolVar(jsonFlag, "j", false, "Output results in JSON format (shorthand)")
 	flag.Parse()
 
@@ -336,11 +342,42 @@ func main() {
 		})
 	}
 
-	var allFindings []Finding
+	type scanResult struct {
+		findings []Finding
+		err      error
+	}
+
+	numWorkers := runtime.NumCPU()
+	if numWorkers < 2 {
+		numWorkers = 2
+	}
+	jobs := make(chan string, len(filesToScan))
+	results := make(chan scanResult, len(filesToScan))
+
+	var wg sync.WaitGroup
+	for w := 0; w < numWorkers; w++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for f := range jobs {
+				findings, err := scanFile(f)
+				results <- scanResult{findings: findings, err: err}
+			}
+		}()
+	}
+
 	for _, f := range filesToScan {
-		findings, err := scanFile(f)
-		if err == nil && len(findings) > 0 {
-			allFindings = append(allFindings, findings...)
+		jobs <- f
+	}
+	close(jobs)
+
+	wg.Wait()
+	close(results)
+
+	var allFindings []Finding
+	for res := range results {
+		if res.err == nil && len(res.findings) > 0 {
+			allFindings = append(allFindings, res.findings...)
 		}
 	}
 

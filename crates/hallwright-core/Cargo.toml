@@ -1,0 +1,8 @@
+[package]
+name = "hallwright"
+version = "2.0.0"
+edition = "2021"
+description = "Ultra-fast zero-dependency static guardrail and code quality sentinel for AI agents"
+license = "MIT"
+
+[dependencies]

@@ -18,6 +18,8 @@ DOMAIN_REGISTRY: Dict[str, Dict[str, Any]] = {
             {"name": "event_bus.py", "class": "EventBus", "purpose": "Decoupled pub/sub with wildcard patterns and dead-letter queue"},
             {"name": "circuit_breaker.py", "class": "CircuitBreaker", "purpose": "Fault tolerance, trip limits, and automatic recovery"},
             {"name": "ports.py", "class": "RepositoryPort", "purpose": "Clean hexagonal architecture entity and port abstractions"},
+            {"name": "outbox_pattern.py", "class": "TransactionalOutbox", "purpose": "Guaranteed transactional outbox event delivery"},
+            {"name": "invariant_guard.py", "class": "InvariantGuard", "purpose": "Architectural boundary and domain invariant enforcement"},
         ],
     },
     "security": {
@@ -28,6 +30,8 @@ DOMAIN_REGISTRY: Dict[str, Dict[str, Any]] = {
             {"name": "token_bucket.py", "class": "TokenBucketRateLimiter", "purpose": "Thread-safe DoS rate limiter"},
             {"name": "jwt_validator.py", "class": "JWTEngine", "purpose": "Zero-dependency HS256 JWT signer and verifier"},
             {"name": "ast_scanner.py", "class": "ASTSecurityScanner", "purpose": "Static AST vulnerability and secret audit"},
+            {"name": "crypto_vault.py", "class": "CryptoVault", "purpose": "PBKDF2 key derivation and SecretZeroizer memory wipe"},
+            {"name": "redos_sanitizer.py", "class": "ReDoSSanitizer", "purpose": "Catastrophic regex backtracking denial-of-service detector"},
         ],
     },
     "performance": {
@@ -64,6 +68,13 @@ DOMAIN_REGISTRY: Dict[str, Dict[str, Any]] = {
             {"name": "spatial_3d.js", "class": "SpatialScene", "purpose": "Standalone 3D perspective particle engine"},
             {"name": "liquid_glass.css", "class": "DesignTokens", "purpose": "Apple-grade dark glassmorphism stylesheet"},
             {"name": "dashboard_3d.html", "class": "HTML5 View", "purpose": "Interactive 3D Swarm & Library Dashboard"},
+        ],
+    },
+    "resilience": {
+        "title": "Fault Tolerance & System Resilience",
+        "description": "Token bucket rate limiting, leaky bucket traffic smoothing, and adaptive backpressure flow control.",
+        "modules": [
+            {"name": "backpressure.py", "class": "TokenBucketLimiter", "purpose": "Token & Leaky Bucket traffic smoothing and backpressure flow control"},
         ],
     },
 }

@@ -424,6 +424,7 @@ def test_library_registry_metadata():
     assert "copywriting" in domains
     assert "design" in domains
     assert "resilience" in domains
+    assert "database" in domains
 
     sec_info = LibraryRegistry.get_domain("security")
     assert len(sec_info["modules"]) >= 6

@@ -19,6 +19,10 @@ from .object_pool import (
     ObjectPool,
     ObjectPoolExhaustedError,
 )
+from .work_queue import (
+    WorkQueue,
+    WorkItem,
+)
 
 __all__ = [
     "LRUCache",
@@ -28,4 +32,6 @@ __all__ = [
     "RingBufferEmptyError",
     "ObjectPool",
     "ObjectPoolExhaustedError",
+    "WorkQueue",
+    "WorkItem",
 ]

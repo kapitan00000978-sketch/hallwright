@@ -1,0 +1,27 @@
+{
+  "timestamp": 1792290770.1205792,
+  "platform": "win32",
+  "results": [
+    {
+      "engine": "Hallwright (Go Native)",
+      "command": "C:\\Users\\user\\Videos\\New folder (3)\\bin\\hallwright.exe -audit -staged",
+      "min_latency_ms": 28.43,
+      "avg_latency_ms": 36.47,
+      "exit_code": 2
+    },
+    {
+      "engine": "Hallwright (Vanilla Node)",
+      "command": "node C:\\Users\\user\\Videos\\New folder (3)\\scripts\\detector.js --staged",
+      "min_latency_ms": 306.0,
+      "avg_latency_ms": 347.99,
+      "exit_code": 0
+    },
+    {
+      "engine": "Hallwright (Python)",
+      "command": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe C:\\Users\\user\\Videos\\New folder (3)\\scripts\\pre-commit-gatekeeper.py --staged",
+      "min_latency_ms": 277.73,
+      "avg_latency_ms": 291.81,
+      "exit_code": 0
+    }
+  ]
+}

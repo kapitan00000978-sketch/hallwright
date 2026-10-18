@@ -19,7 +19,7 @@ Write-Host "==================================================================" 
 Write-Host "[*] Target Directory: $TargetDir" -ForegroundColor Yellow
 
 # Ensure directories
-New-Item -ItemType Directory -Force -Path "$TargetDir\.artisan" | Out-Null
+New-Item -ItemType Directory -Force -Path "$TargetDir\.hallwright" | Out-Null
 New-Item -ItemType Directory -Force -Path "$TargetDir\.cursor\rules" | Out-Null
 New-Item -ItemType Directory -Force -Path "$TargetDir\.github" | Out-Null
 

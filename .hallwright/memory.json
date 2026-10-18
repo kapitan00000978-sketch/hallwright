@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Artisan Engineering Core",
-  "lastUpdated": "2026-10-17T17:14:02.446484+00:00",
+  "lastUpdated": "2026-10-18T02:37:16.344603+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -60,7 +60,7 @@
       "lesson": "Always enforce pagination limits.",
       "severity": "high",
       "recordedAt": "2026-10-15T15:08:39.779478+00:00",
-      "updatedAt": "2026-10-17T17:14:02.446484+00:00"
+      "updatedAt": "2026-10-18T02:37:16.344603+00:00"
     },
     {
       "id": "mis-0004",
@@ -69,16 +69,16 @@
       "lesson": "Always verify algorithm is HS256/RS256",
       "severity": "high",
       "recordedAt": "2026-10-15T18:30:24.182735+00:00",
-      "updatedAt": "2026-10-17T17:13:27.367698+00:00"
+      "updatedAt": "2026-10-18T02:36:43.149952+00:00"
     },
     {
       "id": "mis-0005",
       "category": "dangerous",
       "pattern": "Dangerous dynamic execution ('eval' or 'exec') detected. Replace with safe structured parsing.",
-      "lesson": "Rejected in pre-commit audit (.\\src\\libraries\\security\\ast_scanner.py:64). Resolve Dangerous dynamic execution ('eval' or 'exec') detected. Replace with safe structured parsing. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\web\\playground.js:55). Resolve Dangerous dynamic execution ('eval' or 'exec') detected. Replace with safe structured parsing. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-15T20:23:54.412470+00:00",
-      "updatedAt": "2026-10-15T21:37:57.835504+00:00"
+      "updatedAt": "2026-10-18T02:34:33.619715+00:00"
     },
     {
       "id": "mis-0006",
@@ -93,9 +93,10 @@
       "id": "mis-0007",
       "category": "stub",
       "pattern": "Unfinished stub or placeholder detected. Complete all logic end-to-end.",
-      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\reviewer.py:279). Resolve Unfinished stub or placeholder detected. Complete all logic end-to-end. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\web\\playground.js:85). Resolve Unfinished stub or placeholder detected. Complete all logic end-to-end. before committing.",
       "severity": "medium",
-      "recordedAt": "2026-10-15T20:23:54.516059+00:00"
+      "recordedAt": "2026-10-15T20:23:54.516059+00:00",
+      "updatedAt": "2026-10-18T02:34:33.668502+00:00"
     },
     {
       "id": "mis-0008",
@@ -110,10 +111,10 @@
       "id": "mis-0009",
       "category": "stub",
       "pattern": "Silent exception suppression ('except except: pass') verified via AST.",
-      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\continuity.py:71). Resolve Silent exception suppression ('except except: pass') verified via AST. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\src\\libraries\\database\\sqli_neutralizer.py:34). Resolve Silent exception suppression ('except except: pass') verified via AST. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-15T21:18:15.274803+00:00",
-      "updatedAt": "2026-10-16T09:55:48.820248+00:00"
+      "updatedAt": "2026-10-18T02:24:50.823780+00:00"
     },
     {
       "id": "mis-0010",
@@ -127,10 +128,10 @@
       "id": "mis-0011",
       "category": "dangerous",
       "pattern": "Dangerous dynamic shell execution or command injection risk detected ('shell=True' or dynamic 'os.system'). Use subprocess.run with argument sequence.",
-      "lesson": "Rejected in pre-commit audit (.\\scratch\\test_cmd_ssrf_regex.py:12). Resolve Dangerous dynamic shell execution or command injection risk detected ('shell=True' or dynamic 'os.system'). Use subprocess.run with argument sequence. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\web\\playground.js:29). Resolve Dangerous dynamic shell execution or command injection risk detected ('shell=True' or dynamic 'os.system'). Use subprocess.run with argument sequence. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-17T17:04:12.657842+00:00",
-      "updatedAt": "2026-10-17T17:04:12.846531+00:00"
+      "updatedAt": "2026-10-18T02:33:51.862379+00:00"
     },
     {
       "id": "mis-0012",
@@ -139,6 +140,40 @@
       "lesson": "Rejected in pre-commit audit (.\\bin\\hallwright.js:35). Resolve Empty catch block detected. Handle or log exceptions properly. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-17T17:12:45.130866+00:00"
+    },
+    {
+      "id": "mis-0013",
+      "category": "secret",
+      "pattern": "Hardcoded password, secret, or API token assignment detected. Use environment variables.",
+      "lesson": "Rejected in pre-commit audit (.\\web\\playground.js:26). Resolve Hardcoded password, secret, or API token assignment detected. Use environment variables. before committing.",
+      "severity": "medium",
+      "recordedAt": "2026-10-18T02:33:51.808799+00:00"
+    },
+    {
+      "id": "mis-0014",
+      "category": "secret",
+      "pattern": "GitHub token detected. Externalize credentials via environment variables.",
+      "lesson": "Rejected in pre-commit audit (.\\web\\playground.js:52). Resolve GitHub token detected. Externalize credentials via environment variables. before committing.",
+      "severity": "medium",
+      "recordedAt": "2026-10-18T02:33:51.957095+00:00",
+      "updatedAt": "2026-10-18T02:34:33.573779+00:00"
+    },
+    {
+      "id": "mis-0015",
+      "category": "stub",
+      "pattern": "Silent exception suppression detected. Log or handle errors.",
+      "lesson": "Rejected in pre-commit audit (.\\web\\playground.js:162). Resolve Silent exception suppression detected. Log or handle errors. before committing.",
+      "severity": "medium",
+      "recordedAt": "2026-10-18T02:35:32.998172+00:00",
+      "updatedAt": "2026-10-18T02:35:33.049136+00:00"
+    },
+    {
+      "id": "mis-0016",
+      "category": "dangerous",
+      "pattern": "Potential DOM Cross-Site Scripting (XSS) sink detected. Sanitize dynamic content or use textContent/safe templating.",
+      "lesson": "Rejected in pre-commit audit (.\\web\\playground.js:235). Resolve Potential DOM Cross-Site Scripting (XSS) sink detected. Sanitize dynamic content or use textContent/safe templating. before committing.",
+      "severity": "medium",
+      "recordedAt": "2026-10-18T02:35:33.099447+00:00"
     }
   ],
   "successes": [

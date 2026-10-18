@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hallwright — In-Browser Zero-Latency AI Guardrail Playground</title>
+  <meta name="description" content="Instant in-browser static analysis and auto-remediation guardrail for AI coding agents. Zero dependencies, sub-millisecond execution.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <span class="shield-icon">🛡️</span>
+        <div>
+          <h1 class="logo-title">HALLWRIGHT</h1>
+          <p class="logo-subtitle">Zero-Dependency AI Agent Guardrail & Auto-Healer</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="speed-badge">⚡ Sub-Millisecond Core</span>
+        <a href="https://github.com/kapitan00000978-sketch/hallwright" target="_blank" class="github-btn">
+          ⭐ Star on GitHub
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Playground Grid -->
+    <main class="playground-grid">
+      <!-- Editor Column -->
+      <section class="editor-panel">
+        <div class="panel-header">
+          <div class="lang-tabs" id="langTabs">
+            <button class="tab-btn active" data-lang="python">Python</button>
+            <button class="tab-btn" data-lang="javascript">JavaScript / TS</button>
+            <button class="tab-btn" data-lang="go">Go</button>
+            <button class="tab-btn" data-lang="rust">Rust</button>
+          </div>
+          <div class="editor-controls">
+            <button id="sampleBuggyBtn" class="secondary-btn" title="Load sample code with silent catches and stubs">Load Test Flaws</button>
+            <button id="remediateBtn" class="primary-btn glow" title="Autonomously repair detected flaws">⚡ Auto-Heal (Fix)</button>
+          </div>
+        </div>
+        <div class="code-area-wrapper">
+          <textarea id="codeEditor" spellcheck="false" placeholder="Paste your Python or JavaScript code here to audit..."></textarea>
+        </div>
+      </section>
+
+      <!-- Inspection & Telemetry Column -->
+      <section class="telemetry-panel">
+        <!-- Score Card -->
+        <div class="score-card">
+          <div class="gauge-wrapper">
+            <svg class="score-gauge" viewBox="0 0 120 120">
+              <circle class="gauge-bg" cx="60" cy="60" r="50" />
+              <circle id="gaugeFill" class="gauge-fill" cx="60" cy="60" r="50" />
+            </svg>
+            <div class="gauge-text">
+              <span id="scoreValue" class="score-number">100</span>
+              <span class="score-denom">/100</span>
+            </div>
+          </div>
+          <div class="score-meta">
+            <h2 id="scoreStatus" class="status-clean">VERIFIED CLEAN</h2>
+            <p id="scoreSubtitle">All zero-defect invariants satisfied</p>
+            <div class="audit-stats">
+              <span>Lines: <strong id="lineCount">0</strong></span>
+              <span>Defects: <strong id="defectCount">0</strong></span>
+              <span>Latency: <strong id="scanLatency">0.4ms</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Defect Ledger -->
+        <div class="ledger-card">
+          <div class="ledger-header">
+            <h3>Defect & Vulnerability Ledger</h3>
+            <span id="defectCounterBadge" class="badge-pill clean">0 Issues</span>
+          </div>
+          <div id="defectList" class="defect-list">
+            <div class="empty-state">
+              <span class="sparkle">✨</span>
+              <p>No defects detected. Code is production ready.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badge Generator -->
+        <div class="badge-card">
+          <h3>Embed Certified Badge</h3>
+          <p>Add this badge to your README to prove verified code quality:</p>
+          <div class="badge-preview">
+            <img id="badgeImg" src="https://img.shields.io/badge/Hallwright-100%2F100_Certified-00f0ff?style=flat-square&logo=shield" alt="Hallwright Badge">
+          </div>
+          <div class="badge-copy-row">
+            <input type="text" id="badgeMarkdown" readonly value="[![Hallwright 100/100](https://img.shields.io/badge/Hallwright-100%2F100_Certified-00f0ff?style=flat-square)](https://github.com/kapitan00000978-sketch/hallwright)">
+            <button id="copyBadgeBtn" class="copy-btn">Copy</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Hallwright AI Agent Guardrail Protocol &bull; Zero external dependencies &bull; 100x Mechanical Sympathy</p>
+    </footer>
+  </div>
+
+  <script src="playground.js"></script>
+</body>
+</html>

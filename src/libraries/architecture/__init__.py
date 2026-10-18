@@ -32,6 +32,22 @@ from .ports import (
     RepositoryPort,
     UnitOfWorkPort,
 )
+from .outbox_pattern import (
+    TransactionalOutbox,
+    OutboxRecord,
+    OutboxStatus,
+)
+from .invariant_guard import (
+    InvariantGuard,
+    InvariantViolation,
+    invariant_required,
+)
+from .saga_coordinator import (
+    SagaCoordinator,
+    SagaStep,
+    SagaStepStatus,
+    SagaState,
+)
 
 __all__ = [
     "FiniteStateMachine",
@@ -51,4 +67,14 @@ __all__ = [
     "AggregateRoot",
     "RepositoryPort",
     "UnitOfWorkPort",
+    "TransactionalOutbox",
+    "OutboxRecord",
+    "OutboxStatus",
+    "InvariantGuard",
+    "InvariantViolation",
+    "invariant_required",
+    "SagaCoordinator",
+    "SagaStep",
+    "SagaStepStatus",
+    "SagaState",
 ]

@@ -10,6 +10,7 @@ Autonomously repairs common code quality and safety defects:
 import os
 import sys
 import re
+import difflib
 import argparse
 from typing import List, Dict, Any, Tuple
 
@@ -160,7 +161,7 @@ def remediate_js_code(content: str) -> Tuple[str, int]:
     return content, modifications
 
 
-def remediate_file(filepath: str) -> int:
+def remediate_file(filepath: str, interactive: bool = False) -> int:
     """Remediates an individual file on disk with strict decoding, AST verification, and atomic rollback."""
     if not os.path.exists(filepath):
         return 0
@@ -192,6 +193,30 @@ def remediate_file(filepath: str) -> int:
             fixed, changes = remediate_js_code(original)
 
         if changes > 0 and fixed != original:
+            if interactive:
+                diff_lines = list(difflib.unified_diff(
+                    original.splitlines(keepends=True),
+                    fixed.splitlines(keepends=True),
+                    fromfile=f"a/{filepath}",
+                    tofile=f"b/{filepath}",
+                ))
+                print("\n" + "=" * 60)
+                for line in diff_lines:
+                    if line.startswith("+") and not line.startswith("+++"):
+                        print(f"\033[32m{line.rstrip()}\033[0m")
+                    elif line.startswith("-") and not line.startswith("---"):
+                        print(f"\033[31m{line.rstrip()}\033[0m")
+                    elif line.startswith("@@"):
+                        print(f"\033[36m{line.rstrip()}\033[0m")
+                    else:
+                        print(line.rstrip())
+                print("=" * 60)
+                choice = input(f"Apply {changes} remediations to {filepath}? [Y/n/q]: ").strip().lower()
+                if choice == "q":
+                    sys.exit(0)
+                if choice == "n":
+                    return 0
+
             # Atomic file replacement with rollback protection
             temp_path = filepath + ".tmp"
             try:
@@ -208,8 +233,9 @@ def remediate_file(filepath: str) -> int:
                 if os.path.exists(temp_path):
                     try:
                         os.remove(temp_path)
-                    except OSError:
-                        pass
+                    except OSError as rm_err:
+                        import logging
+                        logging.debug("Could not remove temp %s: %s", temp_path, rm_err)
                 print(f"  [!] Remediation aborted for {filepath}: {write_err}", file=sys.stderr)
                 return 0
     except Exception as e:
@@ -218,7 +244,7 @@ def remediate_file(filepath: str) -> int:
     return 0
 
 
-def remediate_workspace(base_dir: str = ".") -> int:
+def remediate_workspace(base_dir: str = ".", interactive: bool = False) -> int:
     """Recursively remediates all applicable source files in workspace."""
     total_repaired = 0
     files_touched = 0
@@ -230,7 +256,7 @@ def remediate_workspace(base_dir: str = ".") -> int:
                 continue
             if file.endswith((".py", ".js", ".ts", ".jsx", ".tsx")):
                 filepath = os.path.join(root, file)
-                count = remediate_file(filepath)
+                count = remediate_file(filepath, interactive=interactive)
                 if count > 0:
                     total_repaired += count
                     files_touched += 1
@@ -241,19 +267,20 @@ def remediate_workspace(base_dir: str = ".") -> int:
 def main():
     parser = argparse.ArgumentParser(description="Hallwright Autonomous Auto-Remediation (hallwright fix)")
     parser.add_argument("--file", "-f", help="Remediate a specific file")
+    parser.add_argument("--interactive", "-i", action="store_true", help="Interactive confirmation for each remediation diff")
     args = parser.parse_args()
 
     print("🔧 [HALLWRIGHT REMEDIATOR] Scanning and repairing automated defects...")
 
     if args.file:
-        changes = remediate_file(args.file)
+        changes = remediate_file(args.file, interactive=args.interactive)
         if changes > 0:
             print(f"✅ Repaired {args.file}: {changes} defect(s) auto-corrected.")
         else:
             print(f"ℹ️ No auto-remediable defects in {args.file}.")
         sys.exit(0)
 
-    total = remediate_workspace(".")
+    total = remediate_workspace(".", interactive=args.interactive)
     if total > 0:
         print(f"\n✅ [HALLWRIGHT REMEDIATED]: Successfully resolved {total} defect(s) across workspace.")
         try:

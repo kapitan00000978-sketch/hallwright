@@ -288,9 +288,10 @@ def cmd_fix(args: argparse.Namespace) -> int:
 
     target = args.path or "."
     fixed_count = 0
+    is_interactive = getattr(args, "interactive", False)
 
     if os.path.isfile(target):
-        count = remediate_file(target)
+        count = remediate_file(target, interactive=is_interactive)
         fixed_count += count
         print(f"[*] Repaired {count} defect(s) in {target}")
     else:
@@ -300,12 +301,12 @@ def cmd_fix(args: argparse.Namespace) -> int:
             for file in files:
                 if file.endswith(valid_exts):
                     p = os.path.join(root, file)
-                    c = remediate_file(p)
+                    c = remediate_file(p, interactive=is_interactive)
                     if c > 0:
                         fixed_count += c
                         print(f"  [+] Auto-remediated {c} flaw(s) in {p}")
 
-    print(f"\n✅ [ARTISAN FIX COMPLETE]: Resolved {fixed_count} total code defects.")
+    print(f"\n✅ [HALLWRIGHT FIX COMPLETE]: Resolved {fixed_count} total code defects.")
     return 0
 
 
@@ -828,6 +829,46 @@ def cmd_3d(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_completion(args: argparse.Namespace) -> int:
+    """Outputs shell autocompletion script for bash, zsh, fish, or powershell."""
+    shell = getattr(args, "shell", "bash")
+    commands = "init audit fix status memory doctor mcp agents metrics context prompt mutate review swarm resume checkpoint lib 3d hud watch completion"
+    if shell == "bash":
+        print(f'''# Bash completion for Hallwright / Artisan
+_hallwright_completions() {{
+    local cur="${{COMP_WORDS[COMP_CWORD]}}"
+    local commands="{commands}"
+    COMPREPLY=( $(compgen -W "${{commands}}" -- "${{cur}}") )
+}}
+complete -F _hallwright_completions hallwright artisan
+''')
+    elif shell == "zsh":
+        print(f'''#compdef hallwright artisan
+_hallwright() {{
+    local -a commands
+    commands=({commands})
+    _describe 'command' commands
+}}
+compdef _hallwright hallwright artisan
+''')
+    elif shell == "fish":
+        print(f'''# Fish completion for Hallwright / Artisan
+complete -c hallwright -f -a "{commands}"
+complete -c artisan -f -a "{commands}"
+''')
+    elif shell == "powershell":
+        print(f'''# PowerShell completion for Hallwright / Artisan
+Register-ArgumentCompleter -Native -CommandName @('hallwright', 'artisan') -ScriptBlock {{
+    param($wordToComplete, $commandAst, $cursorPosition)
+    $commands = @('{commands}'.Split(' '))
+    $commands | Where-Object {{ $_ -like "$wordToComplete*" }} | ForEach-Object {{
+        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+    }}
+}}
+''')
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="hallwright",
@@ -852,11 +893,12 @@ def main():
     p_audit.add_argument("--format", choices=["text", "json", "sarif"], default="text", help="Output format (text, json, sarif)")
     p_audit.add_argument("--baseline", help="Custom path to baseline.json file")
     p_audit.add_argument("--generate-baseline", action="store_true", help="Generate .hallwright/baseline.json from current technical debt")
-
+    p_audit.add_argument("--ci", "--quiet", "-q", action="store_true", dest="quiet", help="Run in silent CI mode returning only exit status")
 
     # fix
     p_fix = subparsers.add_parser("fix", help="Auto-remediate silent catches and code defects")
     p_fix.add_argument("path", nargs="?", default=".", help="File or directory path to remediate (default: .)")
+    p_fix.add_argument("--interactive", "-i", action="store_true", help="Interactively review and approve each auto-remediation diff")
 
     # status
     subparsers.add_parser("status", help="Display workspace health, memory stats, and active protocol info")
@@ -946,6 +988,10 @@ def main():
     # watchdog
     subparsers.add_parser("watch", help="Launch background file watchdog sentinel")
 
+    # completion
+    p_comp = subparsers.add_parser("completion", help="Generate shell autocompletion script (bash, zsh, fish, powershell)")
+    p_comp.add_argument("shell", nargs="?", default="bash", choices=["bash", "zsh", "fish", "powershell"], help="Target shell")
+
     args = parser.parse_args()
 
     if not args.subcommand or args.subcommand == "status":
@@ -980,6 +1026,8 @@ def main():
         return cmd_lib(args)
     elif args.subcommand in ("3d", "spatial", "studio"):
         return cmd_3d(args)
+    elif args.subcommand == "completion":
+        return cmd_completion(args)
     elif args.subcommand == "mcp":
         from server import main as mcp_main
         mcp_main()

@@ -20,6 +20,7 @@ DOMAIN_REGISTRY: Dict[str, Dict[str, Any]] = {
             {"name": "ports.py", "class": "RepositoryPort", "purpose": "Clean hexagonal architecture entity and port abstractions"},
             {"name": "outbox_pattern.py", "class": "TransactionalOutbox", "purpose": "Guaranteed transactional outbox event delivery"},
             {"name": "invariant_guard.py", "class": "InvariantGuard", "purpose": "Architectural boundary and domain invariant enforcement"},
+            {"name": "saga_coordinator.py", "class": "SagaCoordinator", "purpose": "Multi-agent transactional saga with compensation chain"},
         ],
     },
     "security": {
@@ -32,6 +33,7 @@ DOMAIN_REGISTRY: Dict[str, Dict[str, Any]] = {
             {"name": "ast_scanner.py", "class": "ASTSecurityScanner", "purpose": "Static AST vulnerability and secret audit"},
             {"name": "crypto_vault.py", "class": "CryptoVault", "purpose": "PBKDF2 key derivation and SecretZeroizer memory wipe"},
             {"name": "redos_sanitizer.py", "class": "ReDoSSanitizer", "purpose": "Catastrophic regex backtracking denial-of-service detector"},
+            {"name": "owasp_guard.py", "class": "OwaspGuard", "purpose": "OWASP Top 10 semantic AST analyzer for injections and insecure deserialization"},
         ],
     },
     "performance": {
@@ -41,6 +43,7 @@ DOMAIN_REGISTRY: Dict[str, Dict[str, Any]] = {
             {"name": "cache.py", "class": "LRUCache", "purpose": "O(1) thread-safe LRU & TTL cache with hit metrics"},
             {"name": "ring_buffer.py", "class": "SPSCRingBuffer", "purpose": "Single-producer single-consumer circular buffer"},
             {"name": "object_pool.py", "class": "ObjectPool", "purpose": "Recyclable object pool with RAII context manager"},
+            {"name": "work_queue.py", "class": "WorkQueue", "purpose": "Cache-aligned prioritized thread pool with cancellation"},
         ],
     },
     "testing": {
@@ -75,6 +78,14 @@ DOMAIN_REGISTRY: Dict[str, Dict[str, Any]] = {
         "description": "Token bucket rate limiting, leaky bucket traffic smoothing, and adaptive backpressure flow control.",
         "modules": [
             {"name": "backpressure.py", "class": "TokenBucketLimiter", "purpose": "Token & Leaky Bucket traffic smoothing and backpressure flow control"},
+            {"name": "chaos_injector.py", "class": "ChaosInjector", "purpose": "Deterministic and probabilistic chaos fault and latency injection"},
+        ],
+    },
+    "database": {
+        "title": "Database Security & Query Protection",
+        "description": "AST SQL injection neutralizer and query safety verification.",
+        "modules": [
+            {"name": "sqli_neutralizer.py", "class": "SqlInjectionDetector", "purpose": "AST SQL injection neutralizer for concatenated or interpolated queries"},
         ],
     },
 }

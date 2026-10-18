@@ -6,6 +6,17 @@ from .craftsman import CraftsmanAgent, COUNCIL_MEMBERS
 from .context_selector import SmartMasterSelector
 from .learning_memory import LearningMemory
 from .guilds import COUNCIL_GUILDS, list_guilds_summary, get_guild_for_master
+from .agent_mesh import AgentMesh, AgentMessage, AgentContract
+from .pdk import (
+    PluginManifest,
+    PluginRule,
+    PluginContext,
+    RuleViolation,
+    PluginRegistry,
+    sign_manifest,
+    verify_manifest_signature,
+)
+from .plugin_loader import PluginLoader
 
 __all__ = [
     "CraftsmanAgent",
@@ -14,5 +25,16 @@ __all__ = [
     "LearningMemory",
     "COUNCIL_GUILDS",
     "list_guilds_summary",
-    "get_guild_for_master"
+    "get_guild_for_master",
+    "AgentMesh",
+    "AgentMessage",
+    "AgentContract",
+    "PluginManifest",
+    "PluginRule",
+    "PluginContext",
+    "RuleViolation",
+    "PluginRegistry",
+    "sign_manifest",
+    "verify_manifest_signature",
+    "PluginLoader",
 ]

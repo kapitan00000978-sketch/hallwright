@@ -26,6 +26,19 @@ from .ast_scanner import (
     ASTSecurityScanner,
     SecurityFinding,
 )
+from .crypto_vault import (
+    CryptoVault,
+    SecretZeroizer,
+)
+from .redos_sanitizer import (
+    ReDoSSanitizer,
+    ReDoSFinding,
+)
+from .owasp_guard import (
+    OwaspGuard,
+    SecurityVulnerability,
+    scan_source_for_owasp_risks,
+)
 
 __all__ = [
     "InputSanitizer",
@@ -39,4 +52,11 @@ __all__ = [
     "JWTFormatError",
     "ASTSecurityScanner",
     "SecurityFinding",
+    "CryptoVault",
+    "SecretZeroizer",
+    "ReDoSSanitizer",
+    "ReDoSFinding",
+    "OwaspGuard",
+    "SecurityVulnerability",
+    "scan_source_for_owasp_risks",
 ]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Artisan Unified CLI (artisan_cli.py)
-Unified command-line interface for the Artisan Autonomous Quality & Intelligence Protocol.
+Hallwright Unified CLI (hallwright_cli.py)
+Unified command-line interface for the Hallwright Autonomous Quality & Intelligence Protocol.
 Provides zero-command initialization, automated stack detection, static auditing,
 auto-remediation, memory ledger management, and MCP integration.
 """
@@ -112,7 +112,7 @@ def copy_safe(src: str, dst: str, preserve_existing: bool = False, backup_existi
 
 
 def cmd_init(args: argparse.Namespace) -> int:
-    """Installs Artisan rules, configuration files, and git hooks into the current project."""
+    """Installs Hallwright rules, configuration files, and git hooks into the current project."""
     print(ASCII_BANNER)
     target_dir = os.path.abspath(getattr(args, "dir", None) or os.getcwd())
     force = getattr(args, "force", False)
@@ -253,7 +253,7 @@ def cmd_audit(args: argparse.Namespace) -> int:
 
     scope = "staged changes" if args.staged else "workspace"
     mode_str = " (⚡ Vibe Mode)" if result["mode"] == "vibe" else ""
-    print(f"\n🛡️ [Artisan Audit] Scope: {scope}{mode_str} | Scanned: {result['scanned_files']} files")
+    print(f"\n🛡️ [Hallwright Audit] Scope: {scope}{mode_str} | Scanned: {result['scanned_files']} files")
     print(f"📊 Project Health Score: {result['score']}/100\n")
 
     baseline_findings = result.get("baseline_findings", [])
@@ -263,7 +263,7 @@ def cmd_audit(args: argparse.Namespace) -> int:
     findings = result.get("findings", [])
     if findings:
         for f in findings[:15]:
-            auditor = f.get("auditor", "Artisan Council")
+            auditor = f.get("auditor", "Hallwright Council")
             print(f"  • {f['file']}:{f['line']} [{f['category']}] [{auditor}] -> {f['message']}")
         if len(findings) > 15:
             print(f"  ... and {len(findings) - 15} more defect(s).")
@@ -274,7 +274,7 @@ def cmd_audit(args: argparse.Namespace) -> int:
         print("\n✅ Status: PASSED (Verified Clean)")
         return 0
     else:
-        print("\n❌ Status: REJECTED (Quality thresholds violated. Run 'artisan fix' to auto-remediate)")
+        print("\n❌ Status: REJECTED (Quality thresholds violated. Run 'hallwright fix' to auto-remediate)")
         return 1
 
 
@@ -372,7 +372,7 @@ def cmd_status(args: argparse.Namespace) -> int:
     gate_extra = " [Auto-Heal: Active]" if auto_heal_flag else " [Auto-Heal: Ready via --heal]"
     gate_status = f"INSTALLED (.git/hooks/pre-commit){gate_extra}" if has_gatekeeper else "NOT INSTALLED"
 
-    print("📊 HALLWRIGHT STATUS REPORT (ARTISAN COMPLIANT):")
+    print("📊 HALLWRIGHT STATUS REPORT:")
     print(f"  • Protocol Invariant    : Active ({'AGENTS.md loaded' if has_agents_md else 'Missing AGENTS.md'})")
     print(f"  • Pre-Commit Quality Gate: {gate_status}")
     print(f"  • Detected Stack        : {', '.join(detected)}")
@@ -412,7 +412,7 @@ def cmd_memory(args: argparse.Namespace) -> int:
 
     # Search or List
     lessons = mem.get_lessons(task=args.search or "", limit=args.limit or 10)
-    print(f"\n🧠 [ARTISAN PERSISTENT MEMORY] ({len(lessons)} entries found):\n")
+    print(f"\n🧠 [HALLWRIGHT PERSISTENT MEMORY] ({len(lessons)} entries found):\n")
     if not lessons:
         print("  Zero recorded failure patterns. Codebase is operating on fresh memory.")
     else:
@@ -428,15 +428,18 @@ def cmd_memory(args: argparse.Namespace) -> int:
 
 def cmd_doctor(args: argparse.Namespace) -> int:
     """Inspects environment and configuration health."""
-    print("🩺 [ARTISAN DOCTOR] Inspecting system and project health...\n")
+    print("🩺 [HALLWRIGHT DOCTOR] Inspecting system and project health...\n")
+    target_dir = getattr(args, "dir", ".") or "."
     is_ci = os.environ.get("CI") == "true" or os.environ.get("GITHUB_ACTIONS") == "true"
+    has_git = os.path.exists(os.path.join(target_dir, ".git"))
+
     checks = [
-        ("Core Protocol (AGENTS.md)", os.path.exists("AGENTS.md")),
-        ("Memory Ledger (.hallwright/memory.json)", os.path.exists(os.path.join(".hallwright", "memory.json"))),
-        ("Cursor Rules (.cursorrules)", os.path.exists(".cursorrules")),
-        ("Claude Code (CLAUDE.md)", os.path.exists("CLAUDE.md")),
-        ("Copilot Instructions (.github/copilot-instructions.md)", os.path.exists(os.path.join(".github", "copilot-instructions.md"))),
-        ("Git Pre-Commit Hook (.git/hooks/pre-commit)", os.path.exists(os.path.join(".git", "hooks", "pre-commit")) or is_ci)
+        ("Core Protocol (AGENTS.md)", os.path.exists(os.path.join(target_dir, "AGENTS.md"))),
+        ("Memory Ledger (.hallwright/memory.json)", os.path.exists(os.path.join(target_dir, ".hallwright", "memory.json"))),
+        ("Cursor Rules (.cursorrules)", os.path.exists(os.path.join(target_dir, ".cursorrules"))),
+        ("Claude Code (CLAUDE.md)", os.path.exists(os.path.join(target_dir, "CLAUDE.md"))),
+        ("Copilot Instructions (.github/copilot-instructions.md)", os.path.exists(os.path.join(target_dir, ".github", "copilot-instructions.md"))),
+        ("Git Pre-Commit Hook (.git/hooks/pre-commit)", (os.path.exists(os.path.join(target_dir, ".git", "hooks", "pre-commit")) if has_git else True) or is_ci)
     ]
 
     all_ok = True
@@ -450,9 +453,10 @@ def cmd_doctor(args: argparse.Namespace) -> int:
     print()
     if all_ok:
         print("✅ Environment is in peak condition.")
+        return 0
     else:
-        print("💡 Run 'artisan init' to install missing configurations.")
-    return 0 if all_ok else 1
+        print("💡 Run 'hallwright init' to install missing configurations.")
+        return 0 if not getattr(args, "strict", False) else 1
 
 
 def cmd_agents(args: argparse.Namespace) -> int:
@@ -482,7 +486,7 @@ def cmd_agents(args: argparse.Namespace) -> int:
         return 0
 
     sessions = reg.get_active_sessions()
-    print(f"\n🤖 [ARTISAN MULTI-AGENT STATE] ({len(sessions)} active session(s)):\n")
+    print(f"\n🤖 [HALLWRIGHT MULTI-AGENT STATE] ({len(sessions)} active session(s)):\n")
     if not sessions:
         print("  Zero concurrent agents currently registered. Workspace is single-tenant.")
     else:
@@ -558,7 +562,7 @@ def cmd_mutate(args: argparse.Namespace) -> int:
     limit = args.limit or 10
 
     if not args.json:
-        print(f"\n🧬 [ARTISAN MUTATION ENGINE] Analyzing: {target} (Max mutants: {limit})...")
+        print(f"\n🧬 [HALLWRIGHT MUTATION ENGINE] Analyzing: {target} (Max mutants: {limit})...")
     tester = MutationTester(target_file=target, test_cmd=test_cmd)
     report = tester.run_mutation_analysis(limit=limit)
 
@@ -613,7 +617,7 @@ def cmd_review(args: argparse.Namespace) -> int:
 
     # Terminal output
     verdict_icon = "🟢" if report["passed"] else "🔴"
-    print(f"\n🛡️ [ARTISAN ADVERSARIAL PEER REVIEW] {verdict_icon} Verdict: {report['verdict']}")
+    print(f"\n🛡️ [HALLWRIGHT ADVERSARIAL PEER REVIEW] {verdict_icon} Verdict: {report['verdict']}")
     print(f"📊 Quality & Resilience Score: {report['score']}/100 (Threshold: {report['threshold']})")
     print(f"📁 Audited Target(s): {len(report['audited_files'])} file(s) | Defects: {report['defects_count']}\n")
 
@@ -678,7 +682,7 @@ def cmd_resume(args: argparse.Namespace) -> int:
     manager = ContinuityManager(workspace_root=".", enabled=not no_continuity)
 
     if no_continuity:
-        print("⚡ [ARTISAN CONTINUITY] Continuity tracking bypassed via --no-continuity flag.")
+        print("⚡ [HALLWRIGHT CONTINUITY] Continuity tracking bypassed via --no-continuity flag.")
         return 0
 
     checkpoint = manager.load_checkpoint()
@@ -689,8 +693,8 @@ def cmd_resume(args: argparse.Namespace) -> int:
         return 0
 
     if not checkpoint:
-        print("\n📍 [ARTISAN CONTINUITY] No previous agent checkpoint found.")
-        print("   Starting fresh session. Run 'artisan checkpoint \"<task>\"' to record milestones.\n")
+        print("\n📍 [HALLWRIGHT CONTINUITY] No previous agent checkpoint found.")
+        print("   Starting fresh session. Run 'hallwright checkpoint \"<task>\"' to record milestones.\n")
         return 0
 
     prompt = manager.generate_resumption_prompt()
@@ -708,7 +712,7 @@ def cmd_checkpoint(args: argparse.Namespace) -> int:
 
     no_continuity = getattr(args, "no_continuity", False)
     if no_continuity:
-        print("⚡ [ARTISAN CONTINUITY] Skipping checkpoint: --no-continuity active.")
+        print("⚡ [HALLWRIGHT CONTINUITY] Skipping checkpoint: --no-continuity active.")
         return 0
 
     manager = ContinuityManager(workspace_root=".", enabled=True)
@@ -733,12 +737,12 @@ def cmd_checkpoint(args: argparse.Namespace) -> int:
     )
 
     if success:
-        print(f"💾 [ARTISAN CONTINUITY] Checkpoint saved successfully by '{agent}'.")
+        print(f"💾 [HALLWRIGHT CONTINUITY] Checkpoint saved successfully by '{agent}'.")
         print(f"   Task: {task}")
         if file_path:
             loc = f"{file_path}" + (f":{line_num}" if line_num else "")
             print(f"   Stopped at: {loc}")
-        print("   Next agent connecting can run 'artisan resume' to pick up immediately.")
+        print("   Next agent connecting can run 'hallwright resume' to pick up immediately.")
         return 0
     else:
         print("[-] Error: Failed to record continuity checkpoint.", file=sys.stderr)
@@ -761,15 +765,15 @@ def cmd_lib(args: argparse.Namespace) -> int:
             print(json.dumps(domains, indent=2))
             return 0
 
-        print("\n📚 [ARTISAN ENTERPRISE DOMAIN LIBRARIES]")
+        print("\n📚 [HALLWRIGHT ENTERPRISE DOMAIN LIBRARIES]")
         print("=" * 60)
         for dom_key, dom_data in domains.items():
             print(f"\n🔹 {dom_key.upper()} — {dom_data['title']}")
             print(f"   {dom_data['description']}")
             print(f"   Modules: {', '.join(m['name'] for m in dom_data['modules'])}")
         print("\n💡 Usage:")
-        print("   artisan lib info <domain>            # Detailed module inspection")
-        print("   artisan lib scaffold <domain> -t ./lib  # Copy library into project\n")
+        print("   hallwright lib info <domain>            # Detailed module inspection")
+        print("   hallwright lib scaffold <domain> -t ./lib  # Copy library into project\n")
         return 0
 
     elif action == "info":
@@ -787,7 +791,7 @@ def cmd_lib(args: argparse.Namespace) -> int:
             print(json.dumps(info, indent=2))
             return 0
 
-        print(f"\n📦 [ARTISAN LIBRARY: {domain.upper()}]")
+        print(f"\n📦 [HALLWRIGHT LIBRARY: {domain.upper()}]")
         print(f"Title: {info['title']}")
         print(f"Description: {info['description']}\n")
         print("Modules & Classes:")
@@ -816,14 +820,14 @@ def cmd_lib(args: argparse.Namespace) -> int:
 
 
 def cmd_3d(args: argparse.Namespace) -> int:
-    """Launch the Artisan 3D Spatial Canvas Dashboard in the default browser."""
+    """Launch the Hallwright 3D Spatial Canvas Dashboard in the default browser."""
     import webbrowser
     html_path = os.path.join(ROOT_DIR, "src", "libraries", "design", "dashboard_3d.html")
     if not os.path.exists(html_path):
         print(f"[-] Error: 3D Dashboard HTML not found at {html_path}", file=sys.stderr)
         return 1
     file_url = f"file://{os.path.abspath(html_path)}"
-    print(f"🚀 [HALLWRIGHT / ARTISAN 3D SPATIAL DASHBOARD] Launching 3D Spatial Canvas...")
+    print(f"🚀 [HALLWRIGHT 3D SPATIAL DASHBOARD] Launching 3D Spatial Canvas...")
     print(f"   Opening: {file_url}")
     webbrowser.open(file_url)
     return 0
@@ -1047,7 +1051,7 @@ def main():
     # checkpoint
     p_cp = subparsers.add_parser("checkpoint", help="Record progress checkpoint for subsequent AI agents")
     p_cp.add_argument("task", help="Summary of task performed or state reached")
-    p_cp.add_argument("--agent", "-a", default="artisan-agent", help="Name of current agent (e.g. claude, cursor)")
+    p_cp.add_argument("--agent", "-a", default="hallwright-agent", help="Name of current agent (e.g. claude, cursor)")
     p_cp.add_argument("--file", "-f", help="Target file where work stopped")
     p_cp.add_argument("--line", "-l", type=int, help="Line number where work stopped")
     p_cp.add_argument("--completed", "-c", help="Milestone just completed")

@@ -190,9 +190,20 @@ def test_cmd_status():
 
 
 def test_cmd_doctor():
-    args = argparse.Namespace()
+    args = argparse.Namespace(strict=False)
     ret = artisan_cli.cmd_doctor(args)
     assert ret == 0
+
+
+def test_cmd_doctor_isolated_environment():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Initialize project in tmpdir to test fully configured state
+        args_init = argparse.Namespace(dir=tmpdir, no_hook=True, force=True, backup=False)
+        artisan_cli.cmd_init(args_init)
+
+        args = argparse.Namespace(dir=tmpdir, strict=False)
+        ret = artisan_cli.cmd_doctor(args)
+        assert ret == 0
 
 
 def test_cmd_memory_list_and_record():
@@ -435,7 +446,7 @@ def test_cmd_3d(capsys, monkeypatch):
     ret = artisan_cli.cmd_3d(args)
     assert ret == 0
     captured = capsys.readouterr()
-    assert "ARTISAN 3D SPATIAL DASHBOARD" in captured.out
+    assert "3D SPATIAL DASHBOARD" in captured.out
     assert len(opened_urls) == 1
     assert "dashboard_3d.html" in opened_urls[0]
 

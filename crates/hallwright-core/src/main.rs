@@ -75,7 +75,10 @@ fn scan_line(line: &str, line_num: usize, file_path: &str) -> Vec<Finding> {
     }
 
     // 2. Pass placeholder  // hallwright-ignore
-    if trimmed.starts_with("pass #") || trimmed == "pass" && is_comment { // hallwright-ignore
+    let is_pass_placeholder = trimmed.starts_with("pass #") // hallwright-ignore
+        || trimmed.starts_with("pass //") // hallwright-ignore
+        || (file_path.ends_with(".py") && (trimmed == "pass" || trimmed.starts_with("pass\t"))); // hallwright-ignore
+    if is_pass_placeholder { // hallwright-ignore
         findings.push(Finding {
             rule_id: "STUB_PASS_PLACEHOLDER".to_string(), // hallwright-ignore
             category: "STUB".to_string(),

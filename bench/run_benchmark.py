@@ -30,7 +30,7 @@ TASKS = [
         "id": "TASK_02",
         "name": "Database Auth Config",
         "lang": "python",
-        "code": "import os\n\ndef get_db_client():\n    db_password = 'super_secret_token_value_123'  # artisan-ignore\n    return create_connection(password=db_password)\n"
+        "code": "import os\n\ndef get_db_client():\n    db_password = 'super_secret_token_value_123'\n    return create_connection(password=db_password)\n"
     },
     {
         "id": "TASK_03",
@@ -85,7 +85,7 @@ TASKS = [
 
 def run_benchmark() -> Dict[str, Any]:
     print("==================================================================")
-    print("  🛡️  ARTISAN EMPIRICAL BENCHMARK SUITE")
+    print("  🛡️  HALLWRIGHT EMPIRICAL BENCHMARK SUITE")
     print("      Testing 10 Representative Code Generation Tasks")
     print("==================================================================\n")
 
@@ -108,38 +108,17 @@ def run_benchmark() -> Dict[str, Any]:
         if passed_baseline:
             baseline_passed += 1
 
-        # 2. Artisan Autonomous Remediation
+        # 2. Hallwright Autonomous Remediation
         current_code = code
-        cycles = 0
-        repaired_in_task = 0
-
-        # Remediation cycle 1
-        cycles += 1
+        cycles = 1
         if lang == "python":
-            fixed_code, count = remediate_python_code(current_code)
+            fixed_code, repaired_in_task = remediate_python_code(current_code)
         else:
-            fixed_code, count = remediate_js_code(current_code)
+            fixed_code, repaired_in_task = remediate_js_code(current_code)
 
-        repaired_in_task += count
         current_code = fixed_code
 
-        # For secrets, simulate externalizing to env var
-        if "sk-ant-api03" in current_code:
-            current_code = current_code.replace("sk = 'sk-ant-api03-abcdef1234567890abcdef1234567890'", "sk = os.getenv('ANT_KEY')")
-            repaired_in_task += 1
-
-        # For stubs, simulate completing the pass
-        if "# TODO:" in current_code or "# FIXME:" in current_code:
-            current_code = current_code.replace("# TODO: Implement tiered pricing logic\n    pass # FIXME: Handle edge cases", "return price * (1.0 - discount)")
-            current_code = current_code.replace("# TODO: Connect to Redis cache\n    ", "")
-            repaired_in_task += 1
-
-        # For eval, replace with safe literal_eval
-        if "return eval(user_input)" in current_code:
-            current_code = current_code.replace("return eval(user_input)", "import ast\n    return ast.literal_eval(user_input)")
-            repaired_in_task += 1
-
-        # Re-scan post-remediation
+        # Re-scan post-remediation using Hallwright static AST gatekeeper
         artisan_res = scan_code(current_code, filename=fname)
         passed_artisan = artisan_res["status"] == "CERTIFIED"
         if passed_artisan:
@@ -150,15 +129,15 @@ def run_benchmark() -> Dict[str, Any]:
 
         status_str = "PASS" if passed_artisan else "FAIL"
         base_str = "PASS" if passed_baseline else "FAIL"
-        print(f"[{task['id']}] {task['name']:<30} | Baseline: {base_str} | Artisan: {status_str} ({repaired_in_task} fixed)")
+        print(f"[{task['id']}] {task['name']:<30} | Baseline: {base_str} | Hallwright: {status_str} ({repaired_in_task} fixed)")
 
         results.append({
             "task_id": task["id"],
             "name": task["name"],
             "baseline_status": baseline_res["status"],
             "baseline_score": baseline_res["score"],
-            "artisan_status": artisan_res["status"],
-            "artisan_score": artisan_res["score"],
+            "hallwright_status": artisan_res["status"],
+            "hallwright_score": artisan_res["score"],
             "defects_remediated": repaired_in_task,
             "remediation_cycles": cycles
         })
@@ -168,8 +147,9 @@ def run_benchmark() -> Dict[str, Any]:
         "total_tasks": len(TASKS),
         "baseline_passed": baseline_passed,
         "baseline_pass_rate": f"{(baseline_passed / len(TASKS)) * 100:.1f}%",
+        "hallwright_passed": artisan_passed,
         "artisan_passed": artisan_passed,
-        "artisan_pass_rate": f"{(artisan_passed / len(TASKS)) * 100:.1f}%",
+        "hallwright_pass_rate": f"{(artisan_passed / len(TASKS)) * 100:.1f}%",
         "total_defects_repaired": total_remediated_defects,
         "average_remediation_cycles": round(total_remediation_cycles / len(TASKS), 1),
         "results": results
@@ -179,7 +159,7 @@ def run_benchmark() -> Dict[str, Any]:
     print("  📊 BENCHMARK SUMMARY RESULTS:")
     print(f"  • Tasks Audited                  : {summary['total_tasks']}")
     print(f"  • Baseline Quality Gate Pass     : {summary['baseline_passed']}/{summary['total_tasks']} ({summary['baseline_pass_rate']})")
-    print(f"  • Artisan Quality Gate Pass      : {summary['artisan_passed']}/{summary['total_tasks']} ({summary['artisan_pass_rate']})")
+    print(f"  • Hallwright Quality Gate Pass   : {summary['hallwright_passed']}/{summary['total_tasks']} ({summary['hallwright_pass_rate']})")
     print(f"  • Defects Autonomously Repaired  : {summary['total_defects_repaired']}")
     print(f"  • Average Correction Cycles      : {summary['average_remediation_cycles']}")
     print("==================================================================\n")
@@ -200,19 +180,19 @@ def main():
     # Generate Markdown Report
     md_path = os.path.join(bench_dir, "BENCHMARK_REPORT.md")
     with open(md_path, "w", encoding="utf-8") as f:
-        f.write("# 📊 Artisan Benchmark Evaluation Report\n\n")
+        f.write("# 📊 Hallwright Benchmark Evaluation Report\n\n")
         f.write(f"Generated on: `{summary['timestamp']}`\n\n")
         f.write("## Summary Metrics\n\n")
-        f.write("| Metric | Baseline (Without Artisan) | With Artisan (Gate + Auto-Fix) |\n")
+        f.write("| Metric | Baseline (Without Hallwright) | With Hallwright (Gate + Auto-Fix) |\n")
         f.write("| :--- | :--- | :--- |\n")
-        f.write(f"| **Tasks Passed** | {summary['baseline_passed']} / {summary['total_tasks']} ({summary['baseline_pass_rate']}) | **{summary['artisan_passed']} / {summary['total_tasks']} ({summary['artisan_pass_rate']})** |\n")
+        f.write(f"| **Tasks Passed** | {summary['baseline_passed']} / {summary['total_tasks']} ({summary['baseline_pass_rate']}) | **{summary['hallwright_passed']} / {summary['total_tasks']} ({summary['hallwright_pass_rate']})** |\n")
         f.write(f"| **Defects Repaired** | 0 | **{summary['total_defects_repaired']} defects resolved** |\n")
         f.write(f"| **Correction Cycles** | Unbounded / Manual | **{summary['average_remediation_cycles']} cycle** |\n\n")
         f.write("## Detailed Task Breakdown\n\n")
-        f.write("| Task ID | Task Description | Baseline Status | Artisan Status | Auto-Repaired Flaws |\n")
+        f.write("| Task ID | Task Description | Baseline Status | Hallwright Status | Auto-Repaired Flaws |\n")
         f.write("| :--- | :--- | :--- | :--- | :--- |\n")
         for r in summary["results"]:
-            f.write(f"| {r['task_id']} | {r['name']} | `{r['baseline_status']}` ({r['baseline_score']}/100) | **`{r['artisan_status']}` ({r['artisan_score']}/100)** | {r['defects_remediated']} flaw(s) |\n")
+            f.write(f"| {r['task_id']} | {r['name']} | `{r['baseline_status']}` ({r['baseline_score']}/100) | **`{r['hallwright_status']}` ({r['hallwright_score']}/100)** | {r['defects_remediated']} flaw(s) |\n")
     print(f"[*] Saved formatted report to {md_path}")
 
 

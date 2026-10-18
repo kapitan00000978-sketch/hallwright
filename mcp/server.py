@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Artisan Model Context Protocol (MCP) Server
+Hallwright Model Context Protocol (MCP) Server
 Standard JSON-RPC 2.0 tool provider for Claude, Cursor, Antigravity, and other MCP clients.
 Empowered by The Council of Masters.
 """
@@ -334,7 +334,7 @@ TOOLS = [
     },
     {
         "name": "artisan_save_checkpoint",
-        "description": "Records an atomic progress checkpoint to .artisan/checkpoints.json and updates .artisan/agent_handoff.md for future AI agents.",
+        "description": "Records an atomic progress checkpoint to .hallwright/checkpoints.json and updates .hallwright/agent_handoff.md for future AI agents.",
         "inputSchema": {
             "type": "object",
             "properties": {

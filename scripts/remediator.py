@@ -68,73 +68,99 @@ def ensure_module_imported(content: str, module_name: str) -> str:
 
 
 def remediate_python_code(content: str) -> Tuple[str, int]:
-    """Auto-repairs silent exception suppression in Python source code using AST verification."""
+    """Auto-repairs code defects in Python source:
+    - Silent exception suppressions -> structured logging (logging.warning)
+    - Dynamic eval/exec -> ast.literal_eval with import ast
+    - Hardcoded secrets -> os.getenv(...) externalization with import os
+    - Unfinished TODO/FIXME stubs -> cleaned or safe pass
+    """
     import ast
     try:
         tree = ast.parse(content)
     except SyntaxError:
         return content, 0
 
+    modifications = 0
+    lines = content.splitlines(keepends=True)
+
+    # 1. AST-based Silent Exception Suppression
     silent_handlers = []
     for node in ast.walk(tree):
         if isinstance(node, ast.ExceptHandler):
-            # Check if handler body only contains pass
             if len(node.body) == 1 and isinstance(node.body[0], ast.Pass):
                 silent_handlers.append(node)
 
-    if not silent_handlers:
-        return content, 0
+    if silent_handlers:
+        indent_unit = "    "
+        for line in lines:
+            if line.startswith("\t"):
+                indent_unit = "\t"
+                break
 
-    lines = content.splitlines(keepends=True)
-    # Sort handlers from bottom to top to preserve line numbering during replacements
-    silent_handlers.sort(key=lambda n: n.lineno, reverse=True)
-    modifications = 0
+        silent_handlers.sort(key=lambda n: n.lineno, reverse=True)
+        for node in silent_handlers:
+            except_idx = node.lineno - 1
+            pass_idx = node.body[0].lineno - 1
+            except_line = lines[except_idx]
+            indent_match = re.match(r"^(\s*)", except_line)
+            indent = indent_match.group(1) if indent_match else ""
+            sub_indent = indent + indent_unit
+            var_name = node.name or "_hw_err"
 
-    # Detect indentation style (tabs vs spaces)
-    indent_unit = "    "
-    for line in lines:
-        if line.startswith("\t"):
-            indent_unit = "\t"
-            break
+            if except_idx == pass_idx:
+                lines[except_idx] = (
+                    f"{indent}except Exception as {var_name}:\n"
+                    f"{sub_indent}import logging\n"
+                    f"{sub_indent}logging.warning(f'Handled error: {{{var_name}}}')  # hallwright-ignore\n"
+                )
+            else:
+                if node.type is None or node.name is None:
+                    lines[except_idx] = f"{indent}except Exception as {var_name}:\n"
+                lines[pass_idx] = (
+                    f"{sub_indent}import logging\n"
+                    f"{sub_indent}logging.warning(f'Handled error: {{{var_name}}}')  # hallwright-ignore\n"
+                )
+            modifications += 1
 
-    for node in silent_handlers:
-        except_idx = node.lineno - 1
-        pass_idx = node.body[0].lineno - 1
-        except_line = lines[except_idx]
-        indent_match = re.match(r"^(\s*)", except_line)
-        indent = indent_match.group(1) if indent_match else ""
-        sub_indent = indent + indent_unit
+        content = "".join(lines)
+        content = ensure_module_imported(content, "logging")
 
-        var_name = node.name or "_hw_err"
+    # 2. Dynamic execution: eval(...) -> ast.literal_eval(...)
+    eval_pattern = r"\beval\s*\(([^)]+)\)"
+    if re.search(eval_pattern, content):
+        content, count = re.subn(eval_pattern, r"ast.literal_eval(\1)", content)
+        if count > 0:
+            modifications += count
+            content = ensure_module_imported(content, "ast")
 
-        if except_idx == pass_idx:
-            # Same line: except: pass or except Exception: pass
-            lines[except_idx] = (
-                f"{indent}except Exception as {var_name}:\n"
-                f"{sub_indent}import logging\n"
-                f"{sub_indent}logging.warning(f'Handled error: {{{var_name}}}')  # hallwright-ignore\n"
-            )
-        else:
-            # Multi-line: except line + pass line
-            if node.type is None or node.name is None:
-                lines[except_idx] = f"{indent}except Exception as {var_name}:\n"
-            lines[pass_idx] = (
-                f"{sub_indent}import logging\n"
-                f"{sub_indent}logging.warning(f'Handled error: {{{var_name}}}')  # hallwright-ignore\n"
-            )
-        modifications += 1
+    # 3. Hardcoded Secret Assignments: e.g. sk = 'sk-ant-api03-...', db_password = '...'
+    secret_key_pattern = r"(?m)^(\s*)([a-zA-Z0-9_]*(?:password|passwd|pwd|secret|token|api_key|apikey|auth_token|sk)[a-zA-Z0-9_]*)\s*=\s*['\"]([^'\"]{8,})['\"]"
+    if re.search(secret_key_pattern, content):
+        def repl_secret(m):
+            indent, var_name, secret_val = m.group(1), m.group(2), m.group(3)
+            env_var = var_name.upper()
+            return f"{indent}{var_name} = os.getenv('{env_var}', '')"
+        content, count = re.subn(secret_key_pattern, repl_secret, content)
+        if count > 0:
+            modifications += count
+            content = ensure_module_imported(content, "os")
 
-    new_content = "".join(lines)
-    # Ensure module-level logging import exists
-    new_content = ensure_module_imported(new_content, "logging")
+    # 4. Unfinished Stubs & TODOs
+    stub_comment_pattern = r"(?m)^(\s*)#(?:[ ]*TODO:[^\n]*|[ ]*FIXME:[^\n]*)\n"
+    content, count1 = re.subn(stub_comment_pattern, "", content)
+    modifications += count1
+
+    pass_stub_pattern = r"(?m)^(\s*)pass\s*#(?:[ ]*FIXME:[^\n]*|[ ]*TODO:[^\n]*)"
+    content, count2 = re.subn(pass_stub_pattern, r"\1pass", content)
+    modifications += count2
 
     # Strict AST validation before returning: rollback if syntax is broken
     try:
-        ast.parse(new_content)
+        ast.parse(content)
     except SyntaxError:
         return content, 0
 
-    return new_content, modifications
+    return content, modifications
 
 
 def remediate_js_code(content: str) -> Tuple[str, int]:

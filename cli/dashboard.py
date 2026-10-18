@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Artisan Interactive Terminal Dashboard (HUD)
+Hallwright Interactive Terminal Dashboard (HUD)
 Empowered by The Council of Masters
 """
 

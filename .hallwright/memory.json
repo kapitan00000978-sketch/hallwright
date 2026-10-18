@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Artisan Engineering Core",
-  "lastUpdated": "2026-10-18T03:02:43.605499+00:00",
+  "lastUpdated": "2026-10-18T16:27:31.104526+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -60,7 +60,7 @@
       "lesson": "Always enforce pagination limits.",
       "severity": "high",
       "recordedAt": "2026-10-15T15:08:39.779478+00:00",
-      "updatedAt": "2026-10-18T02:37:16.344603+00:00"
+      "updatedAt": "2026-10-18T16:26:26.669661+00:00"
     },
     {
       "id": "mis-0004",
@@ -69,16 +69,16 @@
       "lesson": "Always verify algorithm is HS256/RS256",
       "severity": "high",
       "recordedAt": "2026-10-15T18:30:24.182735+00:00",
-      "updatedAt": "2026-10-18T02:36:43.149952+00:00"
+      "updatedAt": "2026-10-18T16:27:31.104526+00:00"
     },
     {
       "id": "mis-0005",
       "category": "dangerous",
       "pattern": "Dangerous dynamic execution ('eval' or 'exec') detected. Replace with safe structured parsing.",
-      "lesson": "Rejected in pre-commit audit (.\\web\\playground.js:55). Resolve Dangerous dynamic execution ('eval' or 'exec') detected. Replace with safe structured parsing. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\scratch\\test_remediation_real.py:52). Resolve Dangerous dynamic execution ('eval' or 'exec') detected. Replace with safe structured parsing. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-15T20:23:54.412470+00:00",
-      "updatedAt": "2026-10-18T02:34:33.619715+00:00"
+      "updatedAt": "2026-10-18T16:12:21.150622+00:00"
     },
     {
       "id": "mis-0006",
@@ -93,10 +93,10 @@
       "id": "mis-0007",
       "category": "stub",
       "pattern": "Unfinished stub or placeholder detected. Complete all logic end-to-end.",
-      "lesson": "Rejected in pre-commit audit (.\\web\\playground.js:85). Resolve Unfinished stub or placeholder detected. Complete all logic end-to-end. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\scratch\\test_remediation_real.py:81). Resolve Unfinished stub or placeholder detected. Complete all logic end-to-end. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-15T20:23:54.516059+00:00",
-      "updatedAt": "2026-10-18T02:34:33.668502+00:00"
+      "updatedAt": "2026-10-18T16:12:21.289510+00:00"
     },
     {
       "id": "mis-0008",
@@ -174,6 +174,15 @@
       "lesson": "Rejected in pre-commit audit (.\\web\\playground.js:235). Resolve Potential DOM Cross-Site Scripting (XSS) sink detected. Sanitize dynamic content or use textContent/safe templating. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-18T02:35:33.099447+00:00"
+    },
+    {
+      "id": "mis-0017",
+      "category": "stub",
+      "pattern": "Pass placeholder detected. Implement complete functionality.",
+      "lesson": "Rejected in pre-commit audit (.\\crates\\hallwright-core\\src\\main.rs:78). Resolve Pass placeholder detected. Implement complete functionality. before committing.",
+      "severity": "medium",
+      "recordedAt": "2026-10-18T16:12:21.339652+00:00",
+      "updatedAt": "2026-10-18T16:25:15.960580+00:00"
     }
   ],
   "successes": [

@@ -13,32 +13,39 @@
 
 ---
 
-### ⚡ 1-Line Universal Install (Zero Dependencies)
+### ⚡ Quickstart & Verified Installation (Zero Dependencies)
+
+Hallwright runs out-of-the-box across **Node.js, Python, Go, and compiled native binaries**:
 
 ```bash
-# 🚀 Universal Instant Install (Linux, macOS, Windows)
-curl -fsSL https://raw.githubusercontent.com/kapitan00000978-sketch/hallwright/main/install.sh | sh
+# 🚀 1. Node.js Direct Git / NPX (Runs without npm registry dependency)
+npx github:kapitan00000978-sketch/hallwright init
 
-# Or via your favorite package manager:
-npx hallwright init          # Node.js / Bun / Deno
-pip install hallwright       # Python
-go install github.com/kapitan00000978-sketch/hallwright/cmd/hallwright@latest # Go
+# 🐍 2. Python Direct Install (From GitHub or local clone)
+pip install git+https://github.com/kapitan00000978-sketch/hallwright.git
+# or within a cloned repository:
+pip install -e .
+
+# 🐹 3. Go Toolchain
+go install github.com/kapitan00000978-sketch/hallwright/cmd/hallwright@latest
+
+# ⚡ 4. Precompiled Standalone Native Binary (Zero runtime dependencies)
+./bin/hallwright.exe init     # Windows (included in repository)
+./bin/hallwright init         # Linux / macOS
 ```
 
 ---
 
-### 🏎️ Mechanical Sympathy: 100x Faster Than Traditional Tools
+### 🏎️ Multi-Engine Performance Architecture
 
-Hallwright is engineered from the ground up for zero-friction git commits. No JVM startup delay, no heavy virtualenv warmups, and zero bloated node_modules:
+Hallwright provides native engines engineered for minimal commit friction across any language environment:
 
-| Tool | Engine Runtime | Runtime Dependencies | Startup Latency | Memory Footprint | 500 Files Monorepo Scan |
+| Engine | Implementation | Dependencies | Startup Latency | AST Inspection | Native Binary |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **SonarQube** | Java (JVM) | JRE + PostgreSQL | ~8,500 ms | ~512 MB | ~28.4 s |
-| **Pre-commit** | Python | pip + virtualenv | ~1,200 ms | ~45 MB | ~3.8 s |
-| **Husky** | Node.js | npm + node_modules | ~450 ms | ~68 MB | ~1.9 s |
-| **Hallwright (Rust Core)** | Native Binary | **Zero (0)** | **< 2 ms** | **< 3 MB** | **⚡ 0.08 s (80 ms)** |
-| **Hallwright (Go Core)** | Native Binary | **Zero (0)** | **< 4 ms** | **< 4 MB** | **⚡ 0.12 s (120 ms)** |
-| **Hallwright (Pure Node)** | Vanilla JS | **Zero (0 npm)** | **< 15 ms** | **< 12 MB** | **⚡ 0.45 s (450 ms)** |
+| **Rust Core** (`crates/hallwright-core`) | Native Binary | **Zero (0)** | **< 2 ms** | Pre-commit regex + token scanner | `target/release/hallwright` |
+| **Go Core** (`cmd/hallwright`) | Native Binary | **Zero (0)** | **< 4 ms** | Multi-file concurrent scanner | `bin/hallwright.exe` |
+| **Pure Node** (`bin/hallwright.js`) | Vanilla JS | **Zero (0 npm)** | **< 15 ms** | Zero-dependency AST gate | `bin/hallwright.js` |
+| **Python Engine** (`hallwright_cli.py`) | Python 3.8+ | **Zero (stdlib)** | **< 80 ms** | Full AST visitor + auto-remediation | `hallwright_cli.py` |
 
 ---
 
@@ -395,7 +402,7 @@ hallwright tasnif --json        # Exports complete taxonomy metadata as JSON
 - **Pre-Commit Defense:** The gatekeeper (`scripts/pre-commit-gatekeeper.py`) inspects staged source files and AST nodes before git commits are finalized.
 - **Deterministic Scope:** The gatekeeper deterministically detects unfinished stubs, bare exception catches (`except: pass`, empty `catch {}`), dangerous dynamic code execution, and hardcoded secrets. It does not replace application-specific business logic tests.
 - **Host Execution:** Hallwright does not run an LLM. Your host agent executes all coding actions; Hallwright acts as the deterministic verification and memory layer.
-- **Local Continuity:** Checkpoints track files, status, and notes in `.artisan/continuity.json`. It is fully local and does not transmit code to external servers.
+- **Local Continuity:** Checkpoints track files, status, and notes in `.hallwright/continuity.json`. It is fully local and does not transmit code to external servers.
 
 ---
 

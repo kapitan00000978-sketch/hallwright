@@ -162,7 +162,7 @@ RULES = [
     (
         "SECRET_ASSIGNMENT",
         "SECRET",
-        r"""\b(?:password|passwd|pwd|secret|token|api_key|apikey|auth_token)\s*[:=]\s*["']([^"'\r\n]{4,})["']""",
+        r"""\b(?:[a-zA-Z0-9_]*_)?(?:password|passwd|pwd|secret|token|api_key|apikey|auth_token)\s*[:=]\s*["']([^"'\r\n]{4,})["']""",
         "Hardcoded password, secret, or API token assignment detected. Use environment variables.",
         35
     ),

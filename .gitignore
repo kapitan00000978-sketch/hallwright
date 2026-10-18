@@ -17,7 +17,7 @@ Thumbs.db
 scratch/
 bin/hallwright-*
 bin/hallwright
-bin/hallwright.exe
+!bin/hallwright.exe
 !bin/hallwright.js
 target/
 crates/**/target/

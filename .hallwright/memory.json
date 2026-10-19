@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Hallwright Engineering Core",
-  "lastUpdated": "2026-10-19T08:15:48.315563+00:00",
+  "lastUpdated": "2026-10-19T11:12:46.730117+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -60,7 +60,7 @@
       "lesson": "Always enforce pagination limits.",
       "severity": "high",
       "recordedAt": "2026-10-15T15:08:39.779478+00:00",
-      "updatedAt": "2026-10-19T08:15:48.315563+00:00"
+      "updatedAt": "2026-10-19T11:12:46.730117+00:00"
     },
     {
       "id": "mis-0004",
@@ -69,7 +69,7 @@
       "lesson": "Always verify algorithm is HS256/RS256",
       "severity": "high",
       "recordedAt": "2026-10-15T18:30:24.182735+00:00",
-      "updatedAt": "2026-10-19T08:15:15.303506+00:00"
+      "updatedAt": "2026-10-19T11:12:27.474155+00:00"
     },
     {
       "id": "mis-0005",
@@ -192,6 +192,14 @@
       "pattern": "domain-driven service boundaries with explicit rubrics",
       "lesson": "Decomposing complex domain requirements into 7 standard artifacts guarantees zero defect escape and deterministic testing.",
       "recordedAt": "2026-10-14T12:00:00Z"
+    },
+    {
+      "id": "suc-0002",
+      "category": "code_remediation",
+      "pattern": "Auto-remediated 27 defects in workspace",
+      "lesson": "Hallwright remediator transformed silent catches/stubs into structured logging.",
+      "severity": "high",
+      "recordedAt": "2026-10-19T11:11:40.033619+00:00"
     }
   ],
   "conventions": [

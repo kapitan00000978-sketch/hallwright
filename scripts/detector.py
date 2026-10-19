@@ -310,8 +310,9 @@ def load_artisan_config(base_dir: str = ".") -> Dict[str, Any]:
                 custom_rules = rules_data.get("rules", rules_data if isinstance(rules_data, list) else [])
                 if custom_rules and isinstance(custom_rules, list):
                     config.setdefault("custom_rules", []).extend(custom_rules)
-        except (OSError, json.JSONDecodeError):
-            pass
+        except Exception as _hw_err:
+            import logging
+            logging.warning(f'Handled error: {_hw_err}')  # hallwright-ignore
 
     return config
 

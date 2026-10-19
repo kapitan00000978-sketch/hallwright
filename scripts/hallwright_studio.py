@@ -461,7 +461,9 @@ def print_studio_report(target_file: str, critique: Dict[str, Any], metrics: Dic
 
 def main():
     parser = argparse.ArgumentParser(description="Hallwright Studio — Visual Critique & Elevation Engine")
-    parser.add_argument("target", help="HTML file to audit and critique (e.g. index.html)")
+    parser.add_argument("target", nargs="?", default=None, help="HTML file to audit and critique (default: index.html)")
+    parser.add_argument("--file", "-f", dest="file_target", help="HTML file to audit and critique")
+    parser.add_argument("--url", "-u", dest="url_target", help="URL or file to audit")
     parser.add_argument("--elevate", "-e", action="store_true", help="Autonomously elevate to world-class standards")
     parser.add_argument("--loop", "-l", action="store_true", help="Execute complete autonomous feedback loop with Orchestrator, Blind Critic & Active Memory")
     parser.add_argument("--max-cycles", type=int, default=3, help="Maximum iteration budget for Orchestrator loop (default: 3)")
@@ -470,36 +472,38 @@ def main():
 
     args = parser.parse_args()
 
-    if not os.path.exists(args.target):
-        print(f"Error: Target file not found: {args.target}", file=sys.stderr)
+    target_path = args.file_target or args.url_target or args.target or "index.html"
+
+    if not os.path.exists(target_path):
+        print(f"Error: Target file not found: {target_path}", file=sys.stderr)
         sys.exit(1)
 
     # If --loop is chosen, run full 7-step Orchestrator closed-loop system
     if args.loop and StudioOrchestrator:
-        orchestrator = StudioOrchestrator(args.target, max_iterations=args.max_cycles)
+        orchestrator = StudioOrchestrator(target_path, max_iterations=args.max_cycles)
         result = orchestrator.run(auto_remediate=True)
         sys.exit(0 if result["status"] == "CERTIFIED" else 1)
 
 
-    print(f"🔍 [Hallwright Studio] Launching headless browser & visual inspection on {args.target}...")
-    metrics = capture_visual_metrics(args.target, output_dir=args.screenshots_dir)
-    critique = run_studio_critique(args.target, metrics)
+    print(f"🔍 [Hallwright Studio] Launching visual inspection on {target_path}...")
+    metrics = capture_visual_metrics(target_path, output_dir=args.screenshots_dir)
+    critique = run_studio_critique(target_path, metrics)
 
     if args.json:
         result = {"metrics": metrics, "critique": critique}
         print(json.dumps(result, indent=2))
         return
 
-    print_studio_report(args.target, critique, metrics)
+    print_studio_report(target_path, critique, metrics)
 
     if args.elevate:
-        print(f"🚀 [Hallwright Studio Elevation] Activating Council to transform {args.target} into world-class tier...")
-        elevate_html_to_world_class(args.target)
+        print(f"🚀 [Hallwright Studio Elevation] Activating Council to transform {target_path} into world-class tier...")
+        elevate_html_to_world_class(target_path)
         
         # Re-audit elevated page
         print("📸 [Hallwright Studio] Re-rendering and capturing post-elevation proof...")
-        new_metrics = capture_visual_metrics(args.target, output_dir=args.screenshots_dir)
-        new_critique = run_studio_critique(args.target, new_metrics)
+        new_metrics = capture_visual_metrics(target_path, output_dir=args.screenshots_dir)
+        new_critique = run_studio_critique(target_path, new_metrics)
         
         print("\n" + "=" * 80)
         print("  🎉 ELEVATION COMPLETE: BEFORE VS AFTER COMPARISON")

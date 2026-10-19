@@ -134,7 +134,7 @@ def remediate_python_code(content: str) -> Tuple[str, int]:
             content = ensure_module_imported(content, "ast")
 
     # 3. Hardcoded Secret Assignments: e.g. sk = 'sk-ant-api03-...', db_password = '...'
-    secret_key_pattern = r"(?m)^(\s*)([a-zA-Z0-9_]*(?:password|passwd|pwd|secret|token|api_key|apikey|auth_token|sk)[a-zA-Z0-9_]*)\s*=\s*['\"]([^'\"]{8,})['\"]"
+    secret_key_pattern = r"(?m)^(\s*)([a-zA-Z0-9_]*(?:password|passwd|pwd|secret|token|api_key|apikey|auth_token)\b|sk(?:_[a-zA-Z0-9_]+)?)\s*=\s*['\"]([^'\"]{8,})['\"]"
     if re.search(secret_key_pattern, content):
         def repl_secret(m):
             indent, var_name, secret_val = m.group(1), m.group(2), m.group(3)

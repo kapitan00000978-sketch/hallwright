@@ -68,12 +68,16 @@ def install(agent_target="all"):
     print(f"[*] Target Directory : {target_dir}")
     is_external = os.path.abspath(base_dir) != os.path.abspath(target_dir)
 
-    # 1. Install core protocol rules
+    # 1. Install core protocol rules and craftsman-core SSOT
     if is_external:
         agents_src = os.path.join(base_dir, "AGENTS.md")
         if os.path.exists(agents_src):
             copy_file_or_dir(agents_src, os.path.join(target_dir, "AGENTS.md"))
             print("  [+] Installed core AGENTS.md protocol")
+        core_src = os.path.join(base_dir, ".agents", "plugins", "craftsman-core")
+        if os.path.exists(core_src):
+            copy_file_or_dir(core_src, os.path.join(target_dir, ".agents", "plugins", "craftsman-core"))
+            print("  [+] Deployed shared craftsman-core (Single Source of Truth)")
 
     # 2. Initialize .hallwright memory directory
     mem_dir = os.path.join(target_dir, ".hallwright")

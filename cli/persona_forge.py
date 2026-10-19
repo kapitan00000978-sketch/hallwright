@@ -60,8 +60,8 @@ def create_persona(title, character_name=None, archetype=None, domain="general")
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(template, f, indent=2, ensure_ascii=False)
 
-    # Append to professions directory rule if exists
-    rule_path = os.path.join(".agents", "plugins", "craftsman-agent", "rules", "02-professions-directory.md")
+    # Append to professions directory rule if exists (craftsman-core SSOT)
+    rule_path = os.path.join(".agents", "plugins", "craftsman-core", "rules", "02-professions-directory.md")
     if os.path.exists(rule_path):
         with open(rule_path, "a", encoding="utf-8") as f:
             f.write(f"\n\n---\n\n### 🎭 {character_name} — {title}\n")

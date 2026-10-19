@@ -1,0 +1,25 @@
+{
+  "entries": [
+    {
+      "path": ".agents/plugins/craftsman-core"
+    },
+    {
+      "path": ".agents/plugins/craftsman-agent"
+    },
+    {
+      "path": ".agents/plugins/craftsman-engineer"
+    },
+    {
+      "path": ".agents/plugins/craftsman-security"
+    },
+    {
+      "path": ".agents/plugins/craftsman-designer"
+    },
+    {
+      "path": ".agents/plugins/craftsman-business"
+    },
+    {
+      "path": ".agents/plugins/craftsman-copywriter"
+    }
+  ]
+}

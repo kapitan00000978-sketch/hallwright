@@ -3,10 +3,12 @@ Empowered by The Council of Masters
 
 This directory configures **Google Antigravity & Gemini CLI** with the Hallwright autonomous craftsmanship protocol.
 
-## Contents:
-- `AGENTS.md` — Mandatory workspace directives permanently enforced by Antigravity.
-- `.agents/plugins/craftsman-agent/` — Plugin containing The Council of Masters character rules and skills.
-- `skills/` — 11 core Hallwright skills (TDD, Systematic Debugging, Adversarial Review, etc.).
+## Architecture & Inheritance
+Instead of duplicating rules and skills across multiple folders, this configuration leverages the Antigravity Customization inheritance protocol:
+- `AGENTS.md` — Mandatory workspace quality and security invariants.
+- `.agents/plugins.json` — Inherits all specialized plugins and connects to `craftsman-core` as the single source of truth.
+- `.agents/skills.json` — Inherits all 11 core Hallwright skills directly from `craftsman-core`.
+- `gemini-extension.json` — Antigravity extension metadata and command declarations.
 
 ## How to Use:
-Open this folder in Google Antigravity or copy `AGENTS.md` and `.agents/` into your workspace. Antigravity will automatically embody The Council of Masters and eliminate prompt babysitting.
+Open this repository in Google Antigravity or import `.agents/plugins.json` into your workspace. Antigravity will automatically resolve all skills and rules from `craftsman-core` with zero redundant copies.

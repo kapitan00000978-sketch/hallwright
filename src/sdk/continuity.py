@@ -51,11 +51,12 @@ class ContinuityManager:
 
     def __init__(self, workspace_root: str = ".", enabled: Optional[bool] = None):
         self.workspace_root = os.path.abspath(workspace_root)
-        self.artisan_dir = os.path.join(self.workspace_root, ".hallwright")
-        self.checkpoint_file = os.path.join(self.artisan_dir, "checkpoints.json")
-        self.handoff_file = os.path.join(self.artisan_dir, "agent_handoff.md")
+        self.hallwright_dir = os.path.join(self.workspace_root, ".hallwright")
+        self.artisan_dir = self.hallwright_dir
+        self.checkpoint_file = os.path.join(self.hallwright_dir, "checkpoints.json")
+        self.handoff_file = os.path.join(self.hallwright_dir, "agent_handoff.md")
 
-        self.db_path = os.path.join(self.artisan_dir, "memory.db")
+        self.db_path = os.path.join(self.hallwright_dir, "memory.db")
         self.store = SqliteMemoryStore(self.db_path) if SqliteMemoryStore else None
 
         # Determine if enabled
@@ -161,7 +162,7 @@ class ContinuityManager:
         if not self._enabled:
             return False
 
-        os.makedirs(self.artisan_dir, exist_ok=True)
+        os.makedirs(self.hallwright_dir, exist_ok=True)
 
         existing = self.load_checkpoint() or CheckpointData()
 

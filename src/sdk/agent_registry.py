@@ -18,7 +18,7 @@ from typing import List, Dict, Any, Optional
 DEFAULT_SESSIONS_PATH = os.path.join(".hallwright", "agent_sessions.json")
 DEFAULT_TIMEOUT_MINUTES = 15
 
-logger = logging.getLogger("artisan.agent_registry")
+logger = logging.getLogger("hallwright.agent_registry")
 
 
 class AgentRegistry:
@@ -59,7 +59,7 @@ class AgentRegistry:
         """Atomically persists session data to prevent partial reads during concurrent agent access."""
         dir_name = os.path.dirname(self.sessions_path) or "."
         os.makedirs(dir_name, exist_ok=True)
-        fd, temp_path = tempfile.mkstemp(dir=dir_name, prefix="artisan_sess_", suffix=".tmp")
+        fd, temp_path = tempfile.mkstemp(dir=dir_name, prefix="hallwright_sess_", suffix=".tmp")
         try:
             with os.fdopen(fd, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)

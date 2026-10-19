@@ -1,6 +1,10 @@
 {
   "name": "craftsman-copywriter",
-  "version": "1.0.0",
-  "description": "Direct-response conversion copywriting, zero AI cliches, and punchy hook frameworks.",
-  "author": "Hallwright Open Source Project"
+  "version": "2.1.0",
+  "description": "Conversion copywriting, developer documentation, and API communication standards.",
+  "author": "Hallwright Open Source Project",
+  "dependencies": [
+    "craftsman-core"
+  ],
+  "extends": "craftsman-core"
 }

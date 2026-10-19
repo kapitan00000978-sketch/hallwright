@@ -1,6 +1,10 @@
 {
   "name": "craftsman-agent",
-  "version": "1.0.0",
-  "description": "Professional craftsmanship, human-like responsibility, and autonomous pre-delivery self-correction plugin for AI Agents.",
-  "author": "Hallwright Open Source Project"
+  "version": "2.1.0",
+  "description": "Autonomous multi-agent orchestration and subagent delegator for Hallwright.",
+  "author": "Hallwright Open Source Project",
+  "dependencies": [
+    "craftsman-core"
+  ],
+  "extends": "craftsman-core"
 }

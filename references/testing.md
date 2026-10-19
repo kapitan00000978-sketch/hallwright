@@ -1,5 +1,5 @@
 # 🧪 Testing Guild Reference
-**Lead:** Quality Engineering Core (`artisan_tester`)  
+**Lead:** Quality Engineering Core (`hallwright_tester`)  
 **Domain:** Unit Testing, Mutation Testing, Boundary Assertions & Regression Defense
 
 ---

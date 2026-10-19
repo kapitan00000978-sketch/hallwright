@@ -1,6 +1,10 @@
 {
   "name": "craftsman-security",
-  "version": "1.0.0",
-  "description": "Application security hardening, secret leakage protection, and vulnerability auditing.",
-  "author": "Hallwright Open Source Project"
+  "version": "2.1.0",
+  "description": "Zero-trust cybersecurity directives and AST vulnerability guardrails.",
+  "author": "Hallwright Open Source Project",
+  "dependencies": [
+    "craftsman-core"
+  ],
+  "extends": "craftsman-core"
 }

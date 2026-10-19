@@ -293,7 +293,7 @@ class AdversarialReviewer:
                 })
 
         # ---------------------------------------------------------
-        # 4. ARTISAN LIVING MEMORY: SCAR TISSUE CROSS-CHECK
+        # 4. HALLWRIGHT LIVING MEMORY: SCAR TISSUE CROSS-CHECK
         # ---------------------------------------------------------
         if self.memory:
             memory_findings = self._audit_against_memory(lines, file_path, line_numbers)

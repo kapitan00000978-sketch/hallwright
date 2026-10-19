@@ -43,11 +43,11 @@ COUNCIL_GUILDS: Dict[str, Dict[str, Any]] = {
     "quality_testing": {
         "id": "guild_04",
         "name": "Quality Engineering & Testing Guild",
-        "lead": "artisan_tester",
+        "lead": "hallwright_tester",
         "icon": "🧪",
         "description": "Deterministic unit verification, mutation testing coverage, property testing, and regression defense.",
         "members": [
-            "artisan_tester",
+            "hallwright_tester",
             "legal_contract_auditor"
         ]
     },

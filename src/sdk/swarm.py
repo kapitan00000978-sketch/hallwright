@@ -14,7 +14,7 @@ import logging
 from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
 
-logger = logging.getLogger("artisan.swarm")
+logger = logging.getLogger("hallwright.swarm")
 
 try:
     from agent_registry import AgentRegistry

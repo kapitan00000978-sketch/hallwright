@@ -1,6 +1,10 @@
 {
   "name": "craftsman-business",
-  "version": "1.0.0",
-  "description": "Startup unit economics, financial runway modeling, and legal agreement auditing.",
-  "author": "Hallwright Open Source Project"
+  "version": "2.1.0",
+  "description": "Business logic, financial modeling, and legal compliance standards.",
+  "author": "Hallwright Open Source Project",
+  "dependencies": [
+    "craftsman-core"
+  ],
+  "extends": "craftsman-core"
 }

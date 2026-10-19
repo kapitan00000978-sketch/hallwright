@@ -3,7 +3,7 @@ Persistent Learning Memory Engine for Hallwright
 Part of the Hallwright Autonomous Craftsmanship Protocol.
 
 Records AI agent mistakes, successes, conventions, and past scar tissue
-in `.artisan/memory.json`, dynamically retrieving relevant lessons
+in `.hallwright/memory.json`, dynamically retrieving relevant lessons
 to prevent repeated errors across sessions.
 """
 
@@ -147,7 +147,7 @@ class LearningMemory:
     def _write_atomic(self, data: Dict[str, Any]) -> None:
         """Writes JSON data atomically to prevent corruption."""
         dir_name = os.path.dirname(self.memory_path) or "."
-        fd, temp_path = tempfile.mkstemp(dir=dir_name, prefix="artisan_mem_", suffix=".tmp")
+        fd, temp_path = tempfile.mkstemp(dir=dir_name, prefix="hallwright_mem_", suffix=".tmp")
         try:
             with os.fdopen(fd, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)

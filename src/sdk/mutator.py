@@ -15,7 +15,7 @@ import subprocess
 import logging
 from typing import List, Dict, Any, Optional, Tuple
 
-logger = logging.getLogger("artisan.mutator")
+logger = logging.getLogger("hallwright.mutator")
 
 
 class Mutant:

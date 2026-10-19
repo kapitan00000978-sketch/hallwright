@@ -1,6 +1,10 @@
 {
   "name": "craftsman-engineer",
-  "version": "1.0.0",
-  "description": "Software architecture, clean code, SOLID principles, and defensive programming standards.",
-  "author": "Hallwright Open Source Project"
+  "version": "2.1.0",
+  "description": "Senior software engineering standards and architectural invariants.",
+  "author": "Hallwright Open Source Project",
+  "dependencies": [
+    "craftsman-core"
+  ],
+  "extends": "craftsman-core"
 }

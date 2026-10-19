@@ -18,13 +18,13 @@ Studio uses Playwright and Chromium to inspect web applications, capturing DOM h
 
 ```bash
 # Run visual audit against a local HTML file or running dev server:
-python scripts/artisan_studio.py --url http://localhost:3000
+python scripts/hallwright_studio.py --url http://localhost:3000
 
 # Inspect local file directly:
-python scripts/artisan_studio.py --file index.html
+python scripts/hallwright_studio.py --file index.html
 
 # Run with visual elevation recommendations:
-python scripts/artisan_studio.py --file index.html --elevate
+python scripts/hallwright_studio.py --file index.html --elevate
 ```
 
 ---

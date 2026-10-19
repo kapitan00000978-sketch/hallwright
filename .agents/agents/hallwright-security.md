@@ -19,5 +19,5 @@ Your mission is to enforce zero-trust architecture and eliminate all attack vect
 
 ## 📋 Security Audit Protocol
 1. **Threat Modeling:** Map data flows, trust boundaries, and asset exposure points.
-2. **Defensive Verification:** Run AST security inspections and cross-reference against `.artisan/memory.json` past security scar tissue.
+2. **Defensive Verification:** Run AST security inspections and cross-reference against `.hallwright/memory.json` past security scar tissue.
 3. **Remediation Directives:** If an insecure pattern is detected, issue immediate cryptographic or architectural replacements.

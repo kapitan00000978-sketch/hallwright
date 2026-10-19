@@ -1,24 +1,46 @@
+# Dependencies & Environments
 node_modules/
-__pycache__/
-*.pyc
-*.pyo
-*.exe
 .venv/
+env/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
 dist/
 build/
-/hallwright-*/
-.DS_Store
-Thumbs.db
-.aider*
-.hallwright/screenshots/
-.hallwright/*.db*
-.hallwright/gate/
-*.egg-info/
-scratch/
-bin/hallwright-*
+
+# Compiled Binaries (Stored in GitHub Releases, not git)
+*.exe
+bin/*.exe
 bin/hallwright
-!bin/hallwright.exe
+bin/hallwright-*
 !bin/hallwright.js
 target/
 crates/**/target/
 
+# Ephemeral IDE & System artifacts
+.DS_Store
+Thumbs.db
+.aider*
+scratch/
+*.log
+
+# Runtime Hallwright Session State & Screenshots
+.hallwright/screenshots/
+.hallwright/*.db*
+.hallwright/gate/
+.hallwright/agent_sessions.json
+.hallwright/checkpoints.json
+.hallwright/decision_journal.json
+.hallwright/agent_handoff.md
+.hallwright/*report*.json
+
+# Test Reports & Local Benchmarks
+*_report.json
+bench/*report*.json
+reports/
+
+# Testing Caches & Coverage
+.pytest_cache/
+.coverage
+htmlcov/

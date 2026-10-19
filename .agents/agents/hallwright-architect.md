@@ -18,4 +18,4 @@ Your mission is to engineer rock-solid, production-grade systems with zero techn
 ## 📋 Architectural Workflow
 1. **Deconstruct Requirements:** Break user requirements into cohesive modules, data models, and service boundaries.
 2. **Validate Dependencies:** Avoid circular imports, tight coupling, and leaky abstractions.
-3. **Inspect Living Memory:** Consult `.artisan/memory.json` to avoid repeating architectural pitfalls identified in earlier iterations.
+3. **Inspect Living Memory:** Consult `.hallwright/memory.json` to avoid repeating architectural pitfalls identified in earlier iterations.

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Bazar — Premium Texnologiyalar & Elektronika</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="container nav-wrap">
+      <a href="#" class="brand-badge">
+        <div class="brand-logo-icon">⚡</div>
+        <span class="brand-text-grad">Smart Bazar</span>
+        <span class="badge-tag">Flagship</span>
+      </a>
+
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="search-input" class="search-input" placeholder="Mahsulot yoki brend nomini qidiring...">
+        <span class="search-shortcut">Ctrl K</span>
+      </div>
+
+      <div class="nav-actions">
+        <button id="wishlist-btn" class="icon-btn" title="Saralanganlar">
+          <span>❤️</span>
+          <span id="wishlist-badge" class="icon-badge">0</span>
+        </button>
+
+        <button id="open-cart-btn" class="cart-pill-btn">
+          <span>🛒</span>
+          <span>Savat</span>
+          <span id="cart-badge" style="background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 9999px; font-size: 0.82rem;">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Banner with Flash Sale -->
+    <section class="hero-banner">
+      <div class="hero-content">
+        <div class="hero-tag">🔥 YANGI AVLOD KOLLEKSIYASI 2026</div>
+        <h1 class="hero-title">Eng Sara & Premium Texnologiyalar Dunyosi</h1>
+        <p class="hero-desc">100% original tovarlar, rasmiy xalqaro kafolat va butun O'zbekiston bo'ylab 24 soat ichida eshikkacha tezkor yetkazib berish xizmati.</p>
+
+        <div class="flash-deal-box">
+          <div class="flash-label">⚡ Flash Chegirma:</div>
+          <div class="timer-digits">
+            <span id="timer-hours" class="digit-pill">06</span> :
+            <span id="timer-mins" class="digit-pill">42</span> :
+            <span id="timer-secs" class="digit-pill">19</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="coupon-callout" id="hero-coupon-pill">
+            <span>🎁 Maxsus Promokod: <strong>CHEMPION10</strong> (10% chegirma)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Badges Strip -->
+    <section class="trust-strip">
+      <div class="trust-item">
+        <div class="trust-icon">🚀</div>
+        <div>
+          <div class="trust-title">Tezkor Yetkazish</div>
+          <div class="trust-sub">24 soat ichida eshikkacha</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🛡️</div>
+        <div>
+          <div class="trust-title">100% Original</div>
+          <div class="trust-sub">1 yillik rasmiy kafolat</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">💳</div>
+        <div>
+          <div class="trust-title">0% Muddatli To'lov</div>
+          <div class="trust-sub">12 oygacha foizsiz</div>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🔄</div>
+        <div>
+          <div class="trust-title">14 Kunda Qaytarish</div>
+          <div class="trust-sub">Kafolatlangan xavfsizlik</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls Bar: Category Tabs & Sorting -->
+    <section class="controls-bar">
+      <div class="category-tabs" id="category-tabs">
+        <button class="tab-pill active" data-cat="all">🔥 Barchasi</button>
+        <button class="tab-pill" data-cat="smartphones">📱 Smartfonlar</button>
+        <button class="tab-pill" data-cat="laptops">💻 Noutbuklar</button>
+        <button class="tab-pill" data-cat="audio">🎧 Audio & Quloqchinlar</button>
+        <button class="tab-pill" data-cat="accessories">⌚ Smart Aksessuarlar</button>
+        <button class="tab-pill" data-cat="home">🏠 Uy & Aqlli Texnika</button>
+      </div>
+
+      <div class="sort-and-filters">
+        <div class="sort-select-wrap">
+          <select id="sort-select" class="sort-select">
+            <option value="popular">⚡ Saralash: Ommabop</option>
+            <option value="price-asc">💰 Narx: Arzondan qimmatga</option>
+            <option value="price-desc">💎 Narx: Qimmatdan arzonga</option>
+            <option value="rating">⭐ Yuqori reytingli</option>
+            <option value="newest">✨ Eng yangi tovarlar</option>
+          </select>
+          <span class="sort-arrow">▼</span>
+        </div>
+        <span id="catalog-count" class="count-indicator">8 ta mahsulot</span>
+      </div>
+    </section>
+
+    <!-- Product Grid -->
+    <section id="product-grid" class="product-grid">
+      <!-- JavaScript tomonidan professional tarzda yaratiladi -->
+    </section>
+  </main>
+
+  <!-- Slide-Over Cart Drawer -->
+  <div id="cart-drawer-overlay" class="drawer-overlay">
+    <div id="cart-modal" class="cart-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">🛒 Sizning Savatingiz</div>
+        <button id="close-cart-btn" class="drawer-close">&times;</button>
+      </div>
+
+      <div class="free-delivery-progress">
+        <div class="progress-text">
+          <span>🚚 Bepul yetkazib berish holati:</span>
+          <strong style="color: #34d399;">Faollashtirildi!</strong>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div id="cart-items-container" class="cart-items-body">
+        <!-- Savat elementlari -->
+      </div>
+
+      <div class="drawer-footer">
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Tezkor promokodlar:</div>
+        <div class="coupon-quick-row">
+          <button class="coupon-chip" data-code="CHEMPION10">🎟️ CHEMPION10 (-10%)</button>
+          <button class="coupon-chip" data-code="SUPER20">🔥 SUPER20 (-20%)</button>
+        </div>
+
+        <div class="coupon-form-box">
+          <input type="text" id="coupon-input" class="coupon-input-field" placeholder="Promokod kiriting">
+          <button id="apply-coupon-btn" class="btn-apply-coupon">Qo'llash</button>
+        </div>
+        <div id="coupon-message" style="font-size: 0.82rem; margin-bottom: 12px;"></div>
+
+        <div class="summary-table">
+          <div class="sum-line"><span>Oraliq jami:</span><span id="cart-subtotal">0 UZS</span></div>
+          <div class="sum-line"><span>Chegirma:</span><span id="cart-discount" style="color: var(--accent-emerald);">-0 UZS</span></div>
+          <div class="sum-line"><span>Yetkazib berish:</span><span style="color: var(--accent-cyan); font-weight: 700;">BEPUL (0 UZS)</span></div>
+          <div class="sum-line total"><span>Jami to'lov:</span><span id="cart-total" style="color: #a5b4fc;">0 UZS</span></div>
+        </div>
+
+        <button id="checkout-btn" class="btn-checkout-glow">
+          <span>Buyurtmani Rasmiylashtirish</span>
+          <span>&rarr;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multi-Step Checkout Modal -->
+  <div id="checkout-modal" class="modal-overlay">
+    <div class="modal-content-premium">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);">
+        <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">📦 Buyurtmani Rasmiylashtirish</h2>
+        <button id="close-checkout-btn" class="drawer-close">&times;</button>
+      </div>
+
+      <form id="checkout-form">
+        <div class="form-group">
+          <label for="cust-name">Ism va Familiyangiz</label>
+          <input type="text" id="cust-name" class="form-input-lux" required placeholder="Masalan: Jamshid Usmonov">
+        </div>
+
+        <div class="form-group">
+          <label for="cust-phone">Telefon Raqamingiz</label>
+          <input type="tel" id="cust-phone" class="form-input-lux" required placeholder="+998 90 123 45 67">
+        </div>
+
+        <div class="form-group">
+          <label for="cust-address">Yetkazib Berish Manzili (Shahar, tuman, ko'cha, xonadon)</label>
+          <input type="text" id="cust-address" class="form-input-lux" required placeholder="Toshkent sh., Mirobod t., Nukus ko'chasi, 24-uy">
+        </div>
+
+        <div class="form-group">
+          <label>To'lov Usulini Tanlang</label>
+          <div class="payment-options-grid">
+            <div class="payment-card-option active" data-pay="Payme">
+              <span style="font-size: 1.5rem;">💳</span>
+              <span style="font-size: 0.85rem; font-weight: 700;">Payme</span>
+            </div>
+            <div class="payment-card-option" data-pay="Click">
+              <span style="font-size: 1.5rem;">📱</span>
+              <span style="font-size: 0.85rem; font-weight: 700;">Click</span>
+            </div>
+            <div class="payment-card-option" data-pay="Cash">
+              <span style="font-size: 1.5rem;">💵</span>
+              <span style="font-size: 0.85rem; font-weight: 700;">Qabulda Naqd</span>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="submit-order-btn" class="btn-checkout-glow" style="margin-top: 24px;">
+          <span>Tasdiqlash & Buyurtma Berish</span>
+          <span>✓</span>
+        </button>
+      </form>
+
+      <div id="order-confirm-box" style="display: none; text-align: center; padding: 30px 10px;">
+        <div style="font-size: 4rem; margin-bottom: 16px; animation: bounce 0.6s ease;">🎉</div>
+        <h3 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; margin-bottom: 8px;">Buyurtmangiz Qabul Qilindi!</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+          Buyurtma raqami: <strong id="confirmed-order-id" style="color: var(--primary-light); font-size: 1.2rem;"></strong>
+        </p>
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 18px; margin-bottom: 24px; text-align: left; font-size: 0.9rem; color: var(--text-secondary);">
+          <div>🚚 <strong>Yetkazib berish:</strong> 24 soat ichida (Kuryer sizga qo'ng'iroq qiladi)</div>
+          <div style="margin-top: 6px;">📞 <strong>Qo'llab-quvvatlash:</strong> +998 71 200 00 00</div>
+          <div style="margin-top: 6px;">🛡️ <strong>Kafolat:</strong> 1 yillik rasmiy kafolat kartasi jo'natildi</div>
+        </div>
+        <button id="finish-order-btn" class="btn-checkout-glow">Xaridni Davom Ettirish</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="app.js"></script>
+</body>
+</html>

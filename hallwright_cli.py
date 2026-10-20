@@ -775,6 +775,9 @@ def cmd_swarm(args: argparse.Namespace) -> int:
             deliv = s.get("deliverable")
             if deliv and deliv.get("summary"):
                 print(f"     Artifact: {deliv['summary']}")
+            if deliv and deliv.get("web_research"):
+                wr = deliv["web_research"]
+                print(f"     🌐 Internet Research: {wr.get('references_count', 0)} live references retrieved")
             if deliv and deliv.get("files_written"):
                 for fw in deliv["files_written"]:
                     print(f"     📁 Created: {fw}")
@@ -862,6 +865,69 @@ def cmd_skill(args: argparse.Namespace) -> int:
         return 0
 
     return 0
+
+
+def cmd_web(args: argparse.Namespace) -> int:
+    """Live web search, technical documentation query, and page content fetcher."""
+    try:
+        from web_gateway import InternetGateway
+    except ImportError:
+        try:
+            from src.sdk.web_gateway import InternetGateway
+        except ImportError as imp_err:
+            print(f"[-] Error: InternetGateway module could not be loaded: {imp_err}", file=sys.stderr)
+            return 1
+
+    gateway = InternetGateway()
+    action = getattr(args, "action", "search") or "search"
+    as_json = getattr(args, "json", False)
+
+    if action in ("search", "qidir"):
+        query = getattr(args, "query", "") or ""
+        limit = getattr(args, "limit", 5) or 5
+        hits = gateway.search(query=query, limit=limit)
+        if as_json:
+            print(json.dumps({"query": query, "hits_count": len(hits), "hits": hits}, indent=2))
+            return 0
+        print(f"\n🌐 [HALLWRIGHT INTERNET SEARCH] Query: '{query}' ({len(hits)} results)")
+        print("=" * 78)
+        for idx, h in enumerate(hits, start=1):
+            print(f"  {idx}. 📌 {h['title']}")
+            print(f"     🔗 {h['url']}")
+            print(f"     💬 {h['snippet'][:120]}...\n")
+        return 0
+
+    elif action in ("fetch", "get"):
+        url = getattr(args, "query", "") or ""
+        data = gateway.fetch_page(url=url)
+        if as_json:
+            print(json.dumps(data, indent=2))
+            return 0
+        print(f"\n🌐 [HALLWRIGHT PAGE CONTENT] URL: {url}")
+        print("=" * 78)
+        print(f"  📌 Title: {data.get('title')}")
+        print(f"  📄 Status: {data.get('status')}")
+        content_preview = data.get('content', '')[:600]
+        print(f"  📝 Text Sample:\n{content_preview}...\n")
+        return 0
+
+    elif action in ("docs", "doc"):
+        tech = getattr(args, "query", "") or "python"
+        topic = getattr(args, "topic", "") or "architecture"
+        hits = gateway.query_docs(tech=tech, topic=topic)
+        if as_json:
+            print(json.dumps({"technology": tech, "topic": topic, "hits": hits}, indent=2))
+            return 0
+        print(f"\n🌐 [TECHNICAL DOCUMENTATION SEARCH] Tech: {tech} | Topic: {topic}")
+        print("=" * 78)
+        for idx, h in enumerate(hits, start=1):
+            print(f"  {idx}. 📌 {h['title']}")
+            print(f"     🔗 {h['url']}")
+            print(f"     💬 {h['snippet'][:120]}...\n")
+        return 0
+
+    return 0
+
 
 
 
@@ -1561,6 +1627,15 @@ def main():
     p_sk.add_argument("target", nargs="?", help="Target file or context for skill execution")
     p_sk.add_argument("--json", "-j", action="store_true", help="Output result in JSON format")
 
+    # web / internet
+    p_web = subparsers.add_parser("web", aliases=["internet", "net"], help="Query live web technical search and fetch documentation")
+    p_web.add_argument("action", nargs="?", default="search", choices=["search", "fetch", "get", "docs", "doc", "qidir"], help="Action: search, fetch, docs")
+    p_web.add_argument("query", nargs="?", default="", help="Search query, target URL, or technology name")
+    p_web.add_argument("topic", nargs="?", default="", help="Documentation topic when using docs action")
+    p_web.add_argument("--limit", "-l", type=int, default=5, help="Maximum results to return")
+    p_web.add_argument("--json", "-j", action="store_true", help="Output results in JSON format")
+
+
     # resume
     p_res = subparsers.add_parser("resume", help="Pick up where previous AI agent left off (cross-agent continuity)")
     p_res.add_argument("--agent", "-a", help="Override active AI agent identifier")
@@ -1694,6 +1769,9 @@ def main():
         return cmd_swarm(args)
     elif args.subcommand in ("skill", "skills"):
         return cmd_skill(args)
+    elif args.subcommand in ("web", "internet", "net"):
+        return cmd_web(args)
+
     elif args.subcommand == "resume":
         return cmd_resume(args)
     elif args.subcommand == "checkpoint":

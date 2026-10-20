@@ -269,11 +269,30 @@ class SwarmOrchestrator:
                 "files_written": []
             }
 
+        # Connect subagent to live internet research gateway
+        web_research = None
+        try:
+            from web_gateway import InternetGateway
+        except ImportError:
+            try:
+                from src.sdk.web_gateway import InternetGateway
+            except ImportError as imp_err:
+                logger.debug("InternetGateway import skipped: %s", imp_err)
+                InternetGateway = None
+
+        if InternetGateway:
+            try:
+                gateway = InternetGateway()
+                web_research = gateway.research_for_agent(aid, task, domain=stage.get("role"))
+            except Exception as net_err:
+                logger.debug("Subagent live research skipped: %s", net_err)
+
         deliverable: Dict[str, Any] = {
             "agent_id": aid,
             "persona": stage["persona"],
             "role": stage["role"],
-            "files_written": []
+            "files_written": [],
+            "web_research": web_research
         }
 
         if aid == "hallwright-architect":
@@ -376,7 +395,8 @@ class SwarmOrchestrator:
 
         else:
             deliverable["artifact_type"] = "domain_deliverable"
-            deliverable["summary"] = f"Delivered domain results for {task} under {stage['persona']} governance."
+        if web_research and web_research.get("references_count", 0) > 0:
+            deliverable["summary"] += f" (Informed by {web_research['references_count']} live web references)"
 
         deliverable["files_written"] = written_files
         return deliverable

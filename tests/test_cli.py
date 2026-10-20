@@ -553,6 +553,38 @@ def test_cmd_skill_list_and_run(capsys):
     assert data_run["tier"] == 3
 
 
+def test_cmd_web_search_and_docs(capsys):
+    # Test web search
+    args_search = argparse.Namespace(
+        action="search",
+        query="fastapi uvicorn",
+        limit=2,
+        json=True
+    )
+    ret_s = hallwright_cli.cmd_web(args_search)
+    assert ret_s == 0
+    captured = capsys.readouterr()
+    data = json.loads(captured.out)
+    assert data["query"] == "fastapi uvicorn"
+    assert len(data["hits"]) >= 1
+
+    # Test web docs
+    args_docs = argparse.Namespace(
+        action="docs",
+        query="python",
+        topic="sqlite3",
+        limit=2,
+        json=True
+    )
+    ret_d = hallwright_cli.cmd_web(args_docs)
+    assert ret_d == 0
+    captured_d = capsys.readouterr()
+    data_d = json.loads(captured_d.out)
+    assert data_d["technology"] == "python"
+    assert len(data_d["hits"]) >= 1
+
+
+
 
 
 

@@ -34,6 +34,7 @@ scratch/
 .hallwright/checkpoints.json
 .hallwright/decision_journal.json
 .hallwright/agent_handoff.md
+.hallwright/web_cache.json
 .hallwright/*report*.json
 
 # Test Reports & Local Benchmarks

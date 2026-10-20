@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Hallwright Engineering Core",
-  "lastUpdated": "2026-10-20T13:23:28.049843+00:00",
+  "lastUpdated": "2026-10-20T13:35:13.525621+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -69,7 +69,7 @@
       "lesson": "Always verify algorithm is HS256/RS256",
       "severity": "high",
       "recordedAt": "2026-10-15T18:30:24.182735+00:00",
-      "updatedAt": "2026-10-20T13:23:28.049843+00:00"
+      "updatedAt": "2026-10-20T13:35:13.525621+00:00"
     },
     {
       "id": "mis-0005",

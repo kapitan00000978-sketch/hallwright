@@ -70,3 +70,71 @@ def test_synthesize_test_suite():
     parsed = ast.parse(test_code)
     assert isinstance(parsed, ast.Module)
     assert "def test_hello_module_syntax_and_import" in test_code
+
+
+def test_synthesize_ui_assets():
+    synth = DomainCodeSynthesizer()
+    css = synth.synthesize_ui_css("Katta Boshqaruv Markazi", lang="uz")
+    assert "--bg-main" in css
+    assert "backdrop-filter" in css
+    assert "Elena Rostova" in css
+
+    html = synth.synthesize_ui_html("Katta Boshqaruv Markazi", lang="uz")
+    assert "<!DOCTYPE html>" in html
+    assert "Katta Boshqaruv Markazi" in html
+    assert "app.js" in html
+
+    js = synth.synthesize_ui_js("Katta Boshqaruv Markazi", lang="uz")
+    assert "class ApplicationState" in js
+    assert "triggerAudit" in js
+
+
+def test_auth_service_execution():
+    synth = DomainCodeSynthesizer()
+    code = synth.synthesize_code("Secure auth service", domain="auth")
+    local_scope = {}
+    exec(code, local_scope)
+    AuthClass = local_scope["AuthSecurityService"]
+    auth = AuthClass()
+
+    user = auth.register_user("superadmin", "strong_password_123", role="admin")
+    assert user["role"] == "admin"
+
+    token_info = auth.authenticate_and_issue_token("superadmin", "strong_password_123")
+    token = token_info["access_token"]
+    assert auth.check_permission(token, "user") is True
+    assert auth.check_permission(token, "admin") is True
+
+
+def test_database_manager_execution():
+    synth = DomainCodeSynthesizer()
+    code = synth.synthesize_code("Database service", domain="database")
+    local_scope = {}
+    exec(code, local_scope)
+    DBClass = local_scope["DatabaseManager"]
+    db = DBClass(db_path=":memory:")
+
+    db.insert_record("item1", "val1", category="general")
+    rec = db.get_record("item1")
+    assert rec["value"] == "val1"
+    assert db.count_records() == 1
+
+    db.delete_record("item1", soft=True)
+    assert db.get_record("item1") is None
+    assert db.count_records() == 0
+
+
+def test_ecommerce_service_execution():
+    synth = DomainCodeSynthesizer()
+    code = synth.synthesize_code("Store service", domain="ecommerce")
+    local_scope = {}
+    exec(code, local_scope)
+    StoreClass = local_scope["ECommerceService"]
+    store = StoreClass()
+
+    store.add_product("p1", "Smart Soat", 100.0, 10)
+    order = store.checkout("cust_1", [{"product_id": "p1", "quantity": 2}], coupon_code="CHEMPION10")
+    assert order["status"] == "CONFIRMED"
+    assert len(order["items"]) == 1
+    assert store.catalog["p1"].inventory == 8
+

@@ -495,4 +495,33 @@ def test_cmd_daemon_once(capsys):
     assert "HALLWRIGHT WATCHER DAEMON" in captured.out
 
 
+def test_cmd_tier_status_and_switch(capsys):
+    # Test status json
+    args_status = argparse.Namespace(
+        level=None,
+        status=True,
+        json=True,
+    )
+    ret_status = hallwright_cli.cmd_tier(args_status)
+    assert ret_status == 0
+    captured = capsys.readouterr()
+    data = json.loads(captured.out)
+    assert "active_tier" in data
+    assert len(data["available_tiers"]) == 3
+
+    # Test switch to tier 3
+    args_switch = argparse.Namespace(
+        level=3,
+        status=False,
+        json=True,
+    )
+    ret_switch = hallwright_cli.cmd_tier(args_switch)
+    assert ret_switch == 0
+    captured_sw = capsys.readouterr()
+    data_sw = json.loads(captured_sw.out)
+    assert data_sw["tier"] == 3
+    assert data_sw["full_access"] is True
+
+
+
 

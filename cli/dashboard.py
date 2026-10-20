@@ -260,6 +260,7 @@ def render_sentinel_hud(telemetry: Dict[str, Any], once: bool = False):
     print("  [8/C] Search Council of Masters Dossiers (80 Titans)")
     print("  [9/R] Run Automated Code Remediation Pass")
     print("  [E/V] Inspect Autonomous Immune Ledger & Self-Evolution (Gen " + str(telemetry['generation']) + ")")
+    print("  [T]   Inspect & Switch Operational Skill Tiers (Tier 1-3)")
     print("  [0/Q] Exit Sentinel")
     print("=" * 80)
 
@@ -433,6 +434,27 @@ def action_remediate():
     subprocess.run([sys.executable, script])
 
 
+def action_tiers():
+    """Inspects and switches operational skill tiers."""
+    try:
+        from tiers import SkillTierEngine, TIER_POLICIES
+        engine = SkillTierEngine()
+        active = engine.get_active_tier()
+        print(f"\n{CYAN}{BOLD}⚡ [OPERATIONAL SKILL TIERS & AUTHORITY]{RESET}")
+        print(f"   Active Tier: Tier {active.tier} — {active.name}")
+        print(f"   Uzbek      : {active.uzbek_title}")
+        print(f"   Authority  : {'🔥 FULL ACCESS (Maximum Power)' if active.full_access else '🛡️ Controlled Mode'}")
+        print("-" * 60)
+        for t, p in TIER_POLICIES.items():
+            print(f"   [{t}] Tier {t}: {p.name} - {'FULL ACCESS' if p.full_access else 'Controlled'}")
+        new_choice = input(f"\n{BOLD}👉 Select Tier [1-3] or press Enter to keep current:{RESET} ").strip()
+        if new_choice in ("1", "2", "3"):
+            new_p = engine.set_active_tier(int(new_choice))
+            print(f"{GREEN}✨ Switched to Tier {new_p.tier} ({new_p.name})!{RESET}")
+    except Exception as t_err:
+        print(f"[-] Tier error: {t_err}")
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="dashboard",
@@ -521,6 +543,9 @@ def main():
             input("\nPress Enter to return to Sentinel...")
         elif choice in ("E", "V"):
             action_evolution_ledger()
+            input("\nPress Enter to return to Sentinel...")
+        elif choice in ("T", "TIER"):
+            action_tiers()
             input("\nPress Enter to return to Sentinel...")
         elif choice in ("0", "Q", "EXIT"):
             print("\nExiting Hallwright Sentinel TUI. Stand tall, Master.\n")

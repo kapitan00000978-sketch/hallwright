@@ -29,3 +29,11 @@ The Council of Masters (64 Domain Titans) and Persistent Learning Memory are acc
 - Use `hallwright_resume_continuity()` or `hallwright_save_checkpoint({"task": "..."})` for cross-agent session continuity.
 - Use `hallwright_get_library({"domain": "..."})` or `src/libraries/` to leverage production-grade enterprise modules.
 - Use `hallwright_review_code({"code": "..."})` for adversarial red-team peer review.
+
+---
+
+## ⚡ 3 OPERATIONAL SKILL TIERS (AUTHORITY & ACCESS LEVELS)
+- **Tier 1 — Sentinel Advisory (1-Daraja: Kuzatuv & Maslahat):** Read-only mode. Diagnostic AST audits, security scanning, and advisory recommendations without modifying files.
+- **Tier 2 — Craftsman Artisan (2-Daraja: Faol Quruvchi):** Collaborative builder mode. Code generation with 100/100 Gatekeeper compliance, test verification, and token compression.
+- **Tier 3 — Sovereign Titan (3-Daraja: FULL ACCESS & Maksimal Quvvat):** **FULL ACCESS & MAXIMUM PROJECT UTILIZATION**. Unrestricted multi-agent swarm orchestration, non-blocking background web research and healing, closed-loop immune evolution, adversarial combat arena defense, and automatic token compression with zero hesitation and zero babysitting.
+

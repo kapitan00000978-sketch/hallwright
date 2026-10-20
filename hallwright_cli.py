@@ -1307,6 +1307,66 @@ def cmd_daemon(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_tier(args: argparse.Namespace) -> int:
+    """Inspects or sets the operational skill tier (Tier 1: Sentinel, Tier 2: Artisan, Tier 3: Full Access)."""
+    try:
+        from tiers import SkillTierEngine, TIER_POLICIES
+    except ImportError:
+        try:
+            from src.sdk.tiers import SkillTierEngine, TIER_POLICIES
+        except ImportError:
+            print("[-] Error: SkillTierEngine module could not be loaded.", file=sys.stderr)
+            return 1
+
+    engine = SkillTierEngine()
+    as_json = getattr(args, "json", False)
+    target_tier = getattr(args, "level", None)
+
+    if target_tier is not None:
+        try:
+            tier_num = int(target_tier)
+            policy = engine.set_active_tier(tier_num)
+            if as_json:
+                print(json.dumps(policy.to_dict(), indent=2))
+                return 0
+            print(f"\n⚡ [SKILL TIER UPDATED]: Switched to Tier {policy.tier} — {policy.name}")
+            print(f"   {policy.uzbek_title}")
+            print(f"   Authority: {'🔥 FULL ACCESS (Maximum Project Power)' if policy.full_access else '🛡️ Controlled Mode'}")
+            print(f"   Directive: {policy.prompt_directive}\n")
+            return 0
+        except ValueError as err:
+            print(f"[-] Error: {err}", file=sys.stderr)
+            return 1
+
+    active = engine.get_active_tier()
+    if as_json:
+        print(json.dumps({
+            "active_tier": active.to_dict(),
+            "available_tiers": [p.to_dict() for p in TIER_POLICIES.values()]
+        }, indent=2))
+        return 0
+
+    print("\n" + "=" * 78)
+    print(" ⚡ HALLWRIGHT OPERATIONAL SKILL TIERS & AUTHORITY POLICIES")
+    print("=" * 78)
+    print(f" [ACTIVE TIER]   : Tier {active.tier} — {active.name}")
+    print(f" [UZBEK TITLE]   : {active.uzbek_title}")
+    print(f" [AUTHORITY]     : {'🔥 FULL ACCESS (Maximum Project Utilization)' if active.full_access else '🛡️ Controlled / Read-Only'}")
+    print(f" [DIRECTIVE]     : {active.prompt_directive}")
+    print("-" * 78)
+    print(" 📋 AVAILABLE OPERATIONAL SKILL TIERS:")
+    for t_idx, p in TIER_POLICIES.items():
+        prefix = "👉 [ACTIVE] " if p.tier == active.tier else "   "
+        print(f"{prefix}Tier {p.tier}: {p.name} ({p.uzbek_title})")
+        print(f"      Access : {'FULL ACCESS (All Subsystems)' if p.full_access else ('Code Modifiable' if p.can_modify_files else 'Read-Only')}")
+        print(f"      Swarm  : {'ENABLED (11 Titans)' if p.can_execute_swarm else 'DISABLED'}")
+        print(f"      Healer : {'ENABLED (Live Web)' if p.can_run_web_healer else 'DISABLED'}")
+        print(f"      Desc   : {p.description}\n")
+    print(" 💡 To switch tier: `python hallwright_cli.py tier 1|2|3`")
+    print("=" * 78 + "\n")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="hallwright",
@@ -1479,6 +1539,12 @@ def main():
     p_daemon.add_argument("--no-heal", action="store_true", help="Disable automatic remediation of detected flaws")
     p_daemon.add_argument("--once", action="store_true", help="Perform a single surveillance scan and exit")
 
+    # tier / daraja / access / mode
+    p_tier = subparsers.add_parser("tier", aliases=["daraja", "access", "mode"], help="Inspect or set operational skill tier (1: Sentinel, 2: Artisan, 3: Full Access)")
+    p_tier.add_argument("level", nargs="?", type=int, choices=[1, 2, 3], help="Set active skill tier level (1, 2, or 3 for Full Access)")
+    p_tier.add_argument("--status", "-s", action="store_true", help="Display active skill tier status and authority details")
+    p_tier.add_argument("--json", "-j", action="store_true", help="Output active tier policy in JSON format")
+
     args = parser.parse_args()
 
     if not args.subcommand or args.subcommand == "status":
@@ -1499,6 +1565,8 @@ def main():
         return cmd_arena(args)
     elif args.subcommand in ("daemon", "watcher", "guard-daemon"):
         return cmd_daemon(args)
+    elif args.subcommand in ("tier", "daraja", "access", "mode"):
+        return cmd_tier(args)
 
     elif args.subcommand == "memory":
         return cmd_memory(args)

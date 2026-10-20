@@ -375,6 +375,23 @@ TOOLS = [
             },
             "required": ["code"]
         }
+    },
+    {
+        "name": "hallwright_search",
+        "description": "Unified high-speed multi-index search engine across Council Masters, persistent memory scar tissue, enterprise libraries, plugins, and workspace codebase.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Search query or concept to look up"},
+                "scope": {
+                    "type": "string",
+                    "enum": ["all", "council", "memory", "code", "libraries", "plugins"],
+                    "description": "Optional search scope filter (default: 'all')"
+                },
+                "limit": {"type": "integer", "description": "Maximum number of results per category (default: 5)"}
+            },
+            "required": ["query"]
+        }
     }
 ]
 
@@ -580,6 +597,24 @@ def handle_list_guilds(args):
     return {"status": "Guilds not initialized", "guilds": []}
 
 
+def handle_search(args):
+    try:
+        from search_engine import SearchEngine
+    except ImportError:
+        try:
+            from src.sdk.search_engine import SearchEngine
+        except ImportError:
+            return {"status": "error", "message": "SearchEngine module could not be loaded."}
+
+    query = args.get("query", "")
+    scope = args.get("scope", "all")
+    limit = int(args.get("limit", 5))
+
+    engine = SearchEngine(workspace_root=".")
+    results = engine.search(query=query, scope=scope, limit=limit)
+    return results.to_dict()
+
+
 def validate_tool_arguments(tool_def, args):
     """
     Validates arguments against the tool's inputSchema per MCP JSON-RPC 2.0 specs.
@@ -725,6 +760,8 @@ def dispatch_request(req):
             output = handle_get_library(args)
         elif hw_name == "hallwright_review_code":
             output = handle_review_code(args)
+        elif hw_name == "hallwright_search":
+            output = handle_search(args)
         else:
             return {
                 "jsonrpc": "2.0",

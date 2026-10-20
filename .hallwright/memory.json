@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Hallwright Engineering Core",
-  "lastUpdated": "2026-10-20T04:07:00.391020+00:00",
+  "lastUpdated": "2026-10-20T04:22:05.993117+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -60,7 +60,7 @@
       "lesson": "Always enforce pagination limits.",
       "severity": "high",
       "recordedAt": "2026-10-15T15:08:39.779478+00:00",
-      "updatedAt": "2026-10-20T04:07:00.391020+00:00"
+      "updatedAt": "2026-10-20T04:22:05.993117+00:00"
     },
     {
       "id": "mis-0004",
@@ -69,7 +69,7 @@
       "lesson": "Always verify algorithm is HS256/RS256",
       "severity": "high",
       "recordedAt": "2026-10-15T18:30:24.182735+00:00",
-      "updatedAt": "2026-10-20T04:06:32.689062+00:00"
+      "updatedAt": "2026-10-20T04:21:36.005631+00:00"
     },
     {
       "id": "mis-0005",
@@ -111,10 +111,10 @@
       "id": "mis-0009",
       "category": "stub",
       "pattern": "Silent exception suppression ('except except: pass') verified via AST.",
-      "lesson": "Rejected in pre-commit audit (.\\src\\libraries\\database\\sqli_neutralizer.py:34). Resolve Silent exception suppression ('except except: pass') verified via AST. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\search_engine.py:278). Resolve Silent exception suppression ('except except: pass') verified via AST. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-15T21:18:15.274803+00:00",
-      "updatedAt": "2026-10-18T02:24:50.823780+00:00"
+      "updatedAt": "2026-10-20T04:20:13.931618+00:00"
     },
     {
       "id": "mis-0010",
@@ -183,6 +183,14 @@
       "severity": "medium",
       "recordedAt": "2026-10-18T16:12:21.339652+00:00",
       "updatedAt": "2026-10-18T16:25:15.960580+00:00"
+    },
+    {
+      "id": "mis-0018",
+      "category": "stub",
+      "pattern": "Silent exception suppression. Log or handle errors.",
+      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\search_engine.py:441). Resolve Silent exception suppression. Log or handle errors. before committing.",
+      "severity": "medium",
+      "recordedAt": "2026-10-20T04:20:13.886378+00:00"
     }
   ],
   "successes": [

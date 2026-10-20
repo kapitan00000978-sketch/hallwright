@@ -957,6 +957,33 @@ def cmd_taxonomy(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_search(args: argparse.Namespace) -> int:
+    """Runs high-performance multi-index search across Council, memory, libraries, plugins, and codebase."""
+    try:
+        from search_engine import SearchEngine
+    except ImportError:
+        try:
+            from src.sdk.search_engine import SearchEngine
+        except ImportError:
+            print("❌ Error: SearchEngine module could not be loaded.", file=sys.stderr)
+            return 1
+
+    engine = SearchEngine(workspace_root=".")
+    query = getattr(args, "query", "")
+    scope = getattr(args, "scope", "all")
+    limit = getattr(args, "limit", 5)
+    as_json = getattr(args, "json", False)
+
+    results = engine.search(query=query, scope=scope, limit=limit)
+
+    if as_json:
+        print(json.dumps(results.to_dict(), indent=2))
+        return 0
+
+    print(results.format_terminal())
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="hallwright",
@@ -1084,6 +1111,13 @@ def main():
     p_tax = subparsers.add_parser("taxonomy", aliases=["tasnif"], help="Display or export official architecture & defect taxonomy (Tasnif)")
     p_tax.add_argument("--json", "-j", action="store_true", help="Output taxonomy in JSON format")
 
+    # search / find / qidiruv
+    p_search = subparsers.add_parser("search", aliases=["find", "qidiruv"], help="Multi-index search across Council Masters, memory, libraries, plugins, and code")
+    p_search.add_argument("query", help="Search query or keyword to find")
+    p_search.add_argument("--scope", "-s", default="all", choices=["all", "council", "memory", "code", "libraries", "lib", "plugins"], help="Target search scope (default: all)")
+    p_search.add_argument("--limit", "-l", type=int, default=5, help="Maximum results per category (default: 5)")
+    p_search.add_argument("--json", "-j", action="store_true", help="Output search results in JSON format")
+
     args = parser.parse_args()
 
     if not args.subcommand or args.subcommand == "status":
@@ -1122,6 +1156,8 @@ def main():
         return cmd_completion(args)
     elif args.subcommand in ("taxonomy", "tasnif"):
         return cmd_taxonomy(args)
+    elif args.subcommand in ("search", "find", "qidiruv"):
+        return cmd_search(args)
     elif args.subcommand == "mcp":
         from server import main as mcp_main
         mcp_main()

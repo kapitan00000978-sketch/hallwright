@@ -17,6 +17,7 @@ from .pdk import (
     verify_manifest_signature,
 )
 from .plugin_loader import PluginLoader
+from .search_engine import SearchEngine, SearchHit, SearchResultSet, SearchScope
 
 __all__ = [
     "CraftsmanAgent",
@@ -37,4 +38,8 @@ __all__ = [
     "sign_manifest",
     "verify_manifest_signature",
     "PluginLoader",
+    "SearchEngine",
+    "SearchHit",
+    "SearchResultSet",
+    "SearchScope",
 ]

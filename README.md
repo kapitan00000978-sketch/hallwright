@@ -251,6 +251,7 @@ hallwright mcp
 - `hallwright_get_persona` — Retrieves full discipline criteria and pledge for any Council Master.
 - `hallwright_list_council` — Lists the Council roster.
 - `hallwright_recall_memory` — Direct query interface for memory ledger.
+- `hallwright_search` — Unified multi-index search across Council Masters, memory scar tissue, libraries, plugins, and codebase.
 
 ---
 
@@ -361,7 +362,10 @@ hallwright audit --staged       # Fast audit on git-staged changes only
 hallwright audit --sarif         # Emits OASIS SARIF v2.1.0 report for GitHub Code Scanning
 hallwright fix                  # Automatically repairs silent catches and unfinished stubs
 
-# 🎯 Context & Memory
+# 🎯 Context, Memory & Unified Search
+hallwright search "<query>"     # Multi-index search (Council, memory, libraries, plugins, codebase)
+hallwright search "db" --scope lib # Scoped search (all, council, memory, code, libraries, plugins)
+hallwright search "jwt" --json   # Emits structured JSON hits for agent programmatic consumption
 hallwright context "<task>"     # Generates targeted 2K-token prompt (~6x context optimization)
 hallwright memory               # Inspects living persistent memory and recorded scar tissue
 hallwright memory --search "jwt" # Search historical lessons by keyword

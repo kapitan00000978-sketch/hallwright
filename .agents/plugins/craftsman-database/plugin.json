@@ -1,0 +1,10 @@
+{
+  "name": "craftsman-database",
+  "version": "2.1.0",
+  "description": "Database architecture, query optimization, ACID transactions, and zero-downtime migration standards.",
+  "author": "Hallwright Open Source Project",
+  "dependencies": [
+    "craftsman-core"
+  ],
+  "extends": "craftsman-core"
+}

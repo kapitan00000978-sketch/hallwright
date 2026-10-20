@@ -16,6 +16,12 @@
       "path": ".agents/plugins/craftsman-designer"
     },
     {
+      "path": ".agents/plugins/craftsman-database"
+    },
+    {
+      "path": ".agents/plugins/craftsman-devops"
+    },
+    {
       "path": ".agents/plugins/craftsman-business"
     },
     {

@@ -22,6 +22,7 @@ crates/**/target/
 .DS_Store
 Thumbs.db
 .aider*
+.playwright-mcp/
 scratch/
 *.log
 

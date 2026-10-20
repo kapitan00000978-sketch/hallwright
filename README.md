@@ -131,18 +131,22 @@ Hallwright is not an AI model or operating system. It sits between your develope
 - **Strictly Optional:** Disable anytime with `hallwright resume --no-continuity` or configuring `continuity.enabled: false`.
 
 ### Pillar 3: Subagent & Skill Definitions (`.agents/`, `skills/`)
-Hallwright provides 7 structured sub-agent roles for decomposing complex engineering tasks:
+Hallwright provides structured sub-agent roles for decomposing complex engineering tasks:
 
 > **The host agent runs the subagents; Hallwright does not call any model itself.**
 
 | Sub-Agent | Role | Focus Area |
 | :--- | :--- | :--- |
 | **`hallwright-architect`** | Architecture Lead | Modular decomposition, clean APIs, zero tech-debt. |
+| **`hallwright-designer`** | UI/UX & Design Lead | Frosted glass ergonomics, 8pt spatial grid, WCAG AAA accessibility, 60fps micro-interactions. |
+| **`hallwright-database`** | Database Lead | Sub-10ms query execution plans, index coverage, N+1 query elimination, concurrent DDL. |
 | **`hallwright-security`** | Security Auditor | Threat modeling, OWASP Top 10 defense, credential protection. |
+| **`hallwright-devops`** | DevOps & Cloud Lead | Non-root containers, pinned immutable builds, health probes, zero-downtime rollouts. |
+| **`hallwright-ai`** | ML & AI Systems Lead | Strict data isolation, leakage prevention, reproducible seeds, PR-AUC calibration. |
 | **`hallwright-critic`** | Red-Team Reviewer | Objective peer review, defect ledger compilation, veto/approval. |
-| **`hallwright-tester`** | Testing Lead | Edge case coverage, fuzzing, regression catch validation. |
+| **`hallwright-tester`** | Testing Lead | Edge case coverage, fuzzing, mutation testing, regression defense. |
 | **`hallwright-performance`** | Performance Lead | Mechanical sympathy, zero hot-loop allocations, low latency. |
-| **`hallwright-copywriter`** | Technical Writer | Clear API references, documentation, developer experience. |
+| **`hallwright-copywriter`** | Technical Writer | Clear API references, high-conversion READMEs, developer experience. |
 | **`hallwright-healer`** | Remediation Lead | Auto-repair of silent catches, missing handlers, and stubs. |
 
 ---

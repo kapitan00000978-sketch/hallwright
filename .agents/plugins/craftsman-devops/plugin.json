@@ -1,0 +1,10 @@
+{
+  "name": "craftsman-devops",
+  "version": "2.1.0",
+  "description": "Site reliability engineering, immutable container security, CI/CD pipelines, and zero-downtime rollouts.",
+  "author": "Hallwright Open Source Project",
+  "dependencies": [
+    "craftsman-core"
+  ],
+  "extends": "craftsman-core"
+}

@@ -98,3 +98,22 @@ def test_dispatch_swarm_mesh():
     assert "hallwright-architect" in agent_ids
     assert "hallwright-database" in agent_ids
 
+
+def test_dispatch_swarm_mesh_autonomous_file_generation():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        orchestrator = SwarmOrchestrator()
+        task = "Build secure user login authentication with SQLite database"
+        result = orchestrator.dispatch_swarm_mesh(task, files=["auth.py"], autonomous=True, output_dir=tmpdir)
+
+        assert result["status"] == "SWARM_MESH_COMPLETED"
+        assert result["autonomous"] is True
+        assert len(result["files_written"]) >= 2
+
+        # Verify actual files created on disk
+        files = os.listdir(tmpdir)
+        assert any("auth" in f or "core" in f or "database" in f for f in files)
+        for f in files:
+            full_path = os.path.join(tmpdir, f)
+            assert os.path.getsize(full_path) > 0
+
+

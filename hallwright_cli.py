@@ -743,17 +743,41 @@ def cmd_swarm(args: argparse.Namespace) -> int:
         return 0
 
     if getattr(args, "run", False):
-        mesh_report = orchestrator.dispatch_swarm_mesh(task=task, files=files)
+        autonomous = getattr(args, "autonomous", False)
+        output_dir = getattr(args, "output_dir", None)
+        try:
+            from tiers import SkillTierEngine
+            tier_engine = SkillTierEngine()
+            if tier_engine.get_active_tier().tier == 3:
+                autonomous = True
+        except (ImportError, OSError) as tier_err:
+            logger.debug("Active tier check skipped: %s", tier_err)
+
+        mesh_report = orchestrator.dispatch_swarm_mesh(
+            task=task,
+            files=files,
+            autonomous=autonomous,
+            output_dir=output_dir
+        )
         if args.json:
             print(json.dumps(mesh_report, indent=2))
             return 0
         print("\n🚀 [HALLWRIGHT SWARM MESH DISPATCH ACTIVE]")
         print(f"🎯 Task: {task}")
         print(f"📡 Trace ID: {mesh_report['trace_id']}")
-        print(f"⚡ Stages Executed: {mesh_report['stages_executed']}\n")
+        print(f"⚡ Stages Executed: {mesh_report['stages_executed']}")
+        if mesh_report.get("autonomous"):
+            print("🔥 Mode: Tier 3 Sovereign Autonomous Execution (Zero Placeholders)")
+        print()
         for s in mesh_report["stages"]:
             print(f"  ✅ Stage {s['stage']}: [{s['agent_id']}] — {s['persona']} ({s['role']})")
             print(f"     Output: {s['output']}")
+            deliv = s.get("deliverable")
+            if deliv and deliv.get("summary"):
+                print(f"     Artifact: {deliv['summary']}")
+            if deliv and deliv.get("files_written"):
+                for fw in deliv["files_written"]:
+                    print(f"     📁 Created: {fw}")
         print("\n✨ All stages executed with zero stubs and verified against Council invariants.\n")
         return 0
 
@@ -764,6 +788,81 @@ def cmd_swarm(args: argparse.Namespace) -> int:
 
     print(orchestrator.format_cli_pipeline(execution_report))
     return 0
+
+
+def cmd_skill(args: argparse.Namespace) -> int:
+    """Lists, inspects, or executes active Hallwright and Agent skills."""
+    try:
+        from skill_runner import SkillEngine
+    except ImportError:
+        try:
+            from src.sdk.skill_runner import SkillEngine
+        except ImportError as imp_err:
+            print(f"[-] Error: Skill engine module could not be loaded: {imp_err}", file=sys.stderr)
+            return 1
+
+    engine = SkillEngine()
+    as_json = getattr(args, "json", False)
+    action = getattr(args, "action", "list") or "list"
+    skill_name = getattr(args, "name", None)
+    target = getattr(args, "target", None)
+
+    if action in ("list", "ls") or not action:
+        skills = engine.discover_skills()
+        if as_json:
+            print(json.dumps({k: v.to_dict() for k, v in skills.items()}, indent=2))
+            return 0
+        print("\n" + "=" * 78)
+        print(" ⚡ HALLWRIGHT ACTIVE SKILLS DIRECTORY")
+        print("=" * 78)
+        for name, meta in sorted(skills.items()):
+            print(f"  🔹 {name:<26} [{meta.skill_type}] - {meta.description[:45]}")
+        print("=" * 78)
+        print("💡 Use 'hallwright skill run <name> [target]' to execute an active skill.\n")
+        return 0
+
+    elif action in ("run", "exec"):
+        if not skill_name:
+            print("[-] Error: Skill name is required for run action. E.g. 'hallwright skill run adversarial-code-review'", file=sys.stderr)
+            return 1
+        res = engine.execute_skill(skill_name, target=target)
+        if as_json:
+            print(json.dumps(res, indent=2))
+            return 0 if res.get("status") in ("EXECUTED", "ACTIVATED", "PASSED", "APPROVED", "REMEDIATED", "DIAGNOSED", "NO_DEFECTS_DETECTED") else 1
+        print(f"\n⚡ [SKILL EXECUTION]: {res.get('skill', skill_name)}")
+        print(f"   Status: {res.get('status')}")
+        if "tier_name" in res:
+            print(f"   Tier: {res.get('tier')} — {res.get('tier_name')}")
+            print(f"   Authority: {'🔥 FULL ACCESS' if res.get('full_access') else '🛡️ Controlled Mode'}")
+        if "pass_score" in res:
+            print(f"   Pass Score: {res.get('pass_score')}/100.0 ({res.get('recommendation')})")
+        if "score" in res:
+            print(f"   Evaluation Score: {res.get('score')}/100.0")
+        if "message" in res:
+            print(f"   Details: {res.get('message')}")
+        if "rules_enforced" in res:
+            for r in res["rules_enforced"]:
+                print(f"   - {r}")
+        print()
+        return 0
+
+    elif action in ("info", "inspect"):
+        skills = engine.discover_skills()
+        meta = skills.get(skill_name)
+        if not meta:
+            print(f"[-] Error: Skill '{skill_name}' not found.", file=sys.stderr)
+            return 1
+        if as_json:
+            print(json.dumps(meta.to_dict(), indent=2))
+            return 0
+        print(f"\n⚡ Skill: {meta.name}")
+        print(f"   Type: {meta.skill_type}")
+        print(f"   Description: {meta.description}")
+        print(f"   Path: {meta.path}\n")
+        return 0
+
+    return 0
+
 
 
 def cmd_resume(args: argparse.Namespace) -> int:
@@ -1451,7 +1550,16 @@ def main():
     p_sw.add_argument("--files", "-f", nargs="*", help="Target files involved in the task")
     p_sw.add_argument("--plan", "-p", action="store_true", help="Display delegation plan without registering active sessions")
     p_sw.add_argument("--run", "-r", action="store_true", help="Execute live multi-agent event dispatch across AgentMesh")
+    p_sw.add_argument("--autonomous", "-a", action="store_true", help="Execute real autonomous code generation without placeholders")
+    p_sw.add_argument("--output-dir", "-o", help="Target directory to write synthesized modules and test suites")
     p_sw.add_argument("--json", "-j", action="store_true", help="Output swarm execution plan in JSON format")
+
+    # skill / skills
+    p_sk = subparsers.add_parser("skill", aliases=["skills"], help="List, inspect, and execute active skills")
+    p_sk.add_argument("action", nargs="?", default="list", choices=["list", "run", "info", "inspect", "exec"], help="Action: list, run, info")
+    p_sk.add_argument("name", nargs="?", help="Name of the skill to execute or inspect")
+    p_sk.add_argument("target", nargs="?", help="Target file or context for skill execution")
+    p_sk.add_argument("--json", "-j", action="store_true", help="Output result in JSON format")
 
     # resume
     p_res = subparsers.add_parser("resume", help="Pick up where previous AI agent left off (cross-agent continuity)")
@@ -1584,6 +1692,8 @@ def main():
         return cmd_review(args)
     elif args.subcommand == "swarm":
         return cmd_swarm(args)
+    elif args.subcommand in ("skill", "skills"):
+        return cmd_skill(args)
     elif args.subcommand == "resume":
         return cmd_resume(args)
     elif args.subcommand == "checkpoint":

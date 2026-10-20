@@ -523,5 +523,36 @@ def test_cmd_tier_status_and_switch(capsys):
     assert data_sw["full_access"] is True
 
 
+def test_cmd_skill_list_and_run(capsys):
+    # Test skill list
+    args_list = argparse.Namespace(
+        action="list",
+        name=None,
+        target=None,
+        json=True
+    )
+    ret_list = hallwright_cli.cmd_skill(args_list)
+    assert ret_list == 0
+    captured = capsys.readouterr()
+    skills = json.loads(captured.out)
+    assert "craftsman-evaluator" in skills
+    assert "tier-3-sovereign" in skills
+
+    # Test skill run tier-3-sovereign
+    args_run = argparse.Namespace(
+        action="run",
+        name="tier-3-sovereign",
+        target=None,
+        json=True
+    )
+    ret_run = hallwright_cli.cmd_skill(args_run)
+    assert ret_run == 0
+    captured_run = capsys.readouterr()
+    data_run = json.loads(captured_run.out)
+    assert data_run["status"] == "ACTIVATED"
+    assert data_run["tier"] == 3
+
+
+
 
 

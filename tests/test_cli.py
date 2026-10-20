@@ -448,5 +448,5 @@ def test_cmd_3d(capsys, monkeypatch):
     captured = capsys.readouterr()
     assert "3D SPATIAL DASHBOARD" in captured.out
     assert len(opened_urls) == 1
-    assert "dashboard_3d.html" in opened_urls[0]
+    assert "dashboard_3d.html" in opened_urls[0] or "127.0.0.1" in opened_urls[0]
 

@@ -290,7 +290,9 @@ class SelfEvolutionEngine:
             return "SQL Injection vulnerability via raw interpolation", "security"
         elif "xss" in d_lower or "innerhtml" in d_lower:
             return "DOM Cross-Site Scripting (XSS) via unescaped HTML", "security"
-        elif "token" in d_lower or "secret" in d_lower or "key" in d_lower:
+        elif "comment" in d_lower or "komment" in d_lower or "izoh" in d_lower or "token tej" in d_lower or "#" in d_lower or "comment bloat" in d_lower:
+            return "Redundant hash comments (#) consuming excessive context tokens", "token_efficiency"
+        elif "token" in d_lower or "secret" in d_lower or "api_key" in d_lower or "password" in d_lower:
             return "Plaintext secret or credential exposure", "security"
         elif "zerodivision" in d_lower or "division by zero" in d_lower:
             return "ZeroDivisionError: unhandled zero divisor in computation", "runtime"
@@ -330,6 +332,7 @@ class SelfEvolutionEngine:
                 "runtime": "Implement defensive boundary guards (e.g. check None, 0, and collection bounds) before operations.",
                 "reliability": "Catch specific exceptions explicitly, log with logger.error, and avoid silent swallows.",
                 "performance": "Ensure deterministic resource cleanup using context managers (with statements) and connection pools.",
+                "token_efficiency": "Omit redundant '#' comments; write self-documenting code with meaningful identifiers to maximize token density.",
                 "quality": "Apply modular domain separation and verify 100/100 Pre-Commit Gatekeeper compliance."
             }
             solution = fallbacks.get(category, "Apply defensive programming and zero-stub architecture.")
@@ -339,6 +342,7 @@ class SelfEvolutionEngine:
             "runtime": "DEFENSIVE_BOUNDARY_AND_NULL_GUARD",
             "reliability": "EXPLICIT_EXCEPTION_LOGGING_NO_BARE_CATCH",
             "performance": "CONTEXT_MANAGED_RESOURCE_LIFECYCLE",
+            "token_efficiency": "ZERO_REDUNDANT_HASH_COMMENTS",
             "quality": "ZERO_STUB_PRODUCTION_COMPLIANCE"
         }
         rule = rule_map.get(category, "INVARIANT_QUALITY_RULE")

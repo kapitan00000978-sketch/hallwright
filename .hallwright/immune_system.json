@@ -1,10 +1,10 @@
 {
   "version": "1.0.0",
   "project": "Hallwright Autonomous Immune Core",
-  "generation": 4,
-  "immunity_score": 96,
-  "last_evolved_at": "2026-10-20T06:41:34.229541+00:00",
-  "total_vaccines": 6,
+  "generation": 6,
+  "immunity_score": 98,
+  "last_evolved_at": "2026-10-20T06:47:53.606938+00:00",
+  "total_vaccines": 8,
   "vaccines": [
     {
       "id": "vac-001",
@@ -65,6 +65,26 @@
       "web_solution": "Implement defensive boundary guards (e.g. check None, 0, and collection bounds) before operations.",
       "guardrail_rule": "DEFENSIVE_BOUNDARY_AND_NULL_GUARD",
       "created_at": "2026-10-20T06:41:34.229541+00:00"
+    },
+    {
+      "id": "vac-007",
+      "generation": 5,
+      "category": "security",
+      "error_signature": "Plaintext secret or credential exposure",
+      "root_cause": "Defect 'Plaintext secret or credential exposure' occurred in workspace",
+      "web_solution": "Enforce strict parameterized input sanitization, zero plain text secrets, and OWASP Top 10 defense.",
+      "guardrail_rule": "INPUT_SANITIZATION_AND_ZERO_PLAIN_SECRETS",
+      "created_at": "2026-10-20T06:47:11.955799+00:00"
+    },
+    {
+      "id": "vac-008",
+      "generation": 6,
+      "category": "token_efficiency",
+      "error_signature": "Redundant hash comments (#) consuming excessive context tokens",
+      "root_cause": "Defect 'Redundant hash comments (#) consuming excessive context tokens' occurred in workspace",
+      "web_solution": "Omit redundant '#' comments; write self-documenting code with meaningful identifiers to maximize token density.",
+      "guardrail_rule": "ZERO_REDUNDANT_HASH_COMMENTS",
+      "created_at": "2026-10-20T06:47:53.606938+00:00"
     }
   ]
 }

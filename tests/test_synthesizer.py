@@ -138,3 +138,41 @@ def test_ecommerce_service_execution():
     assert len(order["items"]) == 1
     assert store.catalog["p1"].inventory == 8
 
+
+def test_ecommerce_ui_synthesis_domain_adaptation():
+    synth = DomainCodeSynthesizer()
+    task = "Zamonaviy Online Do'kon va Savat Tizimi"
+    assert synth.detect_domain(task) == "ecommerce"
+
+    html = synth.synthesize_ui_html(task, lang="uz")
+    assert "Smart Bazar" in html
+    assert "product-grid" in html
+    assert "cart-modal" in html
+    assert "checkout-modal" in html
+    assert "CHEMPION10" in html
+
+    js = synth.synthesize_ui_js(task, lang="uz")
+    assert "class ApplicationState" in js
+    assert "addToCart" in js
+    assert "applyCoupon" in js
+    assert "formatPrice" in js
+    # Invariant: Must NOT use innerHTML (Gabriel Frost XSS defense)
+    assert "innerHTML" not in js
+
+
+def test_analytics_ui_synthesis_domain_adaptation():
+    synth = DomainCodeSynthesizer()
+    task = "Korporativ Sotuvlar Statistikasi va Tahlil Paneli"
+    assert synth.detect_domain(task) == "analytics"
+
+    html = synth.synthesize_ui_html(task, lang="uz")
+    assert "Analytics Intelligence" in html
+    assert "chart-bars-wrap" in html
+    assert "data-table" in html
+
+    js = synth.synthesize_ui_js(task, lang="uz")
+    assert "class ApplicationState" in js
+    assert "periodData" in js
+    assert "renderTransactions" in js
+
+

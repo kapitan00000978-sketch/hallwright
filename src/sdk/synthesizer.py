@@ -24,11 +24,17 @@ class DomainCodeSynthesizer:
 
     DOMAIN_KEYWORDS = {
         "api": ["api", "rest", "endpoint", "route", "crud", "fastapi", "flask", "server"],
-        "auth": ["auth", "jwt", "login", "register", "password", "token", "permission", "oauth"],
-        "database": ["database", "db", "sql", "sqlite", "postgres", "schema", "table", "migration", "query"],
+        "auth": ["auth", "jwt", "login", "register", "password", "token", "permission", "oauth", "kirish", "parol", "profil"],
+        "database": ["database", "db", "sql", "sqlite", "postgres", "schema", "table", "migration", "query", "baza"],
         "ui": ["ui", "ux", "frontend", "html", "css", "component", "dashboard", "style", "page", "web", "dizayn"],
-        "ecommerce": ["cart", "payment", "checkout", "product", "order", "stripe", "store", "ecommerce", "dokon"],
-        "analytics": ["analytics", "metric", "report", "stats", "telemetry", "tracking", "tahlil"]
+        "ecommerce": [
+            "cart", "payment", "checkout", "product", "order", "stripe", "store", "ecommerce",
+            "dokon", "do'kon", "savat", "magazin", "shop", "xarid", "savdo", "mahsulot", "buyurtma"
+        ],
+        "analytics": [
+            "analytics", "metric", "report", "stats", "telemetry", "tracking", "tahlil",
+            "statistika", "hisobot", "grafik", "kpi", "monitoring"
+        ]
     }
 
     def detect_domain(self, task: str) -> str:
@@ -643,14 +649,13 @@ body {
   padding: 32px 24px;
 }
 
-/* Glassmorphism Header */
 .app-header {
   position: sticky;
   top: 0;
   z-index: 100;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  background: rgba(7, 10, 19, 0.8);
+  background: rgba(7, 10, 19, 0.85);
   border-bottom: 1px solid var(--border-color);
   padding: 16px 24px;
 }
@@ -661,6 +666,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
 }
 
 .brand-badge {
@@ -683,7 +689,6 @@ body {
   text-transform: uppercase;
 }
 
-/* Grid Layout */
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -691,7 +696,6 @@ body {
   margin-top: 32px;
 }
 
-/* Cards */
 .card {
   background: var(--bg-card);
   backdrop-filter: blur(12px);
@@ -726,7 +730,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* Action Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -740,6 +743,7 @@ body {
   border: 1px solid transparent;
   transition: var(--transition);
   outline: none;
+  text-decoration: none;
 }
 
 .btn-primary {
@@ -753,6 +757,16 @@ body {
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
 }
 
+.btn-accent {
+  background: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.btn-accent:hover {
+  background: #059669;
+}
+
 .btn-outline {
   background: transparent;
   color: var(--text-primary);
@@ -764,10 +778,14 @@ body {
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Metrics & Stats */
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.82rem;
+}
+
 .metric-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
 }
@@ -793,7 +811,6 @@ body {
   letter-spacing: 0.05em;
 }
 
-/* Status Indicator */
 .status-pill {
   display: inline-flex;
   align-items: center;
@@ -817,17 +834,605 @@ body {
   background: currentColor;
   box-shadow: 0 0 8px currentColor;
 }
+
+/* E-Commerce UI Elements */
+.catalog-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 24px 0;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 8px 18px;
+  gap: 10px;
+  min-width: 280px;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.tab-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.tab-pill:hover, .tab-pill.active {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--color-primary);
+  border-color: var(--border-glow);
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.product-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-glow), var(--shadow-lg);
+}
+
+.product-img-box {
+  width: 100%;
+  height: 180px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.product-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--color-accent);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.product-title {
+  font-size: 1.12rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.product-category {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.product-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.product-price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+/* Modals & Overlays */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  max-width: 580px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.cart-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+  gap: 16px;
+}
+
+.qty-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+}
+
+.qty-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.coupon-box {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.summary-row.total-row {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--color-primary);
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #0f172a;
+  border: 1px solid var(--color-accent);
+  color: var(--text-primary);
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(80px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Analytics Chart Components */
+.chart-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  height: 220px;
+  padding: 24px 0 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.chart-bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.chart-bar {
+  width: 100%;
+  max-width: 48px;
+  background: linear-gradient(180deg, var(--color-primary), rgba(59, 130, 246, 0.2));
+  border-radius: 6px 6px 0 0;
+  transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 6px;
+}
+
+.chart-bar:hover {
+  background: linear-gradient(180deg, var(--color-accent), rgba(16, 185, 129, 0.3));
+}
+
+.chart-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.data-table th, .data-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.92rem;
+}
+
+.data-table th {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+}
 """
 
     def synthesize_ui_html(self, task: str, lang: str = "uz") -> str:
-        """Generates accessible, semantic, interactive HTML5 application shell."""
+        """Generates domain-tailored, accessible, semantic, interactive HTML5 application."""
+        dom = self.detect_domain(task)
+        if dom == "ecommerce":
+            return self._synthesize_ecommerce_html(task, lang)
+        elif dom == "analytics":
+            return self._synthesize_analytics_html(task, lang)
+        else:
+            return self._synthesize_general_html(task, lang)
+
+    def _synthesize_ecommerce_html(self, task: str, lang: str = "uz") -> str:
+        is_uz = lang == "uz"
+        title = f"{task} — Online Do'kon" if is_uz else f"{task} — Store"
+        hero_desc = "Eng sara tovarlar, tezkor kuryerlik xizmati va 100% sifat kafolati." if is_uz else "Curated catalog with express delivery and guaranteed quality."
+
+        return f"""<!DOCTYPE html>
+<html lang="{lang}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="nav-wrap">
+      <div class="brand-badge">
+        <span>🛍️ Smart Bazar</span>
+        <span class="badge-tag">Online Store</span>
+      </div>
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="search-input" class="search-input" placeholder="Mahsulotlarni qidirish...">
+      </div>
+      <div>
+        <button id="open-cart-btn" class="btn btn-primary">
+          <span>🛒 Savat</span>
+          <span id="cart-badge" class="badge-tag" style="background:#fff; color:#0f172a; margin-left:4px;">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div style="margin-bottom: 24px;">
+      <h1 style="font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;">{task}</h1>
+      <p style="color: var(--text-secondary); margin-top: 6px;">{hero_desc}</p>
+      <div style="margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); padding: 6px 14px; border-radius: var(--radius-full); font-size: 0.85rem; color: var(--color-primary);">
+        <span>💡 Maxsus aksiya: <strong>CHEMPION10</strong> kodi bilan 10% chegirmaga ega bo'ling!</span>
+      </div>
+    </div>
+
+    <!-- Kategoriya teglari -->
+    <div class="category-tabs" id="category-tabs">
+      <button class="tab-pill active" data-cat="all">Barchasi</button>
+      <button class="tab-pill" data-cat="electronics">Elektronika</button>
+      <button class="tab-pill" data-cat="clothing">Kiyim-kechak</button>
+      <button class="tab-pill" data-cat="accessories">Aksessuarlar</button>
+      <button class="tab-pill" data-cat="home">Uy va Oshxona</button>
+    </div>
+
+    <!-- Mahsulotlar katalogi -->
+    <section id="product-grid" class="product-grid">
+      <!-- JavaScript tomonidan dinamik yaratiladi -->
+    </section>
+  </main>
+
+  <!-- Savat modali -->
+  <div id="cart-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 style="font-size: 1.35rem; font-weight: 700;">🛒 Sizning Savatingiz</h2>
+        <button id="close-cart-btn" class="modal-close-btn">&times;</button>
+      </div>
+      <div id="cart-items-container">
+        <!-- Savatdagi mahsulotlar -->
+      </div>
+      <div class="coupon-box">
+        <input type="text" id="coupon-input" class="form-input" placeholder="Promokod (masalan: CHEMPION10)">
+        <button id="apply-coupon-btn" class="btn btn-outline">Qo'llash</button>
+      </div>
+      <div id="coupon-message" style="font-size: 0.85rem; margin-bottom: 12px;"></div>
+      <div style="background: rgba(255, 255, 255, 0.02); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        <div class="summary-row"><span>Oraliq jami:</span><span id="cart-subtotal">0 UZS</span></div>
+        <div class="summary-row"><span>Chegirma:</span><span id="cart-discount" style="color: var(--color-accent);">-0 UZS</span></div>
+        <div class="summary-row"><span>QQS (12%):</span><span id="cart-tax">0 UZS</span></div>
+        <div class="summary-row total-row"><span>Jami to'lov:</span><span id="cart-total" style="color: var(--color-primary);">0 UZS</span></div>
+      </div>
+      <div style="display: flex; gap: 12px; margin-top: 20px;">
+        <button id="cart-continue-btn" class="btn btn-outline" style="flex: 1;">Xaridni Davom Ettirish</button>
+        <button id="checkout-btn" class="btn btn-primary" style="flex: 1;">Buyurtma Berish</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rasmiylashtirish modali -->
+  <div id="checkout-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 style="font-size: 1.35rem; font-weight: 700;">📦 Buyurtmani Rasmiylashtirish</h2>
+        <button id="close-checkout-btn" class="modal-close-btn">&times;</button>
+      </div>
+      <form id="checkout-form">
+        <div class="form-group">
+          <label for="cust-name">To'liq Ismingiz</label>
+          <input type="text" id="cust-name" class="form-input" required placeholder="Masalan: Sardor Aliyev">
+        </div>
+        <div class="form-group">
+          <label for="cust-phone">Telefon Raqamingiz</label>
+          <input type="tel" id="cust-phone" class="form-input" required placeholder="+998 90 123 45 67">
+        </div>
+        <div class="form-group">
+          <label for="cust-address">Yetkazib Berish Manzili</label>
+          <input type="text" id="cust-address" class="form-input" required placeholder="Toshkent sh., Yunusobod tumani...">
+        </div>
+        <div class="form-group">
+          <label>To'lov Turi</label>
+          <div style="display: flex; gap: 10px; margin-top: 6px;">
+            <label style="flex: 1; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer;">
+              <input type="radio" name="payment" value="Payme" checked> Payme
+            </label>
+            <label style="flex: 1; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer;">
+              <input type="radio" name="payment" value="Click"> Click
+            </label>
+            <label style="flex: 1; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer;">
+              <input type="radio" name="payment" value="Cash"> Naqd
+            </label>
+          </div>
+        </div>
+        <button type="submit" id="submit-order-btn" class="btn btn-accent" style="width: 100%; margin-top: 12px;">Tasdiqlash & Buyurtma Qilish</button>
+      </form>
+      <div id="order-confirm-box" style="display: none; text-align: center; padding: 24px 0;">
+        <div style="font-size: 3.5rem; margin-bottom: 12px;">✅</div>
+        <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">Buyurtmangiz Qabul Qilindi!</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">Buyurtma raqami: <strong id="confirmed-order-id" style="color: var(--color-primary);"></strong></p>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Kuryerimiz tez orada siz bilan bog'lanib mahsulotni yetkazib beradi.</p>
+        <button id="finish-order-btn" class="btn btn-primary" style="width: 100%;">Tushunarli</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="app.js"></script>
+</body>
+</html>
+"""
+
+    def _synthesize_analytics_html(self, task: str, lang: str = "uz") -> str:
+        is_uz = lang == "uz"
+        title = f"{task} — Tahlil & Statistika" if is_uz else f"{task} — Analytics"
+
+        return f"""<!DOCTYPE html>
+<html lang="{lang}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="nav-wrap">
+      <div class="brand-badge">
+        <span>📊 Analytics Intelligence</span>
+        <span class="badge-tag">Real-Time</span>
+      </div>
+      <div class="status-pill status-active">
+        <span class="status-dot"></span>
+        <span>Jonli Telemetriya Faol</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div style="margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-end;">
+      <div>
+        <h1 style="font-size: 2rem; font-weight: 700; letter-spacing: -0.03em;">{task}</h1>
+        <p style="color: var(--text-secondary); margin-top: 4px;">Keng qamrovli korporativ operatsion ko'rsatkichlar va jonli grafiklar.</p>
+      </div>
+      <button id="btn-export-data" class="btn btn-outline">Eksport (JSON)</button>
+    </div>
+
+    <!-- Metrikalar bloki -->
+    <section class="metric-row">
+      <div class="stat-box">
+        <div class="stat-label">Jami Tushum</div>
+        <div class="stat-value" style="color: var(--color-accent);">284.5M UZS</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Faol Foydalanuvchilar</div>
+        <div class="stat-value" style="color: var(--color-primary);">14,820 ta</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Konversiya Darajasi</div>
+        <div class="stat-value" style="color: var(--color-purple);">3.84%</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">O'rtacha Chek</div>
+        <div class="stat-value">1,240,000 UZS</div>
+      </div>
+    </section>
+
+    <!-- Grafik Paneli -->
+    <section class="card" style="margin-bottom: 32px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h2 class="card-title">📈 Sotuvlar Dinamikasi</h2>
+        <div style="display: flex; gap: 8px;">
+          <button class="tab-pill active" id="btn-period-daily">Kunlik</button>
+          <button class="tab-pill" id="btn-period-weekly">Haftalik</button>
+          <button class="tab-pill" id="btn-period-monthly">Oylik</button>
+        </div>
+      </div>
+      <div id="chart-bars-wrap" class="chart-container">
+        <!-- JS yaratadi -->
+      </div>
+    </section>
+
+    <!-- Jadval -->
+    <section class="card">
+      <h2 class="card-title">🧾 So'nggi Tranzaksiyalar</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Mijoz</th>
+            <th>Xizmat</th>
+            <th>Miqdor</th>
+            <th>Holat</th>
+          </tr>
+        </thead>
+        <tbody id="transactions-tbody">
+          <!-- JS yaratadi -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
+"""
+
+    def _synthesize_general_html(self, task: str, lang: str = "uz") -> str:
         is_uz = lang == "uz"
         title = f"{task} — Boshqaruv Markazi" if is_uz else f"{task} — Control Hub"
         status_text = "Tizim Faol & Himoyalangan" if is_uz else "System Active & Guarded"
-        overview_text = "Asosiy Ko'rsatkichlar" if is_uz else "Core Metrics"
         action_btn = "Yangi Amal Yaratish" if is_uz else "Create Action"
         refresh_btn = "Yangilash" if is_uz else "Refresh Data"
-        services_title = "Faol Xizmatlar & Xavfsizlik" if is_uz else "Active Services & Security"
 
         return f"""<!DOCTYPE html>
 <html lang="{lang}">
@@ -855,7 +1460,7 @@ body {
   </header>
 
   <main class="container">
-    <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: gap; gap: 16px;">
+    <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
       <div>
         <h1 style="font-size: 2rem; font-weight: 700; letter-spacing: -0.03em;">{task}</h1>
         <p style="color: var(--text-secondary); margin-top: 6px;">Enterprise 64-Titan arxitekturasi asosida shakllantirilgan avtonom boshqaruv tizimi.</p>
@@ -866,7 +1471,6 @@ body {
       </div>
     </div>
 
-    <!-- Metrikalar bloki -->
     <section class="metric-row">
       <div class="stat-box">
         <div class="stat-label">Xavfsizlik Ko'rsatkichi</div>
@@ -886,17 +1490,16 @@ body {
       </div>
     </section>
 
-    <!-- Asosiy kartalar paneli -->
     <section class="dashboard-grid">
       <div class="card">
         <h2 class="card-title">🔐 Autentifikatsiya & Xavfsizlik</h2>
-        <p class="card-desc">PBKDF2-HMAC-SHA256 parollar xeshlash, JWT tokenlar va TokenBucket tezlik cheklovchisi (RateLimiter) to'liq faollashtirilgan.</p>
+        <p class="card-desc">PBKDF2-HMAC-SHA256 parollar xeshlash, JWT tokenlar va TokenBucket tezlik cheklovchisi to'liq faollashtirilgan.</p>
         <button class="btn btn-outline" style="width: 100%;" onclick="appState.triggerAudit()">Xavfsizlik Tekshiruvi</button>
       </div>
 
       <div class="card">
         <h2 class="card-title">🗄️ Ma'lumotlar Bazasi & Sxemalar</h2>
-        <p class="card-desc">SQLite/SQL tranzaksiyalar boshqaruvi, avtomatik indekslash, soft-delete va sahifalash mexanizmlari bilan ta'minlangan.</p>
+        <p class="card-desc">SQLite/SQL tranzaksiyalar boshqaruvi, avtomatik indekslash va tranzaksiya izolyatsiyasi bilan ta'minlangan.</p>
         <button class="btn btn-outline" style="width: 100%;" onclick="appState.loadRecords()">Yozuvlarni Yuklash</button>
       </div>
 
@@ -907,7 +1510,6 @@ body {
       </div>
     </section>
 
-    <!-- Terminal Jurnali -->
     <section style="margin-top: 36px;">
       <div class="card" style="font-family: monospace; font-size: 0.88rem; background: #050811;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--text-muted);">
@@ -930,6 +1532,554 @@ body {
 
     def synthesize_ui_js(self, task: str, lang: str = "uz") -> str:
         """Generates reactive, production-grade client-side state engine."""
+        dom = self.detect_domain(task)
+        if dom == "ecommerce":
+            return self._synthesize_ecommerce_js(task, lang)
+        elif dom == "analytics":
+            return self._synthesize_analytics_js(task, lang)
+        else:
+            return self._synthesize_general_js(task, lang)
+
+    def _synthesize_ecommerce_js(self, task: str, lang: str = "uz") -> str:
+        return """/**
+ * Hallwright Reactive E-Commerce Store Engine
+ * Production-ready shopping cart, catalog filtering, promo codes, and checkout flow.
+ * Curated for zero-defect compliance with Gabriel Frost DOM security standards.
+ */
+
+class ApplicationState {
+  constructor() {
+    this.products = [
+      { id: "p1", name: "Apple iPhone 15 Pro Max 256GB", price: 14500000, category: "electronics", icon: "📱", badge: "Yangi", stock: 12 },
+      { id: "p2", name: "MacBook Air M3 15-inch 512GB", price: 17200000, category: "electronics", icon: "💻", badge: "Xit", stock: 8 },
+      { id: "p3", name: "Sony WH-1000XM5 Simsiz Quloqchin", price: 4200000, category: "electronics", icon: "🎧", badge: "Top", stock: 15 },
+      { id: "p4", name: "Apple Watch Series 9 GPS 45mm", price: 5400000, category: "accessories", icon: "⌚", badge: "Yangi", stock: 20 },
+      { id: "p5", name: "Nike Air Jordan 1 Retro High", price: 1850000, category: "clothing", icon: "👟", badge: "Chegirma", stock: 7 },
+      { id: "p6", name: "Shimoliy Yuz Termo Sayyohlik Ryukzagi", price: 890000, category: "accessories", icon: "🎒", badge: "Sifatli", stock: 25 },
+      { id: "p7", name: "Dyson V15 Simsiz Changyutgich", price: 9200000, category: "home", icon: "🧹", badge: "Premium", stock: 5 },
+      { id: "p8", name: "Nespresso Vertuo Qahva Mashinasi", price: 3100000, category: "home", icon: "☕", badge: "Mashhur", stock: 18 }
+    ];
+
+    this.cart = [];
+    this.coupon = null;
+    this.coupons = { "CHEMPION10": 10.0, "SUPER20": 20.0 };
+    this.activeCategory = "all";
+    this.searchQuery = "";
+
+    this.initCatalog();
+    this.initEventListeners();
+    this.updateCartUI();
+  }
+
+  formatPrice(num) {
+    return new Intl.NumberFormat('uz-UZ').format(num) + " UZS";
+  }
+
+  initCatalog() {
+    this.renderProducts();
+  }
+
+  renderProducts() {
+    const grid = document.getElementById('product-grid');
+    if (!grid) return;
+
+    while (grid.firstChild) {
+      grid.removeChild(grid.firstChild);
+    }
+
+    const filtered = this.products.filter(p => {
+      const matchesCategory = this.activeCategory === 'all' || p.category === this.activeCategory;
+      const matchesSearch = p.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      const emptyDiv = document.createElement('div');
+      emptyDiv.style.gridColumn = '1 / -1';
+      emptyDiv.style.textAlign = 'center';
+      emptyDiv.style.padding = '48px 0';
+      emptyDiv.style.color = '#94a3b8';
+      emptyDiv.textContent = "Kechirasiz, qidiruvingiz bo'yicha hech qanday mahsulot topilmadi.";
+      grid.appendChild(emptyDiv);
+      return;
+    }
+
+    filtered.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+
+      if (p.badge) {
+        const badge = document.createElement('span');
+        badge.className = 'product-badge';
+        badge.textContent = p.badge;
+        card.appendChild(badge);
+      }
+
+      const imgBox = document.createElement('div');
+      imgBox.className = 'product-img-box';
+      imgBox.textContent = p.icon;
+      card.appendChild(imgBox);
+
+      const catSpan = document.createElement('div');
+      catSpan.className = 'product-category';
+      catSpan.textContent = p.category;
+      card.appendChild(catSpan);
+
+      const title = document.createElement('h3');
+      title.className = 'product-title';
+      title.textContent = p.name;
+      card.appendChild(title);
+
+      const meta = document.createElement('div');
+      meta.className = 'product-meta';
+
+      const price = document.createElement('div');
+      price.className = 'product-price';
+      price.textContent = this.formatPrice(p.price);
+
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-primary btn-sm';
+      btn.textContent = "+ Savatga";
+      btn.addEventListener('click', () => this.addToCart(p.id));
+
+      meta.appendChild(price);
+      meta.appendChild(btn);
+      card.appendChild(meta);
+
+      grid.appendChild(card);
+    });
+  }
+
+  addToCart(productId) {
+    const prod = this.products.find(p => p.id === productId);
+    if (!prod) return;
+
+    const existing = this.cart.find(item => item.product.id === productId);
+    if (existing) {
+      if (existing.quantity >= prod.stock) {
+        this.showToast(`Omborda boshqa ${prod.name} qolmadi!`);
+        return;
+      }
+      existing.quantity += 1;
+    } else {
+      this.cart.push({ product: prod, quantity: 1 });
+    }
+
+    this.showToast(`"${prod.name}" savatga qo'shildi!`);
+    this.updateCartUI();
+  }
+
+  updateQuantity(productId, delta) {
+    const item = this.cart.find(it => it.product.id === productId);
+    if (!item) return;
+
+    item.quantity += delta;
+    if (item.quantity <= 0) {
+      this.cart = this.cart.filter(it => it.product.id !== productId);
+    }
+    this.updateCartUI();
+  }
+
+  applyCoupon(code) {
+    const clean = (code || "").trim().toUpperCase();
+    const msgEl = document.getElementById('coupon-message');
+    if (!clean) return;
+
+    if (this.coupons[clean]) {
+      this.coupon = { code: clean, discountPct: this.coupons[clean] };
+      if (msgEl) {
+        msgEl.style.color = '#10b981';
+        msgEl.textContent = `Ajoyib! ${clean} promokodi qo'llandi (${this.coupons[clean]}% chegirma).`;
+      }
+      this.showToast(`Promokod muvaffaqiyatli qo'llandi: -${this.coupons[clean]}%`);
+    } else {
+      this.coupon = null;
+      if (msgEl) {
+        msgEl.style.color = '#ef4444';
+        msgEl.textContent = "Noto'g'ri promokod. CHEMPION10 yoki SUPER20 ni sinab ko'ring.";
+      }
+    }
+    this.updateCartUI();
+  }
+
+  updateCartUI() {
+    const badge = document.getElementById('cart-badge');
+    const container = document.getElementById('cart-items-container');
+    const subtotalEl = document.getElementById('cart-subtotal');
+    const discountEl = document.getElementById('cart-discount');
+    const taxEl = document.getElementById('cart-tax');
+    const totalEl = document.getElementById('cart-total');
+
+    const totalCount = this.cart.reduce((sum, it) => sum + it.quantity, 0);
+    if (badge) badge.textContent = String(totalCount);
+
+    if (container) {
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+
+      if (this.cart.length === 0) {
+        const empty = document.createElement('div');
+        empty.style.textAlign = 'center';
+        empty.style.padding = '32px 0';
+        empty.style.color = '#94a3b8';
+        empty.textContent = "Savatingiz hozircha bo'sh.";
+        container.appendChild(empty);
+      } else {
+        this.cart.forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'cart-item-row';
+
+          const info = document.createElement('div');
+          const name = document.createElement('div');
+          name.style.fontWeight = '600';
+          name.textContent = item.product.name;
+          const pr = document.createElement('div');
+          pr.style.fontSize = '0.85rem';
+          pr.style.color = '#94a3b8';
+          pr.textContent = `${this.formatPrice(item.product.price)} x ${item.quantity}`;
+          info.appendChild(name);
+          info.appendChild(pr);
+
+          const controls = document.createElement('div');
+          controls.className = 'qty-control';
+
+          const minus = document.createElement('button');
+          minus.className = 'qty-btn';
+          minus.textContent = '-';
+          minus.addEventListener('click', () => this.updateQuantity(item.product.id, -1));
+
+          const qtySpan = document.createElement('span');
+          qtySpan.style.minWidth = '20px';
+          qtySpan.style.textAlign = 'center';
+          qtySpan.textContent = String(item.quantity);
+
+          const plus = document.createElement('button');
+          plus.className = 'qty-btn';
+          plus.textContent = '+';
+          plus.addEventListener('click', () => this.updateQuantity(item.product.id, 1));
+
+          controls.appendChild(minus);
+          controls.appendChild(qtySpan);
+          controls.appendChild(plus);
+
+          row.appendChild(info);
+          row.appendChild(controls);
+          container.appendChild(row);
+        });
+      }
+    }
+
+    const subtotal = this.cart.reduce((sum, it) => sum + (it.product.price * it.quantity), 0);
+    const discountPct = this.coupon ? this.coupon.discountPct : 0.0;
+    const discountAmt = Math.round(subtotal * (discountPct / 100.0));
+    const tax = Math.round((subtotal - discountAmt) * 0.12);
+    const total = subtotal - discountAmt + tax;
+
+    if (subtotalEl) subtotalEl.textContent = this.formatPrice(subtotal);
+    if (discountEl) discountEl.textContent = `-${this.formatPrice(discountAmt)}`;
+    if (taxEl) taxEl.textContent = this.formatPrice(tax);
+    if (totalEl) totalEl.textContent = this.formatPrice(total);
+  }
+
+  showToast(message) {
+    const toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    const icon = document.createElement('span');
+    icon.textContent = '✨';
+    const text = document.createElement('span');
+    text.textContent = message;
+
+    toast.appendChild(icon);
+    toast.appendChild(text);
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 2800);
+  }
+
+  triggerAudit() {
+    this.showToast("Gabriel Frost: Xavfsizlik auditi 100/100 toza!");
+  }
+
+  loadRecords() {
+    this.showToast(`${this.products.length} ta mahsulot yuklandi.`);
+  }
+
+  runDiagnostics() {
+    this.showToast("Barcha tizimlar barqaror ishlamoqda.");
+  }
+
+  initEventListeners() {
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        this.searchQuery = e.target.value;
+        this.renderProducts();
+      });
+    }
+
+    const categoryTabs = document.getElementById('category-tabs');
+    if (categoryTabs) {
+      categoryTabs.addEventListener('click', (e) => {
+        if (e.target.classList.contains('tab-pill')) {
+          categoryTabs.querySelectorAll('.tab-pill').forEach(btn => btn.classList.remove('active'));
+          e.target.classList.add('active');
+          this.activeCategory = e.target.getAttribute('data-cat') || 'all';
+          this.renderProducts();
+        }
+      });
+    }
+
+    const openCartBtn = document.getElementById('open-cart-btn');
+    const closeCartBtn = document.getElementById('close-cart-btn');
+    const cartContinueBtn = document.getElementById('cart-continue-btn');
+    const cartModal = document.getElementById('cart-modal');
+
+    if (openCartBtn && cartModal) {
+      openCartBtn.addEventListener('click', () => cartModal.classList.add('open'));
+    }
+    if (closeCartBtn && cartModal) {
+      closeCartBtn.addEventListener('click', () => cartModal.classList.remove('open'));
+    }
+    if (cartContinueBtn && cartModal) {
+      cartContinueBtn.addEventListener('click', () => cartModal.classList.remove('open'));
+    }
+
+    const applyCouponBtn = document.getElementById('apply-coupon-btn');
+    const couponInput = document.getElementById('coupon-input');
+    if (applyCouponBtn && couponInput) {
+      applyCouponBtn.addEventListener('click', () => {
+        this.applyCoupon(couponInput.value);
+      });
+    }
+
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const checkoutModal = document.getElementById('checkout-modal');
+    const closeCheckoutBtn = document.getElementById('close-checkout-btn');
+
+    if (checkoutBtn && checkoutModal && cartModal) {
+      checkoutBtn.addEventListener('click', () => {
+        if (this.cart.length === 0) {
+          this.showToast("Savatingiz bo'sh. Mahsulot tanlang!");
+          return;
+        }
+        cartModal.classList.remove('open');
+        checkoutModal.classList.add('open');
+      });
+    }
+
+    if (closeCheckoutBtn && checkoutModal) {
+      closeCheckoutBtn.addEventListener('click', () => checkoutModal.classList.remove('open'));
+    }
+
+    const checkoutForm = document.getElementById('checkout-form');
+    const confirmBox = document.getElementById('order-confirm-box');
+    const confirmedOrderId = document.getElementById('confirmed-order-id');
+    const finishOrderBtn = document.getElementById('finish-order-btn');
+
+    if (checkoutForm && confirmBox && confirmedOrderId) {
+      checkoutForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const randId = "ORD-" + Math.floor(100000 + Math.random() * 900000);
+        confirmedOrderId.textContent = randId;
+        checkoutForm.style.display = 'none';
+        confirmBox.style.display = 'block';
+
+        this.cart = [];
+        this.coupon = null;
+        this.updateCartUI();
+        this.showToast(`Buyurtma qabul qilindi: ${randId}`);
+      });
+    }
+
+    if (finishOrderBtn && checkoutModal && checkoutForm && confirmBox) {
+      finishOrderBtn.addEventListener('click', () => {
+        checkoutModal.classList.remove('open');
+        checkoutForm.style.display = 'block';
+        checkoutForm.reset();
+        confirmBox.style.display = 'none';
+      });
+    }
+  }
+}
+
+const appState = new ApplicationState();
+"""
+
+    def _synthesize_analytics_js(self, task: str, lang: str = "uz") -> str:
+        return """/**
+ * Hallwright Reactive Analytics Platform Engine
+ * Interactive period switching, responsive SVG/CSS chart rendering, and data export.
+ */
+
+class ApplicationState {
+  constructor() {
+    this.periodData = {
+      daily: [
+        { label: "09:00", val: 35 },
+        { label: "12:00", val: 65 },
+        { label: "15:00", val: 85 },
+        { label: "18:00", val: 95 },
+        { label: "21:00", val: 70 },
+        { label: "00:00", val: 40 }
+      ],
+      weekly: [
+        { label: "Dush", val: 55 },
+        { label: "Sesh", val: 70 },
+        { label: "Chor", val: 80 },
+        { label: "Pay", val: 92 },
+        { label: "Juma", val: 100 },
+        { label: "Shan", val: 85 },
+        { label: "Yak", val: 60 }
+      ],
+      monthly: [
+        { label: "Yan", val: 45 },
+        { label: "Fev", val: 60 },
+        { label: "Mar", val: 75 },
+        { label: "Apr", val: 90 },
+        { label: "May", val: 85 },
+        { label: "Iyun", val: 95 }
+      ]
+    };
+
+    this.transactions = [
+      { id: "TX-1049", user: "Aziz Rahimov", service: "Premium Obuna", amount: "450,000 UZS", status: "Muvaffaqiyatli" },
+      { id: "TX-1050", user: "Malika Yusupova", service: "Yillik Litsenziya", amount: "1,200,000 UZS", status: "Muvaffaqiyatli" },
+      { id: "TX-1051", user: "Jasur Bekov", service: "API Kotirovkasi", amount: "320,000 UZS", status: "Kutilmoqda" },
+      { id: "TX-1052", user: "Nodira Karimova", service: "Maxsus Konsultatsiya", amount: "800,000 UZS", status: "Muvaffaqiyatli" }
+    ];
+
+    this.activePeriod = "daily";
+    this.initChart();
+    this.renderTransactions();
+    this.initListeners();
+  }
+
+  initChart() {
+    const wrap = document.getElementById('chart-bars-wrap');
+    if (!wrap) return;
+
+    while (wrap.firstChild) {
+      wrap.removeChild(wrap.firstChild);
+    }
+
+    const data = this.periodData[this.activePeriod] || this.periodData.daily;
+    data.forEach(item => {
+      const group = document.createElement('div');
+      group.className = 'chart-bar-group';
+
+      const bar = document.createElement('div');
+      bar.className = 'chart-bar';
+      bar.style.height = `${item.val}%`;
+      bar.title = `${item.label}: ${item.val}%`;
+
+      const label = document.createElement('div');
+      label.className = 'chart-label';
+      label.textContent = item.label;
+
+      group.appendChild(bar);
+      group.appendChild(label);
+      wrap.appendChild(group);
+    });
+  }
+
+  renderTransactions() {
+    const tbody = document.getElementById('transactions-tbody');
+    if (!tbody) return;
+
+    while (tbody.firstChild) {
+      tbody.removeChild(tbody.firstChild);
+    }
+
+    this.transactions.forEach(tx => {
+      const tr = document.createElement('tr');
+
+      const tdId = document.createElement('td');
+      tdId.style.fontWeight = '600';
+      tdId.textContent = tx.id;
+
+      const tdUser = document.createElement('td');
+      tdUser.textContent = tx.user;
+
+      const tdService = document.createElement('td');
+      tdService.textContent = tx.service;
+
+      const tdAmount = document.createElement('td');
+      tdAmount.style.color = '#10b981';
+      tdAmount.style.fontWeight = '600';
+      tdAmount.textContent = tx.amount;
+
+      const tdStatus = document.createElement('td');
+      const pill = document.createElement('span');
+      pill.className = 'status-pill status-active';
+      pill.textContent = tx.status;
+      tdStatus.appendChild(pill);
+
+      tr.appendChild(tdId);
+      tr.appendChild(tdUser);
+      tr.appendChild(tdService);
+      tr.appendChild(tdAmount);
+      tr.appendChild(tdStatus);
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  triggerAudit() {
+    alert("Analytics Engine Gatekeeper: 100/100 toza!");
+  }
+
+  loadRecords() {
+    this.renderTransactions();
+  }
+
+  runDiagnostics() {
+    alert("Barcha tahlil agregatsiyalari sog'lom.");
+  }
+
+  initListeners() {
+    const btnDaily = document.getElementById('btn-period-daily');
+    const btnWeekly = document.getElementById('btn-period-weekly');
+    const btnMonthly = document.getElementById('btn-period-monthly');
+    const exportBtn = document.getElementById('btn-export-data');
+
+    const setPeriod = (period, activeBtn) => {
+      this.activePeriod = period;
+      [btnDaily, btnWeekly, btnMonthly].forEach(b => b && b.classList.remove('active'));
+      if (activeBtn) activeBtn.classList.add('active');
+      this.initChart();
+    };
+
+    if (btnDaily) btnDaily.addEventListener('click', () => setPeriod('daily', btnDaily));
+    if (btnWeekly) btnWeekly.addEventListener('click', () => setPeriod('weekly', btnWeekly));
+    if (btnMonthly) btnMonthly.addEventListener('click', () => setPeriod('monthly', btnMonthly));
+
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => {
+        const jsonStr = JSON.stringify({ transactions: this.transactions, stats: this.periodData }, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'analytics_report.json';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+  }
+}
+
+const appState = new ApplicationState();
+"""
+
+    def _synthesize_general_js(self, task: str, lang: str = "uz") -> str:
         return """/**
  * Hallwright Reactive UI Controller
  * Manages live client state, telemetry updates, and component actions.

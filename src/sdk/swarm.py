@@ -107,7 +107,7 @@ class SwarmOrchestrator:
         self.registry = registry if registry else (AgentRegistry() if AgentRegistry else None)
         self.memory = memory if memory else (LearningMemory() if LearningMemory else None)
 
-    def plan_swarm_pipeline(self, task: str, files: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+    def plan_swarm_pipeline(self, task: str, files: Optional[List[str]] = None, autonomous: bool = False) -> List[Dict[str, Any]]:
         """
         Analyzes task intent and constructs an ordered multi-stage sub-agent execution pipeline.
         """
@@ -132,16 +132,33 @@ class SwarmOrchestrator:
             scores[agent_id] = score
 
         # Always include architect for system-level implementation
-        if any(w in task_lower for w in ["build", "create", "implement", "feature", "add", "develop"]):
+        if any(w in task_lower for w in ["build", "create", "implement", "feature", "add", "develop", "qur", "yarat", "tizim", "dastur"]):
             scores["hallwright-architect"] = max(scores.get("hallwright-architect", 0), 3)
 
-        # Always include security if authentication, keys, or endpoints are touched
-        if any(w in task_lower for w in ["auth", "login", "jwt", "token", "payment", "api", "key", "secret"]):
+        # Always include designer for web/UI/store/site/frontend
+        if any(w in task_lower for w in ["ui", "ux", "dizayn", "sayt", "site", "web", "frontend", "html", "css", "do'kon", "store", "magazin", "portal", "savat"]):
+            scores["hallwright-designer"] = max(scores.get("hallwright-designer", 0), 4)
+
+        # Always include security if authentication, keys, payments or endpoints are touched
+        if any(w in task_lower for w in ["auth", "login", "jwt", "token", "payment", "api", "key", "secret", "xavfsiz", "himoya", "parol", "to'lov"]):
             scores["hallwright-security"] = max(scores.get("hallwright-security", 0), 4)
 
+        # Always include database if persistence, catalog, or data mentioned
+        if any(w in task_lower for w in ["database", "db", "sql", "sqlite", "postgres", "baza", "jadval", "saqla", "data", "mahsulot", "order", "buyurtma"]):
+            scores["hallwright-database"] = max(scores.get("hallwright-database", 0), 3)
+
         # Always include tester for implementation tasks
-        if any(w in task_lower for w in ["build", "create", "fix", "implement", "refactor"]):
+        if any(w in task_lower for w in ["build", "create", "fix", "implement", "refactor", "qur", "yarat", "tizim", "sayt", "do'kon"]):
             scores["hallwright-tester"] = max(scores.get("hallwright-tester", 0), 2)
+
+        # Autonomous / Sovereign delivery overdrive guarantees full-stack generation
+        if autonomous:
+            scores["hallwright-architect"] = max(scores.get("hallwright-architect", 0), 4)
+            scores["hallwright-designer"] = max(scores.get("hallwright-designer", 0), 4)
+            scores["hallwright-database"] = max(scores.get("hallwright-database", 0), 3)
+            scores["hallwright-security"] = max(scores.get("hallwright-security", 0), 3)
+            scores["hallwright-tester"] = max(scores.get("hallwright-tester", 0), 3)
+            scores["hallwright-copywriter"] = max(scores.get("hallwright-copywriter", 0), 2)
 
         # Always include critic as the final gatekeeper
         scores["hallwright-critic"] = max(scores.get("hallwright-critic", 0), 3)
@@ -415,7 +432,7 @@ class SwarmOrchestrator:
         Dispatches contract agreements and traces messages across subagent topics.
         When autonomous=True or output_dir is given, executes tangible domain code generation.
         """
-        pipeline = self.plan_swarm_pipeline(task, files)
+        pipeline = self.plan_swarm_pipeline(task, files, autonomous=autonomous or bool(output_dir))
         try:
             from agent_mesh import AgentMesh, AgentMessage, AgentContract
         except ImportError:

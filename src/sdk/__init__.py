@@ -19,6 +19,7 @@ from .pdk import (
 from .plugin_loader import PluginLoader
 from .search_engine import SearchEngine, SearchHit, SearchResultSet, SearchScope
 from .prompt_engine import PromptEngine, PromptQualityScore, OptimizationResult
+from .web_healer import AutonomousWebHealer, HealingResult
 
 __all__ = [
     "CraftsmanAgent",
@@ -46,4 +47,6 @@ __all__ = [
     "PromptEngine",
     "PromptQualityScore",
     "OptimizationResult",
+    "AutonomousWebHealer",
+    "HealingResult",
 ]

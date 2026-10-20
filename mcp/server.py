@@ -404,6 +404,18 @@ TOOLS = [
             },
             "required": ["prompt"]
         }
+    },
+    {
+        "name": "hallwright_heal_error",
+        "description": "Autonomously researches an error, traceback, or defect on the live web, synthesizes root cause diagnosis and remediation strategy, and permanently ingests learned scar tissue into memory.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "error": {"type": "string", "description": "The error message, exception, or defect description to heal"},
+                "code": {"type": "string", "description": "Optional code snippet associated with the error"}
+            },
+            "required": ["error"]
+        }
     }
 ]
 
@@ -643,6 +655,22 @@ def handle_optimize_prompt(args):
     return result.to_dict()
 
 
+def handle_heal_error(args):
+    try:
+        from web_healer import AutonomousWebHealer
+    except ImportError:
+        try:
+            from src.sdk.web_healer import AutonomousWebHealer
+        except ImportError:
+            return {"status": "error", "message": "AutonomousWebHealer module could not be loaded."}
+
+    error = args.get("error", "")
+    code = args.get("code")
+    healer = AutonomousWebHealer(workspace_root=".")
+    result = healer.heal_defect(defect=error, code_snippet=code)
+    return result.to_dict()
+
+
 def validate_tool_arguments(tool_def, args):
     """
     Validates arguments against the tool's inputSchema per MCP JSON-RPC 2.0 specs.
@@ -792,6 +820,8 @@ def dispatch_request(req):
             output = handle_search(args)
         elif hw_name == "hallwright_optimize_prompt":
             output = handle_optimize_prompt(args)
+        elif hw_name == "hallwright_heal_error":
+            output = handle_heal_error(args)
         else:
             return {
                 "jsonrpc": "2.0",

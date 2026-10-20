@@ -45,7 +45,7 @@ def test_mcp_tools_list_distilled_canonical_tools():
     req = {"jsonrpc": "2.0", "id": 2, "method": "tools/list"}
     res = server.dispatch_request(req)
     tool_names = [t["name"] for t in res["result"]["tools"]]
-    assert len(tool_names) == 15
+    assert len(tool_names) == 16
     assert "hallwright_inspect_code" in tool_names
     assert "hallwright_get_persona" in tool_names
     assert "hallwright_list_council" in tool_names
@@ -61,6 +61,7 @@ def test_mcp_tools_list_distilled_canonical_tools():
     assert "hallwright_review_code" in tool_names
     assert "hallwright_search" in tool_names
     assert "hallwright_optimize_prompt" in tool_names
+    assert "hallwright_heal_error" in tool_names
     # Verify legacy artisan_* tools are NOT duplicated in tools/list
     assert not any(t.startswith("artisan_") for t in tool_names)
 

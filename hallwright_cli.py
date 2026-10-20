@@ -310,6 +310,56 @@ def cmd_fix(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_heal(args: argparse.Namespace) -> int:
+    """Uses live web research and Scar Tissue memory to autonomously heal errors and defects."""
+    try:
+        from web_healer import AutonomousWebHealer
+    except ImportError:
+        try:
+            from src.sdk.web_healer import AutonomousWebHealer
+        except ImportError:
+            print("[-] Error: AutonomousWebHealer module could not be loaded.", file=sys.stderr)
+            return 1
+
+    healer = AutonomousWebHealer(workspace_root=".")
+    target_error = getattr(args, "error", "")
+    filepath = getattr(args, "file", None)
+    code = None
+
+    if filepath and os.path.isfile(filepath):
+        try:
+            with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+                code = f.read()
+        except OSError as file_err:
+            logging.debug("Could not read file %s for healing: %s", filepath, file_err)
+
+    if not target_error:
+        print("[-] Error: Please specify an error string or defect to heal.", file=sys.stderr)
+        return 1
+
+    res = healer.heal_defect(defect=target_error, code_snippet=code, filepath=filepath)
+    if getattr(args, "json", False):
+        print(json.dumps(res.to_dict(), indent=2))
+        return 0
+
+    print("\n🌐 [HALLWRIGHT AUTONOMOUS WEB HEALER]")
+    print(f"🎯 Diagnosis: {res.diagnosis}")
+    print(f"🔍 Web Query: \"{res.query}\"")
+    if res.web_references:
+        print("\n📚 Live Technical References:")
+        for idx, ref in enumerate(res.web_references, 1):
+            print(f"  {idx}. {ref['title']}")
+            print(f"     URL: {ref['url']}")
+            print(f"     Snippet: {ref['snippet'][:110]}...")
+    print(f"\n💡 Remediation Strategy:\n{res.remediation_strategy}")
+    if res.suggested_patch:
+        print(f"\n🩹 Suggested Patch:\n{res.suggested_patch}")
+    if res.memory_recorded:
+        print(f"\n🧠 Ingested into Scar Tissue Memory: Recorded as permanent lesson [{res.lesson_id}].")
+    print("")
+    return 0
+
+
 def cmd_status(args: argparse.Namespace) -> int:
     """Displays workspace health, active guilds, memory status, and pre-commit gate info."""
     print(ASCII_BANNER)
@@ -1165,6 +1215,12 @@ def main():
     p_search.add_argument("--limit", "-l", type=int, default=5, help="Maximum results per category (default: 5)")
     p_search.add_argument("--json", "-j", action="store_true", help="Output search results in JSON format")
 
+    # heal / research-fix / davola
+    p_heal = subparsers.add_parser("heal", aliases=["research-fix", "davola"], help="Autonomous web research & self-healing for errors and defects")
+    p_heal.add_argument("error", nargs="?", default="", help="Error message, traceback, or defect description")
+    p_heal.add_argument("--file", "-f", help="Target source file associated with the error")
+    p_heal.add_argument("--json", "-j", action="store_true", help="Output healing report in JSON format")
+
     args = parser.parse_args()
 
     if not args.subcommand or args.subcommand == "status":
@@ -1175,6 +1231,8 @@ def main():
         return cmd_audit(args)
     elif args.subcommand == "fix":
         return cmd_fix(args)
+    elif args.subcommand in ("heal", "research-fix", "davola"):
+        return cmd_heal(args)
     elif args.subcommand == "memory":
         return cmd_memory(args)
     elif args.subcommand == "doctor":

@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Hallwright Engineering Core",
-  "lastUpdated": "2026-10-20T05:03:17.618914+00:00",
+  "lastUpdated": "2026-10-20T05:57:08.848403+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -60,7 +60,7 @@
       "lesson": "Always enforce pagination limits.",
       "severity": "high",
       "recordedAt": "2026-10-15T15:08:39.779478+00:00",
-      "updatedAt": "2026-10-20T05:03:17.618914+00:00"
+      "updatedAt": "2026-10-20T05:56:24.222277+00:00"
     },
     {
       "id": "mis-0004",
@@ -111,18 +111,19 @@
       "id": "mis-0009",
       "category": "stub",
       "pattern": "Silent exception suppression ('except except: pass') verified via AST.",
-      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\search_engine.py:278). Resolve Silent exception suppression ('except except: pass') verified via AST. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\hallwright_cli.py:333). Resolve Silent exception suppression ('except except: pass') verified via AST. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-15T21:18:15.274803+00:00",
-      "updatedAt": "2026-10-20T04:20:13.931618+00:00"
+      "updatedAt": "2026-10-20T05:54:42.879092+00:00"
     },
     {
       "id": "mis-0010",
       "category": "dangerous",
       "pattern": "Potential SQL injection via raw string interpolation or concatenation. Use parameterized queries.",
-      "lesson": "Rejected in pre-commit audit (.\\professions\\database_architect\\elevation_engine.py:133). Resolve Potential SQL injection via raw string interpolation or concatenation. Use parameterized queries. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\web_healer.py:106). Resolve Potential SQL injection via raw string interpolation or concatenation. Use parameterized queries. before committing.",
       "severity": "medium",
-      "recordedAt": "2026-10-16T19:02:54.797113+00:00"
+      "recordedAt": "2026-10-16T19:02:54.797113+00:00",
+      "updatedAt": "2026-10-20T05:54:42.926088+00:00"
     },
     {
       "id": "mis-0011",
@@ -242,6 +243,32 @@
       "lesson": "Never provide a default string fallback like 'supersecret' for JWT_SECRET or SECRET_KEY; raise an explicit RuntimeError if missing.",
       "severity": "critical",
       "recordedAt": "2026-10-14T14:00:00Z"
+    },
+    {
+      "id": "sca-0002",
+      "category": "web_healed",
+      "pattern": "ZeroDivisionError division by zero",
+      "lesson": "Resolved 'ZeroDivisionError division by zero'. Defense: 2. Architecture Defense: Validate boundaries, use parameterized calls, and handle exceptions explicitly.",
+      "severity": "high",
+      "recordedAt": "2026-10-20T05:54:09.681571+00:00",
+      "updatedAt": "2026-10-20T05:57:06.458283+00:00"
+    },
+    {
+      "id": "sca-0003",
+      "category": "web_healed",
+      "pattern": "TypeError 'NoneType' object is not callable",
+      "lesson": "Resolved 'TypeError 'NoneType' object is not callable'. Defense: 2. Architecture Defense: Validate boundaries, use parameterized calls, and handle exceptions explicitly.",
+      "severity": "high",
+      "recordedAt": "2026-10-20T05:54:12.213199+00:00",
+      "updatedAt": "2026-10-20T05:57:08.848403+00:00"
+    },
+    {
+      "id": "sca-0004",
+      "category": "web_healed",
+      "pattern": "TypeError unsupported operand type(s) for +: 'int' and 'str'",
+      "lesson": "Resolved 'TypeError unsupported operand type(s) for +: 'int' and 'str''. Defense: 2. Architecture Defense: Validate boundaries, use parameterized calls, and handle exceptions explicitly.",
+      "severity": "high",
+      "recordedAt": "2026-10-20T05:54:30.894860+00:00"
     }
   ],
   "domainKnowledge": {

@@ -102,7 +102,8 @@ class SwarmOrchestrator:
     Decomposes tasks into specialized sub-agent delegations and orchestrates collaborative execution.
     """
 
-    def __init__(self, registry: Optional[Any] = None, memory: Optional[Any] = None):
+    def __init__(self, registry: Optional[Any] = None, memory: Optional[Any] = None, workspace_root: Optional[str] = None):
+        self.workspace_root = workspace_root
         self.registry = registry if registry else (AgentRegistry() if AgentRegistry else None)
         self.memory = memory if memory else (LearningMemory() if LearningMemory else None)
 
@@ -291,6 +292,7 @@ class SwarmOrchestrator:
             "agent_id": aid,
             "persona": stage["persona"],
             "role": stage["role"],
+            "summary": f"Executed domain deliverables under {stage['persona']} governance.",
             "files_written": [],
             "web_research": web_research
         }
@@ -396,7 +398,7 @@ class SwarmOrchestrator:
         else:
             deliverable["artifact_type"] = "domain_deliverable"
         if web_research and web_research.get("references_count", 0) > 0:
-            deliverable["summary"] += f" (Informed by {web_research['references_count']} live web references)"
+            deliverable["summary"] = deliverable.get("summary", "") + f" (Informed by {web_research['references_count']} live web references)"
 
         deliverable["files_written"] = written_files
         return deliverable

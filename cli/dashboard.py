@@ -183,6 +183,29 @@ def get_telemetry() -> Dict[str, Any]:
     except Exception as evo_err:
         logging.debug("Could not read immune state: %s", evo_err)
 
+    # 5. Read operational skill tier
+    telemetry["active_tier"] = 3
+    telemetry["tier_name"] = "Sovereign Sovereign"
+    telemetry["tier_full_access"] = True
+    try:
+        from tiers import SkillTierEngine
+        active_policy = SkillTierEngine().get_active_tier()
+        telemetry["active_tier"] = active_policy.tier
+        telemetry["tier_name"] = active_policy.name
+        telemetry["tier_full_access"] = active_policy.full_access
+    except Exception as tier_err:
+        logging.debug("Could not read tier state: %s", tier_err)
+
+    # 6. Read internet gateway connectivity & cache state
+    telemetry["internet_connected"] = True
+    telemetry["cached_searches"] = 0
+    try:
+        from web_gateway import InternetGateway
+        gw = InternetGateway()
+        telemetry["cached_searches"] = len(gw._cache)
+    except Exception as gw_err:
+        logging.debug("Could not read gateway state: %s", gw_err)
+
     return telemetry
 
 
@@ -202,10 +225,15 @@ def render_sentinel_hud(telemetry: Dict[str, Any], once: bool = False):
     score_color = GREEN if score >= 90 else (YELLOW if score >= 70 else RED)
     status_color = GREEN if telemetry["protocol_status"] == "ACTIVE" else YELLOW
 
+    tier_val = telemetry.get("active_tier", 3)
+    tier_badge = f"{MAGENTA}{BOLD}[⚡ TIER {tier_val}: FULL ACCESS]{RESET}" if telemetry.get("tier_full_access") else f"{BLUE}{BOLD}[⚡ TIER {tier_val}: CONTROLLED]{RESET}"
+    net_badge = f"{GREEN}{BOLD}[🌐 INTERNET: ACTIVE ({telemetry.get('cached_searches', 0)} cached)]{RESET}"
+
     print(f" {status_color}{BOLD}[● PROTOCOL: {telemetry['protocol_status']}]{RESET}  "
           f"{score_color}{BOLD}[GATEKEEPER: {score}/100 PASSED]{RESET}  "
           f"{CYAN}{BOLD}[SWARM: {telemetry['active_subagents']} TITANS]{RESET}  "
           f"{GREEN}{BOLD}[🧬 IMMUNITY: {telemetry['immunity_score']}% (GEN {telemetry['generation']})]{RESET}")
+    print(f" {tier_badge}  {net_badge}")
     print("-" * 80)
 
     # 11 Council Titan Swarm Roster

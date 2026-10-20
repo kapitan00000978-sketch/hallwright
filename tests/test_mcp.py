@@ -45,7 +45,7 @@ def test_mcp_tools_list_distilled_canonical_tools():
     req = {"jsonrpc": "2.0", "id": 2, "method": "tools/list"}
     res = server.dispatch_request(req)
     tool_names = [t["name"] for t in res["result"]["tools"]]
-    assert len(tool_names) == 16
+    assert len(tool_names) == 23
     assert "hallwright_inspect_code" in tool_names
     assert "hallwright_get_persona" in tool_names
     assert "hallwright_list_council" in tool_names
@@ -62,6 +62,13 @@ def test_mcp_tools_list_distilled_canonical_tools():
     assert "hallwright_search" in tool_names
     assert "hallwright_optimize_prompt" in tool_names
     assert "hallwright_heal_error" in tool_names
+    assert "hallwright_swarm" in tool_names
+    assert "hallwright_execute_skill" in tool_names
+    assert "hallwright_web_search" in tool_names
+    assert "hallwright_fetch_page" in tool_names
+    assert "hallwright_synthesize_code" in tool_names
+    assert "hallwright_get_tier" in tool_names
+    assert "hallwright_set_tier" in tool_names
     # Verify legacy artisan_* tools are NOT duplicated in tools/list
     assert not any(t.startswith("artisan_") for t in tool_names)
 
@@ -363,6 +370,133 @@ def test_mcp_review_code_tool():
     content_rev = json.loads(res_rev["result"]["content"][0]["text"])
     assert "score" in content_rev
     assert content_rev["passed"] is True
+
+
+def test_mcp_tier_tools():
+    # 1. Get tier
+    req_get = {
+        "jsonrpc": "2.0",
+        "id": 70,
+        "method": "tools/call",
+        "params": {
+            "name": "hallwright_get_tier",
+            "arguments": {}
+        }
+    }
+    res_get = server.dispatch_request(req_get)
+    assert "result" in res_get
+    content_get = json.loads(res_get["result"]["content"][0]["text"])
+    assert content_get["tier"] in (1, 2, 3)
+    assert "name" in content_get
+
+    # 2. Set tier to 3
+    req_set = {
+        "jsonrpc": "2.0",
+        "id": 71,
+        "method": "tools/call",
+        "params": {
+            "name": "hallwright_set_tier",
+            "arguments": {"tier": 3}
+        }
+    }
+    res_set = server.dispatch_request(req_set)
+    assert "result" in res_set
+    content_set = json.loads(res_set["result"]["content"][0]["text"])
+    assert content_set["status"] == "ok"
+    assert content_set["policy"]["tier"] == 3
+
+
+def test_mcp_synthesize_code_tools():
+    # 1. Synthesize Auth
+    req_auth = {
+        "jsonrpc": "2.0",
+        "id": 72,
+        "method": "tools/call",
+        "params": {
+            "name": "hallwright_synthesize_code",
+            "arguments": {"domain": "auth"}
+        }
+    }
+    res_auth = server.dispatch_request(req_auth)
+    assert "result" in res_auth
+    content_auth = json.loads(res_auth["result"]["content"][0]["text"])
+    assert content_auth["domain"] == "auth"
+    assert "PBKDF2" in content_auth["code"]
+
+    # 2. Synthesize UI
+    req_ui = {
+        "jsonrpc": "2.0",
+        "id": 73,
+        "method": "tools/call",
+        "params": {
+            "name": "hallwright_synthesize_code",
+            "arguments": {"domain": "ui", "options": {"title": "Test Portal"}}
+        }
+    }
+    res_ui = server.dispatch_request(req_ui)
+    assert "result" in res_ui
+    content_ui = json.loads(res_ui["result"]["content"][0]["text"])
+    assert "styles.css" in content_ui["files"]
+    assert "index.html" in content_ui["files"]
+    assert "app.js" in content_ui["files"]
+
+
+def test_mcp_web_search_and_fetch_tools():
+    req_search = {
+        "jsonrpc": "2.0",
+        "id": 74,
+        "method": "tools/call",
+        "params": {
+            "name": "hallwright_web_search",
+            "arguments": {"query": "python security", "max_results": 3}
+        }
+    }
+    res_search = server.dispatch_request(req_search)
+    assert "result" in res_search
+    content_search = json.loads(res_search["result"]["content"][0]["text"])
+    assert content_search["count"] > 0
+    assert len(content_search["results"]) > 0
+
+
+def test_mcp_execute_skill_tool():
+    req_skill = {
+        "jsonrpc": "2.0",
+        "id": 75,
+        "method": "tools/call",
+        "params": {
+            "name": "hallwright_execute_skill",
+            "arguments": {
+                "skill_name": "craftsman-evaluator",
+                "context": {"code": "def get_pi(): return 3.14159"}
+            }
+        }
+    }
+    res_skill = server.dispatch_request(req_skill)
+    assert "result" in res_skill
+    content_skill = json.loads(res_skill["result"]["content"][0]["text"])
+    assert content_skill["skill"] == "craftsman-evaluator"
+    assert content_skill["status"] in ("APPROVED", "NEEDS_IMPROVEMENT")
+
+
+def test_mcp_swarm_tool():
+    req_swarm = {
+        "jsonrpc": "2.0",
+        "id": 76,
+        "method": "tools/call",
+        "params": {
+            "name": "hallwright_swarm",
+            "arguments": {
+                "task": "Build zero-latency cache manager",
+                "autonomous": False
+            }
+        }
+    }
+    res_swarm = server.dispatch_request(req_swarm)
+    assert "result" in res_swarm
+    content_swarm = json.loads(res_swarm["result"]["content"][0]["text"])
+    assert content_swarm["stages_executed"] >= 3
+    assert content_swarm["status"] == "SWARM_MESH_COMPLETED"
+
 
 
 

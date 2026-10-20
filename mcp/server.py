@@ -416,6 +416,99 @@ TOOLS = [
             },
             "required": ["error"]
         }
+    },
+    {
+        "name": "hallwright_swarm",
+        "description": "Multi-agent sovereign orchestration. Dispatches 11 specialized Council subagents to research the live web and autonomously generate production code and UI components into a workspace directory.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "task": {"type": "string", "description": "The mission or project description for the 11-Titan swarm"},
+                "autonomous": {"type": "boolean", "description": "If true, writes generated artifacts directly to disk (default: true)"},
+                "output_dir": {"type": "string", "description": "Directory to output generated assets (default: 'output')"},
+                "web_research": {"type": "boolean", "description": "Whether subagents query live internet documentation (default: true)"}
+            },
+            "required": ["task"]
+        }
+    },
+    {
+        "name": "hallwright_execute_skill",
+        "description": "Dynamically executes a Hallwright skill (craftsman-evaluator, adversarial-code-review, tier-3-sovereign, flaw-remediator, etc.) programmatically with context parameters.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "skill_name": {"type": "string", "description": "Name or identifier of the skill to execute"},
+                "context": {"type": "object", "description": "Optional contextual parameters passed to the skill execution"}
+            },
+            "required": ["skill_name"]
+        }
+    },
+    {
+        "name": "hallwright_web_search",
+        "description": "Queries the live internet and technical documentation across DuckDuckGo and official dev portals with local caching and resilient fallback.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Search query or technical keyword"},
+                "domain": {"type": "string", "description": "Optional domain focus or restriction (e.g. python, react, security)"},
+                "max_results": {"type": "integer", "description": "Maximum number of results to return (default: 5)"}
+            },
+            "required": ["query"]
+        }
+    },
+    {
+        "name": "hallwright_fetch_page",
+        "description": "Fetches live web page content or technical docs and strips HTML to clean markdown/text.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "url": {"type": "string", "description": "Web page URL to fetch"},
+                "max_chars": {"type": "integer", "description": "Maximum characters to return (default: 4000)"}
+            },
+            "required": ["url"]
+        }
+    },
+    {
+        "name": "hallwright_synthesize_code",
+        "description": "Directly synthesizes production-grade, AST-compliant domain implementations (auth, database, ecommerce, api, or ui) without placeholder stubs.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "domain": {
+                    "type": "string",
+                    "enum": ["auth", "database", "ecommerce", "api", "ui"],
+                    "description": "Target domain module to synthesize"
+                },
+                "options": {
+                    "type": "object",
+                    "description": "Optional configuration options (title, brand_color, etc.)"
+                }
+            },
+            "required": ["domain"]
+        }
+    },
+    {
+        "name": "hallwright_get_tier",
+        "description": "Inspects current operational skill tier (Tier 1 Sentinel, Tier 2 Craftsman, Tier 3 Sovereign Titan), features, and active permissions.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {}
+        }
+    },
+    {
+        "name": "hallwright_set_tier",
+        "description": "Sets operational skill tier (1 for Sentinel Advisory, 2 for Craftsman Artisan, 3 for Sovereign Titan).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "tier": {
+                    "type": "integer",
+                    "enum": [1, 2, 3],
+                    "description": "Target operational tier level (1, 2, or 3)"
+                }
+            },
+            "required": ["tier"]
+        }
     }
 ]
 
@@ -671,6 +764,144 @@ def handle_heal_error(args):
     return result.to_dict()
 
 
+def handle_swarm(args):
+    try:
+        from swarm import SwarmOrchestrator
+    except ImportError:
+        try:
+            from src.sdk.swarm import SwarmOrchestrator
+        except ImportError:
+            return {"status": "error", "message": "SwarmOrchestrator module could not be loaded."}
+
+    task = args.get("task", "")
+    autonomous = bool(args.get("autonomous", True))
+    output_dir = args.get("output_dir", "output")
+
+    orchestrator = SwarmOrchestrator(workspace_root=".")
+    result = orchestrator.dispatch_swarm_mesh(
+        task=task,
+        autonomous=autonomous,
+        output_dir=output_dir
+    )
+    return result
+
+
+def handle_execute_skill(args):
+    try:
+        from skill_runner import SkillEngine
+    except ImportError:
+        try:
+            from src.sdk.skill_runner import SkillEngine
+        except ImportError:
+            return {"status": "error", "message": "SkillEngine module could not be loaded."}
+
+    skill_name = args.get("skill_name", "")
+    context = args.get("context", {})
+    runner = SkillEngine(workspace_root=".")
+    result = runner.execute_skill(skill_name=skill_name, context=context)
+    return result
+
+
+def handle_web_search(args):
+    try:
+        from web_gateway import InternetGateway
+    except ImportError:
+        try:
+            from src.sdk.web_gateway import InternetGateway
+        except ImportError:
+            return {"status": "error", "message": "InternetGateway module could not be loaded."}
+
+    query = args.get("query", "")
+    max_results = int(args.get("max_results", 5))
+    gateway = InternetGateway()
+    results = gateway.search(query=query, limit=max_results)
+    return {"query": query, "count": len(results), "results": results}
+
+
+def handle_fetch_page(args):
+    try:
+        from web_gateway import InternetGateway
+    except ImportError:
+        try:
+            from src.sdk.web_gateway import InternetGateway
+        except ImportError:
+            return {"status": "error", "message": "InternetGateway module could not be loaded."}
+
+    url = args.get("url", "")
+    max_chars = int(args.get("max_chars", 4000))
+    gateway = InternetGateway()
+    return gateway.fetch_page(url=url, max_chars=max_chars)
+
+
+def handle_synthesize_code(args):
+    try:
+        from synthesizer import DomainCodeSynthesizer
+    except ImportError:
+        try:
+            from src.sdk.synthesizer import DomainCodeSynthesizer
+        except ImportError:
+            return {"status": "error", "message": "DomainCodeSynthesizer module could not be loaded."}
+
+    domain = args.get("domain", "auth")
+    options = args.get("options", {}) or {}
+    synth = DomainCodeSynthesizer()
+
+    if domain == "ui":
+        title = options.get("title", "Hallwright Sovereign UI")
+        lang = options.get("lang", "uz")
+        css = synth.synthesize_ui_css(task=title, lang=lang)
+        html = synth.synthesize_ui_html(task=title, lang=lang)
+        js = synth.synthesize_ui_js(task=title, lang=lang)
+        return {
+            "domain": "ui",
+            "files": {
+                "styles.css": css,
+                "index.html": html,
+                "app.js": js
+            }
+        }
+    else:
+        code = synth.synthesize_code(f"Sovereign {domain} implementation", domain=domain)
+        filename = f"{domain}_service.py"
+        return {
+            "domain": domain,
+            "filename": filename,
+            "code": code
+        }
+
+
+def handle_get_tier(args):
+    try:
+        from tiers import SkillTierEngine
+    except ImportError:
+        try:
+            from src.sdk.tiers import SkillTierEngine
+        except ImportError:
+            return {"status": "error", "message": "SkillTierEngine module could not be loaded."}
+
+    engine = SkillTierEngine()
+    active = engine.get_active_tier()
+    return active.to_dict()
+
+
+def handle_set_tier(args):
+    try:
+        from tiers import SkillTierEngine
+    except ImportError:
+        try:
+            from src.sdk.tiers import SkillTierEngine
+        except ImportError:
+            return {"status": "error", "message": "SkillTierEngine module could not be loaded."}
+
+    tier_num = int(args.get("tier", 3))
+    engine = SkillTierEngine()
+    try:
+        policy = engine.set_active_tier(tier_num)
+        return {"status": "ok", "policy": policy.to_dict()}
+    except ValueError as err:
+        return {"status": "error", "message": str(err)}
+
+
 def validate_tool_arguments(tool_def, args):
     """
     Validates arguments against the tool's inputSchema per MCP JSON-RPC 2.0 specs.
@@ -709,6 +940,9 @@ def validate_tool_arguments(tool_def, args):
         elif expected_type == "boolean":
             if not isinstance(val, bool):
                 return f"Parameter '{field}' must be a boolean, got {type(val).__name__}."
+        elif expected_type == "object":
+            if not isinstance(val, dict):
+                return f"Parameter '{field}' must be a dictionary object, got {type(val).__name__}."
 
         # Enum check if specified
         if "enum" in prop_def and val not in prop_def["enum"]:
@@ -822,6 +1056,20 @@ def dispatch_request(req):
             output = handle_optimize_prompt(args)
         elif hw_name == "hallwright_heal_error":
             output = handle_heal_error(args)
+        elif hw_name == "hallwright_swarm":
+            output = handle_swarm(args)
+        elif hw_name == "hallwright_execute_skill":
+            output = handle_execute_skill(args)
+        elif hw_name == "hallwright_web_search":
+            output = handle_web_search(args)
+        elif hw_name == "hallwright_fetch_page":
+            output = handle_fetch_page(args)
+        elif hw_name == "hallwright_synthesize_code":
+            output = handle_synthesize_code(args)
+        elif hw_name == "hallwright_get_tier":
+            output = handle_get_tier(args)
+        elif hw_name == "hallwright_set_tier":
+            output = handle_set_tier(args)
         else:
             return {
                 "jsonrpc": "2.0",

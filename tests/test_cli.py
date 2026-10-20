@@ -584,7 +584,20 @@ def test_cmd_web_search_and_docs(capsys):
     assert len(data_d["hits"]) >= 1
 
 
-
-
-
-
+def test_cmd_sovereign_loop(capsys):
+    with tempfile.TemporaryDirectory() as tmpdir:
+        args = argparse.Namespace(
+            task="Build fast session token manager",
+            output_dir=tmpdir,
+            skip_web=True,
+            json=True
+        )
+        ret = hallwright_cli.cmd_sovereign(args)
+        assert ret == 0
+        captured = capsys.readouterr()
+        data = json.loads(captured.out)
+        assert data["status"] == "SOVEREIGN_EXECUTION_COMPLETED"
+        assert len(data["steps"]) >= 5
+        assert any(s["name"] == "11-Titan Swarm AgentMesh Generation" for s in data["steps"])
+        assert os.path.exists(os.path.join(tmpdir, "core_service.py"))
+        assert os.path.exists(os.path.join(tmpdir, "index.html"))

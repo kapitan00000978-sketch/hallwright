@@ -515,7 +515,8 @@ def cmd_metrics(args: argparse.Namespace) -> int:
 
 
 def cmd_context(args: argparse.Namespace) -> int:
-    """Dynamically builds a token-optimized, scar-tissue-injected prompt for any task."""
+    """Dynamically evaluates prompt quality, applying passthrough for fully specified prompts
+    and Council Master elevation for underspecified requests."""
     try:
         from context_selector import SmartMasterSelector
         from learning_memory import LearningMemory
@@ -525,14 +526,44 @@ def cmd_context(args: argparse.Namespace) -> int:
         print(f"[-] Error: Could not load context engine: {imp_err}", file=sys.stderr)
         return 1
 
+    try:
+        from prompt_engine import PromptEngine
+        prompt_engine = PromptEngine()
+    except ImportError:
+        try:
+            from src.sdk.prompt_engine import PromptEngine
+            prompt_engine = PromptEngine()
+        except ImportError:
+            prompt_engine = None
+
     task = args.task or ""
     files = args.files or []
+
+    # 1. Run prompt quality analysis and smart elevation
+    opt_res = None
+    effective_task = task
+    if prompt_engine and task:
+        opt_res = prompt_engine.optimize_prompt(task)
+        if opt_res and opt_res.status == "ELEVATION_APPLIED":
+            effective_task = opt_res.final_prompt
+
     lessons = memory.get_lessons(task=task, limit=4)
-    res = selector.build_dynamic_prompt(task_description=task, files=files, lessons=lessons)
+    res = selector.build_dynamic_prompt(task_description=effective_task, files=files, lessons=lessons)
+
+    if opt_res:
+        res["prompt_quality"] = opt_res.to_dict()
 
     if args.json:
         print(json.dumps(res, indent=2))
         return 0
+
+    if opt_res:
+        if opt_res.status == "PASSTHROUGH_OPTIMAL":
+            print(f"\n✨ [PROMPT EVALUATION]: PASSTHROUGH (Score: {opt_res.score.total_score}/100 - Comprehensive & Specific)")
+            print("   The prompt is already fully specified. Accepted as-is with zero artificial bloat.\n")
+        else:
+            print(f"\n⚡ [PROMPT ELEVATION]: ELEVATED (Score: {opt_res.score.total_score}/100 - Missing Key Invariants)")
+            print(f"   Applied: {', '.join(opt_res.enhancements_applied)}\n")
 
     print(res["prompt"])
     print("\n" + "-" * 70)
@@ -1112,9 +1143,9 @@ def main():
     p_tax.add_argument("--json", "-j", action="store_true", help="Output taxonomy in JSON format")
 
     # search / find / qidiruv
-    p_search = subparsers.add_parser("search", aliases=["find", "qidiruv"], help="Multi-index search across Council Masters, memory, libraries, plugins, and code")
+    p_search = subparsers.add_parser("search", aliases=["find", "qidiruv"], help="Multi-index search across Council Masters, memory, libraries, plugins, code, and live web")
     p_search.add_argument("query", help="Search query or keyword to find")
-    p_search.add_argument("--scope", "-s", default="all", choices=["all", "council", "memory", "code", "libraries", "lib", "plugins"], help="Target search scope (default: all)")
+    p_search.add_argument("--scope", "-s", default="all", choices=["all", "council", "memory", "code", "libraries", "lib", "plugins", "web"], help="Target search scope (default: all, includes web)")
     p_search.add_argument("--limit", "-l", type=int, default=5, help="Maximum results per category (default: 5)")
     p_search.add_argument("--json", "-j", action="store_true", help="Output search results in JSON format")
 

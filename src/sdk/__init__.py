@@ -18,6 +18,7 @@ from .pdk import (
 )
 from .plugin_loader import PluginLoader
 from .search_engine import SearchEngine, SearchHit, SearchResultSet, SearchScope
+from .prompt_engine import PromptEngine, PromptQualityScore, OptimizationResult
 
 __all__ = [
     "CraftsmanAgent",
@@ -42,4 +43,7 @@ __all__ = [
     "SearchHit",
     "SearchResultSet",
     "SearchScope",
+    "PromptEngine",
+    "PromptQualityScore",
+    "OptimizationResult",
 ]

@@ -111,3 +111,69 @@ def test_mcp_search_tool():
     assert parsed["query"] == "jwt"
     assert parsed["total_hits"] > 0
     assert "libraries" in parsed["by_category"]
+
+
+def test_search_web_offline_resilience(engine, monkeypatch):
+    import urllib.request
+    def mock_urlopen(*args, **kwargs):
+        raise urllib.error.URLError("Simulated offline network failure")
+    monkeypatch.setattr(urllib.request, "urlopen", mock_urlopen)
+
+    results = engine.search_web("FastAPI async", limit=5)
+    assert isinstance(results, list)
+    assert len(results) == 0  # Gracefully returned empty list without crashing
+
+
+def test_search_web_html_extraction(engine, monkeypatch):
+    import io
+    sample_html = (
+        '<div>'
+        '<a class="result__a" href="/l/?kh=-1&uddg=https%3A%2F%2Ffastapi.tiangolo.com%2Fasync%2F">'
+        'Concurrency and <b>async</b> / await - FastAPI</a>'
+        '<a class="result__snippet">Modern versions of <b>Python</b> have intuitive async.</a>'
+        '</div>'
+    )
+    class MockResponse:
+        def read(self):
+            return sample_html.encode("utf-8")
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+
+    import urllib.request
+    monkeypatch.setattr(urllib.request, "urlopen", lambda *args, **kwargs: MockResponse())
+
+    results = engine.search_web("FastAPI async", limit=1)
+    assert len(results) == 1
+    hit = results[0]
+    assert hit.category == "web"
+    assert "Concurrency and async / await - FastAPI" in hit.title
+    assert "https://fastapi.tiangolo.com/async/" in hit.metadata["url"]
+    assert "Modern versions of Python have intuitive async." in hit.snippet
+    assert hit.score >= 80.0
+
+
+def test_search_scope_web(engine, monkeypatch):
+    import io
+    sample_html = (
+        '<a class="result__a" href="https://example.com/docs">Example Docs</a>'
+        '<a class="result__snippet">Example technical documentation snippet.</a>'
+    )
+    class MockResponse:
+        def read(self):
+            return sample_html.encode("utf-8")
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+
+    import urllib.request
+    monkeypatch.setattr(urllib.request, "urlopen", lambda *args, **kwargs: MockResponse())
+
+    res = engine.search("FastAPI", scope="web", limit=3)
+    assert res.scope == "web"
+    assert res.total_hits == 1
+    assert "web" in res.by_category
+    assert "council" not in res.by_category
+

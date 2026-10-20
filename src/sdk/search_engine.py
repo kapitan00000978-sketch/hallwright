@@ -8,12 +8,16 @@ Provides unified, lightning-fast semantic and pattern search across:
 3. Enterprise Domain Libraries & Modules (src/libraries/)
 4. PDK Plugins & Autonomous Subagents (.agents/)
 5. Local Codebase & AST Patterns (Multi-language source tree)
+6. Live Web & Technical Documentation Search (DuckDuckGo Realtime)
 """
 
 import os
 import re
 import json
 import logging
+import html
+import urllib.request
+import urllib.parse
 from enum import Enum
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
@@ -28,6 +32,7 @@ class SearchScope(str, Enum):
     CODE = "code"
     LIBRARIES = "libraries"
     PLUGINS = "plugins"
+    WEB = "web"
 
 
 @dataclass
@@ -86,6 +91,7 @@ class SearchResultSet:
             "memory": ("🧠", "PROJECT MEMORY & SCAR TISSUE"),
             "plugins": ("🔌", "PDK PLUGINS & SUBAGENTS"),
             "code": ("💻", "WORKSPACE CODEBASE MATCHES"),
+            "web": ("🌐", "LIVE WEB SEARCH & DOCUMENTATION"),
         }
 
         for cat, (icon, label) in category_labels.items():
@@ -170,6 +176,13 @@ class SearchEngine:
             if code_hits:
                 by_cat["code"] = code_hits
                 all_hits.extend(code_hits)
+
+        # 6. Live Web Search (DuckDuckGo Realtime)
+        if scope_lower in ("all", "web", "internet"):
+            web_hits = self.search_web(clean_query, limit=limit)
+            if web_hits:
+                by_cat["web"] = web_hits
+                all_hits.extend(web_hits)
 
         # Global ranking by score descending
         all_hits.sort(key=lambda h: h.score, reverse=True)
@@ -562,3 +575,79 @@ class SearchEngine:
 
         hits.sort(key=lambda h: h.score, reverse=True)
         return hits[:limit]
+
+    def search_web(self, query: str, limit: int = 5, timeout: float = 4.0) -> List[SearchHit]:
+        """Perform real-time web and technical documentation search via DuckDuckGo HTML endpoint.
+
+        Features:
+        - Zero third-party dependencies (pure Python standard library).
+        - Automatic decoding of target URLs from redirect wrappers.
+        - Clean HTML stripping and entity unescaping.
+        - Resilient network error handling (never crashes or blocks on offline/timeout).
+        """
+        clean_q = (query or "").strip()
+        if not clean_q:
+            return []
+
+        hits: List[SearchHit] = []
+        encoded_query = urllib.parse.quote_plus(clean_q)
+        url = f"https://html.duckduckgo.com/html/?q={encoded_query}"
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+            }
+        )
+
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                content = resp.read().decode("utf-8", errors="replace")
+        except Exception as exc:
+            logger.debug("Live web search unavailable or timed out for %r: %s", clean_q, exc)
+            return hits
+
+        title_matches = re.findall(
+            r'<a[^>]+class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>',
+            content,
+            re.DOTALL
+        )
+        snippet_matches = re.findall(
+            r'<a[^>]+class="result__snippet"[^>]*>(.*?)</a>',
+            content,
+            re.DOTALL
+        )
+
+        for idx, (raw_href, raw_title) in enumerate(title_matches[:limit]):
+            clean_title = html.unescape(re.sub(r'<[^>]+>', '', raw_title)).strip()
+            if not clean_title:
+                continue
+
+            raw_snippet = snippet_matches[idx] if idx < len(snippet_matches) else ""
+            clean_snippet = html.unescape(re.sub(r'<[^>]+>', '', raw_snippet)).strip()
+
+            # Decode target destination from DDG redirect url
+            final_url = raw_href
+            if "uddg=" in raw_href:
+                try:
+                    parsed = urllib.parse.urlparse(raw_href)
+                    qs = urllib.parse.parse_qs(parsed.query)
+                    if "uddg" in qs and qs["uddg"]:
+                        final_url = qs["uddg"][0]
+                except Exception as parse_exc:
+                    logger.debug("Failed to decode target url %r: %s", raw_href, parse_exc)
+
+            # Score web results: top hit starts at 88.0, decaying slightly
+            score = max(50.0, 88.0 - (idx * 3.0))
+
+            hits.append(SearchHit(
+                category="web",
+                title=clean_title,
+                score=score,
+                snippet=clean_snippet,
+                metadata={"url": final_url, "engine": "duckduckgo_live"}
+            ))
+
+        return hits
+

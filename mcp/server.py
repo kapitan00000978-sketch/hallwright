@@ -378,19 +378,31 @@ TOOLS = [
     },
     {
         "name": "hallwright_search",
-        "description": "Unified high-speed multi-index search engine across Council Masters, persistent memory scar tissue, enterprise libraries, plugins, and workspace codebase.",
+        "description": "Unified high-speed multi-index search engine across Council Masters, persistent memory scar tissue, enterprise libraries, plugins, workspace codebase, and live web.",
         "inputSchema": {
             "type": "object",
             "properties": {
                 "query": {"type": "string", "description": "Search query or concept to look up"},
                 "scope": {
                     "type": "string",
-                    "enum": ["all", "council", "memory", "code", "libraries", "plugins"],
-                    "description": "Optional search scope filter (default: 'all')"
+                    "enum": ["all", "council", "memory", "code", "libraries", "plugins", "web"],
+                    "description": "Optional search scope filter (default: 'all', supports 'web' for live docs)"
                 },
                 "limit": {"type": "integer", "description": "Maximum number of results per category (default: 5)"}
             },
             "required": ["query"]
+        }
+    },
+    {
+        "name": "hallwright_optimize_prompt",
+        "description": "Evaluates user prompt quality across 5 engineering dimensions. If the prompt is already comprehensive and fully specified, it passes through untouched ('PASSTHROUGH_OPTIMAL'). If underspecified or vague, it elevates the prompt with Council Master domain constraints, zero-stub invariants, defensive error handling, and acceptance criteria.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "prompt": {"type": "string", "description": "The user prompt or engineering task to analyze and optimize"},
+                "domain": {"type": "string", "description": "Optional domain (e.g. backend, frontend, security, database)"}
+            },
+            "required": ["prompt"]
         }
     }
 ]
@@ -615,6 +627,22 @@ def handle_search(args):
     return results.to_dict()
 
 
+def handle_optimize_prompt(args):
+    try:
+        from prompt_engine import PromptEngine
+    except ImportError:
+        try:
+            from src.sdk.prompt_engine import PromptEngine
+        except ImportError:
+            return {"status": "error", "message": "PromptEngine module could not be loaded."}
+
+    prompt = args.get("prompt", "")
+    domain = args.get("domain")
+    engine = PromptEngine()
+    result = engine.optimize_prompt(prompt, domain=domain)
+    return result.to_dict()
+
+
 def validate_tool_arguments(tool_def, args):
     """
     Validates arguments against the tool's inputSchema per MCP JSON-RPC 2.0 specs.
@@ -762,6 +790,8 @@ def dispatch_request(req):
             output = handle_review_code(args)
         elif hw_name == "hallwright_search":
             output = handle_search(args)
+        elif hw_name == "hallwright_optimize_prompt":
+            output = handle_optimize_prompt(args)
         else:
             return {
                 "jsonrpc": "2.0",

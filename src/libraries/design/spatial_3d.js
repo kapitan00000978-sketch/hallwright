@@ -92,6 +92,28 @@ class SwarmParticle {
     }
 }
 
+class EnergyPulse {
+    constructor(fromParticle, toParticle, color = '#00F5FF') {
+        this.from = fromParticle;
+        this.to = toParticle;
+        this.color = color;
+        this.progress = 0;
+        this.speed = 0.022;
+        this.alive = true;
+    }
+
+    update() {
+        this.progress += this.speed;
+        if (this.progress >= 1.0) {
+            this.alive = false;
+        }
+    }
+
+    getCurrentPos() {
+        return this.from.pos.add(this.to.pos.sub(this.from.pos).multiplyScalar(this.progress));
+    }
+}
+
 class SpatialScene {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
@@ -101,6 +123,7 @@ class SpatialScene {
         this.ctx = this.canvas.getContext('2d');
         this.camera = new SpatialCamera(60, 1.0, 1, 2000);
         this.particles = [];
+        this.pulses = [];
         this.rotationY = 0;
         this.rotationX = 0;
         this.isDragging = false;
@@ -262,7 +285,40 @@ class SpatialScene {
             this.ctx.fillText(particle.label, proj.x, proj.y + nodeRadius + 14);
         }
 
+        // Render active energy pulses (Mesh communication beams)
+        for (let i = this.pulses.length - 1; i >= 0; i--) {
+            const pulse = this.pulses[i];
+            pulse.update();
+            if (!pulse.alive) {
+                this.pulses.splice(i, 1);
+                continue;
+            }
+            const pulsePos3D = this.rotateVector(pulse.getCurrentPos(), this.rotationX, this.rotationY);
+            const pulseProj = this.camera.project(pulsePos3D, width, height);
+            if (pulseProj) {
+                const pulseGlow = this.ctx.createRadialGradient(
+                    pulseProj.x, pulseProj.y, 1,
+                    pulseProj.x, pulseProj.y, 10 * pulseProj.scale
+                );
+                pulseGlow.addColorStop(0, '#FFFFFF');
+                pulseGlow.addColorStop(0.4, pulse.color);
+                pulseGlow.addColorStop(1, 'rgba(0,0,0,0)');
+                this.ctx.fillStyle = pulseGlow;
+                this.ctx.beginPath();
+                this.ctx.arc(pulseProj.x, pulseProj.y, 10 * pulseProj.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+        }
+
         requestAnimationFrame(() => this.render());
+    }
+
+    sendPulse(fromId, toId, color = '#00F5FF') {
+        const fromP = this.particles.find(p => p.id === fromId);
+        const toP = this.particles.find(p => p.id === toId);
+        if (fromP && toP) {
+            this.pulses.push(new EnergyPulse(fromP, toP, color));
+        }
     }
 
     start() {

@@ -132,7 +132,8 @@
             </div>
             <div style="display: flex; gap: 12px;">
                 <button class="btn-ghost" onclick="toggleAutoRotate()">Pause Orbit</button>
-                <button class="btn-primary" onclick="resetSwarmCamera()">Center Swarm</button>
+                <button class="btn-ghost" onclick="resetSwarmCamera()">Center Swarm</button>
+                <button class="btn-primary" onclick="simulateMeshDispatch()" style="background: linear-gradient(135deg, #A855F7 0%, #00F5FF 100%);">⚡ Dispatch Mesh Beam</button>
             </div>
         </header>
 
@@ -144,12 +145,12 @@
                     Interactive 3D Constellation
                 </div>
                 <div style="font-size: 12px; color: var(--text-muted); background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 6px;">
-                    Left-click + drag to rotate • Scroll to zoom
+                    Left-click + drag to rotate • Scroll to zoom • Energy Beams active
                 </div>
             </div>
             <div class="hud-stats">
                 <div class="stat-card">
-                    <div class="stat-value">7 Active</div>
+                    <div class="stat-value">11 Active</div>
                     <div class="stat-label">Sub-Agents</div>
                 </div>
                 <div class="stat-card">
@@ -271,16 +272,33 @@
         window.addEventListener('DOMContentLoaded', () => {
             scene = new SpatialScene('spatialCanvas');
 
-            // Register the 7 Sub-Agents in 3D orbit
+            // Register all 11 Council Titan Sub-Agents in 3D orbit
             scene.addAgent('architect', 'Marcus: Architect', '#00F5FF');
+            scene.addAgent('database', 'Cassandra: Database', '#F59E0B');
+            scene.addAgent('ai', 'Evelyn: AI/ML', '#8B5CF6');
             scene.addAgent('security', 'Gabriel: Security', '#F43F5E');
-            scene.addAgent('critic', 'Red-Team Critic', '#A855F7');
+            scene.addAgent('designer', 'Elena: UI/UX & 3D', '#E879F9');
+            scene.addAgent('performance', 'Valerie: Low-Latency', '#10B981');
+            scene.addAgent('devops', 'Gareth: DevOps', '#EF4444');
             scene.addAgent('tester', 'Mutation Tester', '#38BDF8');
-            scene.addAgent('performance', 'Systems Perf', '#10B981');
-            scene.addAgent('copywriter', 'Diana: Copywriter', '#F59E0B');
+            scene.addAgent('critic', 'Red-Team Critic', '#A855F7');
             scene.addAgent('healer', 'Auto-Healer', '#EC4899');
+            scene.addAgent('copywriter', 'Diana: Copywriter', '#FBBF24');
 
             scene.start();
+
+            // Periodic ambient mesh pulses
+            setInterval(() => {
+                const pairs = [
+                    ['architect', 'database', '#00F5FF'],
+                    ['database', 'security', '#F59E0B'],
+                    ['security', 'critic', '#F43F5E'],
+                    ['critic', 'healer', '#EC4899'],
+                    ['designer', 'architect', '#E879F9'],
+                ];
+                const [from, to, color] = pairs[Math.floor(Math.random() * pairs.length)];
+                scene.sendPulse(from, to, color);
+            }, 2500);
         });
 
         function toggleAutoRotate() {
@@ -296,6 +314,23 @@
                 scene.camera.zoom = 1.0;
                 scene.autoRotate = true;
             }
+        }
+
+        function simulateMeshDispatch() {
+            if (!scene) return;
+            const chain = [
+                ['architect', 'database', '#00F5FF'],
+                ['database', 'security', '#F59E0B'],
+                ['security', 'designer', '#F43F5E'],
+                ['designer', 'tester', '#E879F9'],
+                ['tester', 'critic', '#38BDF8'],
+                ['critic', 'healer', '#A855F7'],
+            ];
+            chain.forEach(([from, to, color], idx) => {
+                setTimeout(() => {
+                    scene.sendPulse(from, to, color);
+                }, idx * 400);
+            });
         }
     </script>
 </body>

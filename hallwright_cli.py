@@ -1194,8 +1194,14 @@ def main():
     # 3d / spatial / studio
     subparsers.add_parser("3d", aliases=["spatial", "studio"], help="Launch hardware-accelerated 3D spatial swarm dashboard")
 
-    # hud
-    subparsers.add_parser("hud", help="Launch interactive terminal dashboard")
+    # hud / sentinel / dashboard / tui
+    p_hud = subparsers.add_parser("hud", aliases=["sentinel", "dashboard", "tui"], help="Launch interactive terminal sentinel dashboard")
+    p_hud.add_argument("--once", action="store_true", help="Print single surveillance pass and exit cleanly")
+    p_hud.add_argument("--json", "-j", action="store_true", help="Output telemetry in JSON format and exit")
+    p_hud.add_argument("--audit", action="store_true", help="Execute Pre-Commit Gatekeeper audit pass directly")
+    p_hud.add_argument("--swarm", "-s", help="Dispatch multi-agent swarm task directly")
+    p_hud.add_argument("--heal", help="Dispatch autonomous web-healer on an error directly")
+    p_hud.add_argument("--prompt", "-p", help="Evaluate prompt quality directly")
 
     # watchdog
     subparsers.add_parser("watch", help="Launch background file watchdog sentinel")
@@ -1267,9 +1273,22 @@ def main():
         from server import main as mcp_main
         mcp_main()
         return 0
-    elif args.subcommand == "hud":
-        subprocess.run([sys.executable, os.path.join(ROOT_DIR, "cli", "dashboard.py")])
-        return 0
+    elif args.subcommand in ("hud", "sentinel", "dashboard", "tui"):
+        cmd_args = [sys.executable, os.path.join(ROOT_DIR, "cli", "dashboard.py")]
+        if getattr(args, "once", False):
+            cmd_args.append("--once")
+        if getattr(args, "json", False):
+            cmd_args.append("--json")
+        if getattr(args, "audit", False):
+            cmd_args.append("--audit")
+        if getattr(args, "swarm", None):
+            cmd_args.extend(["--swarm", args.swarm])
+        if getattr(args, "heal", None):
+            cmd_args.extend(["--heal", args.heal])
+        if getattr(args, "prompt", None):
+            cmd_args.extend(["--prompt", args.prompt])
+        res = subprocess.run(cmd_args)
+        return res.returncode
     elif args.subcommand == "watch":
         subprocess.run([sys.executable, os.path.join(ROOT_DIR, "scripts", "watchdog.py"), "--watch"])
         return 0

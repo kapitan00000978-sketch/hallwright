@@ -316,3 +316,19 @@ class SwarmOrchestrator:
             "orchestrated_at": datetime.now(timezone.utc).isoformat(),
         }
 
+
+def plan_swarm_pipeline(task: str, files: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+    """Convenience module function to plan a swarm pipeline."""
+    return SwarmOrchestrator().plan_swarm_pipeline(task, files)
+
+
+def execute_pipeline(task: str, files: Optional[List[str]] = None) -> Dict[str, Any]:
+    """Convenience module function to execute a swarm pipeline."""
+    return SwarmOrchestrator().execute_pipeline(task, files)
+
+
+def dispatch_swarm_mesh(task: str, files: Optional[List[str]] = None) -> Dict[str, Any]:
+    """Convenience module function to dispatch swarm across AgentMesh."""
+    return SwarmOrchestrator().dispatch_swarm_mesh(task, files)
+
+

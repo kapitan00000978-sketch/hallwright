@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Hallwright Engineering Core",
-  "lastUpdated": "2026-10-20T05:57:08.848403+00:00",
+  "lastUpdated": "2026-10-20T06:08:40.875510+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -111,10 +111,10 @@
       "id": "mis-0009",
       "category": "stub",
       "pattern": "Silent exception suppression ('except except: pass') verified via AST.",
-      "lesson": "Rejected in pre-commit audit (.\\hallwright_cli.py:333). Resolve Silent exception suppression ('except except: pass') verified via AST. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\cli\\dashboard.py:23). Resolve Silent exception suppression ('except except: pass') verified via AST. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-15T21:18:15.274803+00:00",
-      "updatedAt": "2026-10-20T05:54:42.879092+00:00"
+      "updatedAt": "2026-10-20T06:08:40.875510+00:00"
     },
     {
       "id": "mis-0010",

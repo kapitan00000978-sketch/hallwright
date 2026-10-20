@@ -916,17 +916,28 @@ def cmd_lib(args: argparse.Namespace) -> int:
 
 
 def cmd_3d(args: argparse.Namespace) -> int:
-    """Launch the Hallwright 3D Spatial Canvas Dashboard in the default browser."""
+    """Launch the Hallwright 3D Spatial Canvas Dashboard in the default browser with Live Mesh Hub."""
     import webbrowser
     html_path = os.path.join(ROOT_DIR, "src", "libraries", "design", "dashboard_3d.html")
     if not os.path.exists(html_path):
         print(f"[-] Error: 3D Dashboard HTML not found at {html_path}", file=sys.stderr)
         return 1
-    file_url = f"file://{os.path.abspath(html_path)}"
-    print(f"🚀 [HALLWRIGHT 3D SPATIAL DASHBOARD] Launching 3D Spatial Canvas...")
-    print(f"   Opening: {file_url}")
-    webbrowser.open(file_url)
+
+    target_url = f"file://{os.path.abspath(html_path)}"
+    try:
+        from live_hub import LiveHubServer
+        hub = LiveHubServer()
+        server_url = hub.start(background=True)
+        target_url = server_url
+        print(f"🚀 [HALLWRIGHT 3D SPATIAL DASHBOARD] Live AgentMesh Hub active at {server_url}")
+        print("   Real-time SSE event streaming and interactive Swarm execution ready!")
+    except Exception as hub_err:
+        print(f"⚠️  [Live Hub notice]: Starting in standalone file mode: {hub_err}")
+
+    print(f"   Opening: {target_url}")
+    webbrowser.open(target_url)
     return 0
+
 
 
 def cmd_completion(args: argparse.Namespace) -> int:

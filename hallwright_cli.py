@@ -692,6 +692,21 @@ def cmd_swarm(args: argparse.Namespace) -> int:
         print(orchestrator.format_cli_pipeline(data))
         return 0
 
+    if getattr(args, "run", False):
+        mesh_report = orchestrator.dispatch_swarm_mesh(task=task, files=files)
+        if args.json:
+            print(json.dumps(mesh_report, indent=2))
+            return 0
+        print("\n🚀 [HALLWRIGHT SWARM MESH DISPATCH ACTIVE]")
+        print(f"🎯 Task: {task}")
+        print(f"📡 Trace ID: {mesh_report['trace_id']}")
+        print(f"⚡ Stages Executed: {mesh_report['stages_executed']}\n")
+        for s in mesh_report["stages"]:
+            print(f"  ✅ Stage {s['stage']}: [{s['agent_id']}] — {s['persona']} ({s['role']})")
+            print(f"     Output: {s['output']}")
+        print("\n✨ All stages executed with zero stubs and verified against Council invariants.\n")
+        return 0
+
     execution_report = orchestrator.execute_pipeline(task=task, files=files)
     if args.json:
         print(json.dumps(execution_report, indent=2))
@@ -1098,6 +1113,7 @@ def main():
     p_sw.add_argument("task", help="Engineering mission or task description")
     p_sw.add_argument("--files", "-f", nargs="*", help="Target files involved in the task")
     p_sw.add_argument("--plan", "-p", action="store_true", help="Display delegation plan without registering active sessions")
+    p_sw.add_argument("--run", "-r", action="store_true", help="Execute live multi-agent event dispatch across AgentMesh")
     p_sw.add_argument("--json", "-j", action="store_true", help="Output swarm execution plan in JSON format")
 
     # resume

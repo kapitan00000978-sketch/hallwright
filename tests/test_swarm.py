@@ -19,7 +19,7 @@ from agent_registry import AgentRegistry
 
 
 def test_subagents_roster():
-    assert len(SUBAGENTS_ROSTER) == 7
+    assert len(SUBAGENTS_ROSTER) == 11
     expected = [
         "hallwright-architect",
         "hallwright-security",
@@ -27,7 +27,11 @@ def test_subagents_roster():
         "hallwright-tester",
         "hallwright-performance",
         "hallwright-copywriter",
-        "hallwright-healer"
+        "hallwright-healer",
+        "hallwright-designer",
+        "hallwright-database",
+        "hallwright-devops",
+        "hallwright-ai"
     ]
     for agent_id in expected:
         assert agent_id in SUBAGENTS_ROSTER
@@ -80,3 +84,17 @@ def test_format_cli_pipeline():
     assert "HALLWRIGHT MULTI-AGENT SWARM ORCHESTRATOR" in formatted
     assert "Delegated Stages" in formatted
     assert "hallwright-critic" in formatted
+
+
+def test_dispatch_swarm_mesh():
+    orchestrator = SwarmOrchestrator()
+    task = "Design high-throughput distributed database outbox and UI monitor"
+    result = orchestrator.dispatch_swarm_mesh(task, files=["outbox.py"])
+
+    assert result["status"] == "SWARM_MESH_COMPLETED"
+    assert result["stages_executed"] >= 3
+    assert result["trace_id"].startswith("swarm_")
+    agent_ids = [s["agent_id"] for s in result["stages"]]
+    assert "hallwright-architect" in agent_ids
+    assert "hallwright-database" in agent_ids
+

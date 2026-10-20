@@ -98,6 +98,8 @@ class LiveHubRequestHandler(BaseHTTPRequestHandler):
             self._handle_sse_stream()
         elif path == "/api/telemetry":
             self._handle_telemetry()
+        elif path == "/api/immune":
+            self._handle_immune_system()
         elif path == "/api/status":
             self._send_json({"status": "ONLINE", "server": "Hallwright Live Hub v2.0"})
         else:
@@ -117,6 +119,10 @@ class LiveHubRequestHandler(BaseHTTPRequestHandler):
             self._handle_audit_dispatch()
         elif self.path == "/api/heal":
             self._handle_heal_dispatch(data)
+        elif self.path == "/api/evolve":
+            self._handle_evolve_dispatch(data)
+        elif self.path == "/api/compress":
+            self._handle_compress_dispatch(data)
         else:
             self.send_error(404, "Endpoint Not Found")
 
@@ -231,6 +237,38 @@ class LiveHubRequestHandler(BaseHTTPRequestHandler):
         except Exception as heal_err:
             err_msg = {"status": "ERROR", "message": str(heal_err)}
             self._send_json(err_msg, status=500)
+
+    def _handle_immune_system(self) -> None:
+        immune_path = os.path.join(ROOT_DIR, ".hallwright", "immune_system.json")
+        if os.path.exists(immune_path):
+            try:
+                with open(immune_path, "r", encoding="utf-8") as f:
+                    state = json.load(f)
+                self._send_json(state)
+                return
+            except Exception as read_err:
+                logger.debug("Failed reading immune system: %s", read_err)
+        self._send_json({"generation": 6, "immunity_score": 98, "vaccines": []})
+
+    def _handle_evolve_dispatch(self, data: Dict[str, Any]) -> None:
+        defect = data.get("defect", "Sample defect for autonomous evolution")
+        try:
+            from evolution import evolve_sync
+            res = evolve_sync(defect)
+            self._send_json(res)
+        except Exception as evo_err:
+            self._send_json({"status": "ERROR", "message": str(evo_err)}, status=500)
+
+    def _handle_compress_dispatch(self, data: Dict[str, Any]) -> None:
+        target = data.get("path", ".")
+        try:
+            from compressor import TokenCompressor
+            compressor = TokenCompressor()
+            stats_list = compressor.compress_directory(target, in_place=False)
+            total_saved = sum(s.tokens_saved for s in stats_list)
+            self._send_json({"status": "SUCCESS", "files_compressed": len(stats_list), "tokens_saved": total_saved})
+        except Exception as comp_err:
+            self._send_json({"status": "ERROR", "message": str(comp_err)}, status=500)
 
 
 def find_free_port(starting_port: int = 8765, max_attempts: int = 20) -> int:

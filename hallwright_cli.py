@@ -1155,6 +1155,158 @@ def cmd_evolve(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_compress(args: argparse.Namespace) -> int:
+    """Removes redundant '#' and '//' comments and whitespace to save LLM context tokens."""
+    try:
+        from compressor import TokenCompressor
+    except ImportError:
+        try:
+            from src.sdk.compressor import TokenCompressor
+        except ImportError:
+            print("[-] Error: TokenCompressor module could not be loaded.", file=sys.stderr)
+            return 1
+
+    compressor = TokenCompressor()
+    target_path = getattr(args, "path", ".") or "."
+    in_place = getattr(args, "in_place", False)
+    as_json = getattr(args, "json", False)
+    exts = getattr(args, "ext", "")
+    target_exts = [e.strip() if e.strip().startswith(".") else f".{e.strip()}" for e in exts.split(",")] if exts else None
+
+    if os.path.isfile(target_path):
+        _, stats = compressor.compress_file(target_path, in_place=in_place)
+        stats_list = [stats]
+    elif os.path.isdir(target_path):
+        stats_list = compressor.compress_directory(target_path, extensions=target_exts, in_place=in_place)
+    else:
+        print(f"[-] Error: Target path '{target_path}' not found.", file=sys.stderr)
+        return 1
+
+    total_orig = sum(s.original_tokens for s in stats_list)
+    total_comp = sum(s.compressed_tokens for s in stats_list)
+    total_saved = sum(s.tokens_saved for s in stats_list)
+    total_comments = sum(s.comments_removed for s in stats_list)
+    overall_pct = (total_saved / total_orig * 100.0) if total_orig > 0 else 0.0
+
+    if as_json:
+        print(json.dumps({
+            "target": target_path,
+            "in_place": in_place,
+            "files_processed": len(stats_list),
+            "total_original_tokens": total_orig,
+            "total_compressed_tokens": total_comp,
+            "total_tokens_saved": total_saved,
+            "savings_pct": round(overall_pct, 2),
+            "total_comments_removed": total_comments,
+            "files": [s.to_dict() for s in stats_list]
+        }, indent=2))
+        return 0
+
+    print("\n" + "=" * 78)
+    print(" ⚡ HALLWRIGHT TOKEN COMPRESSOR & AST COMMENT STRIPPER")
+    print("=" * 78)
+    print(f" [TARGET]        : {target_path} ({'MODIFIED IN-PLACE' if in_place else 'DRY RUN / CHECK'})")
+    print(f" [FILES SCANNED] : {len(stats_list)} files with comment noise")
+    print(f" [COMMENTS CUT]  : {total_comments} redundant '#' or '//' lines eliminated")
+    print(f" [TOKENS SAVED]  : {total_saved:,} tokens ({overall_pct:.1f}% reduction)")
+    print(f" [TOKEN BUDGET]  : {total_orig:,} tokens -> {total_comp:,} tokens")
+    print("-" * 78)
+    if stats_list:
+        print(" 📄 TOP COMPRESSED FILES:")
+        for s in sorted(stats_list, key=lambda x: x.tokens_saved, reverse=True)[:8]:
+            fname = os.path.relpath(s.file_path, target_path) if os.path.isabs(s.file_path) else s.file_path
+            print(f"  • {fname:<40} -{s.tokens_saved:>5} tok ({s.savings_pct:>4.1f}%) | {s.comments_removed} comments cut")
+    else:
+        print("  ✨ All files are already maximally compressed and token-dense. Zero comment bloat!")
+    print("=" * 78 + "\n")
+    return 0
+
+
+def cmd_arena(args: argparse.Namespace) -> int:
+    """Executes closed-loop Red vs Blue adversarial combat simulation."""
+    try:
+        from arena import AdversarialArena
+    except ImportError:
+        try:
+            from src.sdk.arena import AdversarialArena
+        except ImportError:
+            print("[-] Error: AdversarialArena module could not be loaded.", file=sys.stderr)
+            return 1
+
+    arena = AdversarialArena(workspace_root=".")
+    as_json = getattr(args, "json", False)
+    auto_evolve = not getattr(args, "no_evolve", False)
+
+    res = arena.execute_simulation(auto_evolve=auto_evolve)
+
+    if as_json:
+        print(json.dumps(res, indent=2))
+        return 0
+
+    print("\n" + "=" * 78)
+    print(" ⚔️  HALLWRIGHT ADVERSARIAL COMBAT ARENA — RED VS BLUE SIMULATION")
+    print("=" * 78)
+    print(f" [STATUS]          : {res['status']} ({res['attacks_repelled']}/{res['total_rounds']} Repelled)")
+    print(f" [DEFENSE SCORE]   : {res['defense_score']}/100 Cyber Resilience")
+    print(f" [GENERATION]      : Gen {res['current_generation']}")
+    print(f" [VACCINES FORGED] : {res['vaccines_synthesized']} dynamic defenses evolved")
+    print(f" [COMBAT DURATION] : {res['duration_seconds']}s")
+    print("-" * 78)
+    print(" 🛡️  ENGAGEMENT TELEMETRY:")
+    for r in res.get("rounds", []):
+        status_icon = "✅ REPELLED" if not r["breached"] else "💥 BREACHED"
+        print(f"  • Round {r['round_number']} [{r['category'].upper()}]: {r['vector_name']}")
+        print(f"    Defense : {status_icon} via [{r['defense_rule_applied']}] ({r['resolution_time_ms']}ms)")
+        if r.get("evolved_vaccine_id"):
+            print(f"    Evolved : Evolved new vaccine {r['evolved_vaccine_id']} (Advanced to Gen {r['generation_advanced_to']})")
+    print("=" * 78 + "\n")
+    return 0
+
+
+def cmd_daemon(args: argparse.Namespace) -> int:
+    """Runs autonomous background watcher daemon for real-time surveillance, compression, and healing."""
+    try:
+        from watcher_daemon import WatcherDaemon
+    except ImportError:
+        try:
+            from src.sdk.watcher_daemon import WatcherDaemon
+        except ImportError:
+            print("[-] Error: WatcherDaemon module could not be loaded.", file=sys.stderr)
+            return 1
+
+    interval = getattr(args, "interval", 2.0) or 2.0
+    auto_heal = not getattr(args, "no_heal", False)
+    once = getattr(args, "once", False)
+    daemon = WatcherDaemon(workspace_root=".", poll_interval=interval)
+
+    if once:
+        events = daemon.check_changes(auto_heal=auto_heal)
+        print(f"\n🛰️  [HALLWRIGHT WATCHER DAEMON]: Single surveillance pass completed.")
+        print(f"   Changes detected: {len(events)}")
+        for ev in events:
+            print(f"   • {ev.file_path} (Tokens saved: {ev.tokens_saved}, Healed: {ev.healed})")
+        return 0
+
+    print("\n" + "=" * 78)
+    print(" 🛰️  HALLWRIGHT AUTONOMOUS SURVEILLANCE & REPAIR DAEMON")
+    print("=" * 78)
+    print(f" [SURVEILLANCE] : Active on '.' (Interval: {interval}s)")
+    print(f" [AUTO-COMPRESS]: Active (Zero Comment Bloat Invariant)")
+    print(f" [AUTO-HEAL]    : {'ENABLED' if auto_heal else 'DISABLED'}")
+    print(" [STATUS]       : Monitoring file saves silently in the background...")
+    print(" [CONTROL]      : Press Ctrl+C to terminate surveillance.")
+    print("=" * 78 + "\n")
+
+    thread = daemon.start_background(auto_heal=auto_heal)
+    try:
+        while True:
+            time.sleep(1.0)
+    except (KeyboardInterrupt, EOFError):
+        print("\n\nStopping surveillance daemon. Stand tall, Master.\n")
+        daemon.stop()
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="hallwright",
@@ -1309,6 +1461,23 @@ def main():
     p_evo.add_argument("--status", "-s", action="store_true", help="Display current generation, immunity score, and synthesized vaccines")
     p_evo.add_argument("--json", "-j", action="store_true", help="Output immune ledger in JSON format")
 
+    # compress / strip / teja / minify
+    p_comp = subparsers.add_parser("compress", aliases=["strip", "teja", "minify"], help="Remove redundant comments and whitespace to save LLM context tokens")
+    p_comp.add_argument("path", nargs="?", default=".", help="Target source file or directory (default: current directory)")
+    p_comp.add_argument("--in-place", "-i", action="store_true", help="Apply compression and comment stripping directly to files")
+    p_comp.add_argument("--ext", "-e", help="Comma-separated file extensions to process (e.g. .py,.js,.ts)")
+    p_comp.add_argument("--json", "-j", action="store_true", help="Output compression statistics in JSON format")
+
+    # arena / jang / red-team / combat
+    p_arena = subparsers.add_parser("arena", aliases=["jang", "red-team", "combat"], help="Run autonomous closed-loop Red-Team vs Blue-Team combat simulation")
+    p_arena.add_argument("--no-evolve", action="store_true", help="Disable automatic vaccine synthesis on breach")
+    p_arena.add_argument("--json", "-j", action="store_true", help="Output combat telemetry in JSON format")
+
+    # daemon / watcher / guard-daemon
+    p_daemon = subparsers.add_parser("daemon", aliases=["watcher", "guard-daemon"], help="Run autonomous background watcher daemon for surveillance and compression")
+    p_daemon.add_argument("--interval", "-i", type=float, default=2.0, help="Polling interval in seconds (default: 2.0)")
+    p_daemon.add_argument("--no-heal", action="store_true", help="Disable automatic remediation of detected flaws")
+    p_daemon.add_argument("--once", action="store_true", help="Perform a single surveillance scan and exit")
 
     args = parser.parse_args()
 
@@ -1324,6 +1493,12 @@ def main():
         return cmd_heal(args)
     elif args.subcommand in ("evolve", "immunitet", "vaccine"):
         return cmd_evolve(args)
+    elif args.subcommand in ("compress", "strip", "teja", "minify"):
+        return cmd_compress(args)
+    elif args.subcommand in ("arena", "jang", "red-team", "combat"):
+        return cmd_arena(args)
+    elif args.subcommand in ("daemon", "watcher", "guard-daemon"):
+        return cmd_daemon(args)
 
     elif args.subcommand == "memory":
         return cmd_memory(args)

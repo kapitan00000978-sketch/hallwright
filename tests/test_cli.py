@@ -450,3 +450,49 @@ def test_cmd_3d(capsys, monkeypatch):
     assert len(opened_urls) == 1
     assert "dashboard_3d.html" in opened_urls[0] or "127.0.0.1" in opened_urls[0]
 
+
+def test_cmd_compress(capsys, tmp_path):
+    f = tmp_path / "test_file.py"
+    f.write_text("# Redundant comment\nx = 10\n# Another comment\n", encoding="utf-8")
+    args = argparse.Namespace(
+        path=str(f),
+        in_place=False,
+        json=True,
+        ext="",
+    )
+    ret = hallwright_cli.cmd_compress(args)
+    assert ret == 0
+    captured = capsys.readouterr()
+    data = json.loads(captured.out)
+    assert data["files_processed"] == 1
+    assert data["total_tokens_saved"] > 0
+    assert data["total_comments_removed"] >= 2
+
+
+def test_cmd_arena(capsys):
+    args = argparse.Namespace(
+        json=True,
+        no_evolve=False,
+    )
+    ret = hallwright_cli.cmd_arena(args)
+    assert ret == 0
+    captured = capsys.readouterr()
+    data = json.loads(captured.out)
+    assert "defense_score" in data
+    assert data["defense_score"] >= 90
+    assert len(data["rounds"]) >= 4
+
+
+def test_cmd_daemon_once(capsys):
+    args = argparse.Namespace(
+        once=True,
+        interval=1.0,
+        no_heal=False,
+    )
+    ret = hallwright_cli.cmd_daemon(args)
+    assert ret == 0
+    captured = capsys.readouterr()
+    assert "HALLWRIGHT WATCHER DAEMON" in captured.out
+
+
+

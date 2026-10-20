@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Hallwright Engineering Core",
-  "lastUpdated": "2026-10-20T06:37:55.639876+00:00",
+  "lastUpdated": "2026-10-20T06:42:51.662060+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -60,7 +60,7 @@
       "lesson": "Always enforce pagination limits.",
       "severity": "high",
       "recordedAt": "2026-10-15T15:08:39.779478+00:00",
-      "updatedAt": "2026-10-20T05:56:24.222277+00:00"
+      "updatedAt": "2026-10-20T06:40:57.464906+00:00"
     },
     {
       "id": "mis-0004",
@@ -69,7 +69,7 @@
       "lesson": "Always verify algorithm is HS256/RS256",
       "severity": "high",
       "recordedAt": "2026-10-15T18:30:24.182735+00:00",
-      "updatedAt": "2026-10-20T05:01:54.543835+00:00"
+      "updatedAt": "2026-10-20T06:42:51.662060+00:00"
     },
     {
       "id": "mis-0005",
@@ -251,7 +251,7 @@
       "lesson": "Resolved 'ZeroDivisionError division by zero'. Defense: 2. Architecture Defense: Validate boundaries, use parameterized calls, and handle exceptions explicitly.",
       "severity": "high",
       "recordedAt": "2026-10-20T05:54:09.681571+00:00",
-      "updatedAt": "2026-10-20T06:19:43.674960+00:00"
+      "updatedAt": "2026-10-20T06:41:32.045701+00:00"
     },
     {
       "id": "sca-0003",
@@ -260,7 +260,7 @@
       "lesson": "Resolved 'TypeError 'NoneType' object is not callable'. Defense: 2. Architecture Defense: Validate boundaries, use parameterized calls, and handle exceptions explicitly.",
       "severity": "high",
       "recordedAt": "2026-10-20T05:54:12.213199+00:00",
-      "updatedAt": "2026-10-20T06:19:45.998013+00:00"
+      "updatedAt": "2026-10-20T06:41:34.203168+00:00"
     },
     {
       "id": "sca-0004",

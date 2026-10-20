@@ -1,10 +1,10 @@
 {
   "version": "1.0.0",
   "project": "Hallwright Autonomous Immune Core",
-  "generation": 2,
-  "immunity_score": 94,
-  "last_evolved_at": "2026-10-20T06:36:20.912748+00:00",
-  "total_vaccines": 4,
+  "generation": 4,
+  "immunity_score": 96,
+  "last_evolved_at": "2026-10-20T06:41:34.229541+00:00",
+  "total_vaccines": 6,
   "vaccines": [
     {
       "id": "vac-001",
@@ -45,6 +45,26 @@
       "web_solution": "Implement defensive boundary guards (e.g. check None, 0, and collection bounds) before operations.",
       "guardrail_rule": "DEFENSIVE_BOUNDARY_AND_NULL_GUARD",
       "created_at": "2026-10-20T06:36:20.912748+00:00"
+    },
+    {
+      "id": "vac-005",
+      "generation": 3,
+      "category": "runtime",
+      "error_signature": "ZeroDivisionError: unhandled zero divisor in computation",
+      "root_cause": "Defect 'ZeroDivisionError: unhandled zero divisor in computation' occurred in workspace",
+      "web_solution": "Implement defensive boundary guards (e.g. check None, 0, and collection bounds) before operations.",
+      "guardrail_rule": "DEFENSIVE_BOUNDARY_AND_NULL_GUARD",
+      "created_at": "2026-10-20T06:41:32.071993+00:00"
+    },
+    {
+      "id": "vac-006",
+      "generation": 4,
+      "category": "runtime",
+      "error_signature": "TypeError: unexpected type operation without typeguard",
+      "root_cause": "Defect 'TypeError: unexpected type operation without typeguard' occurred in workspace",
+      "web_solution": "Implement defensive boundary guards (e.g. check None, 0, and collection bounds) before operations.",
+      "guardrail_rule": "DEFENSIVE_BOUNDARY_AND_NULL_GUARD",
+      "created_at": "2026-10-20T06:41:34.229541+00:00"
     }
   ]
 }

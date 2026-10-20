@@ -172,6 +172,14 @@ class AutonomousWebHealer:
             except Exception as mem_err:
                 logger.debug("Failed to record healed scar tissue: %s", mem_err)
 
+            # Trigger non-blocking autonomous background self-evolution
+            try:
+                from evolution import evolve_async
+                evolve_async(defect)
+            except Exception as evo_err:
+                logger.debug("Background evolution trigger skipped: %s", evo_err)
+
+
         return HealingResult(
             query=query,
             diagnosis=diagnosis,

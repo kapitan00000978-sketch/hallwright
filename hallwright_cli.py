@@ -1091,6 +1091,70 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_evolve(args: argparse.Namespace) -> int:
+    """Handles autonomous self-evolution, background vaccine synthesis, and immunity ledger inspection."""
+    try:
+        from evolution import SelfEvolutionEngine, evolve_async, evolve_sync
+    except ImportError:
+        try:
+            from src.sdk.evolution import SelfEvolutionEngine, evolve_async, evolve_sync
+        except ImportError:
+            print("[-] Error: Evolution engine could not be loaded.", file=sys.stderr)
+            return 1
+
+    engine = SelfEvolutionEngine(workspace_root=".")
+    as_json = getattr(args, "json", False)
+    defect = getattr(args, "defect", "")
+    is_async = getattr(args, "is_async", False)
+
+    if defect:
+        if is_async:
+            evolve_async(defect)
+            if as_json:
+                print(json.dumps({"status": "BACKGROUND_THREAD_LAUNCHED", "defect": defect, "unblocked": True}))
+                return 0
+            print(f"\n🧬 [AUTONOMOUS SELF-EVOLUTION ACTIVE]")
+            print(f"⚡ Defect ingested: \"{defect}\"")
+            print("🚀 Background research thread launched! AI agent is UNBLOCKED and working at full speed.")
+            print("✨ Vaccine will be synthesized and added to .hallwright/immune_system.json automatically.\n")
+            return 0
+        else:
+            result = evolve_sync(defect)
+            if as_json:
+                print(json.dumps(result, indent=2))
+                return 0
+            print(f"\n🧬 [AUTONOMOUS SELF-EVOLUTION COMPLETED]")
+            print(f"🎯 Status: {result.get('status')}")
+            print(f"⚡ Project Generation: Gen {result.get('generation')}")
+            vac = result.get("vaccine", {})
+            print(f"💉 Synthesized Vaccine: [{vac.get('id')}] {vac.get('error_signature')}")
+            print(f"🛡️  Evolved Guardrail Rule: {vac.get('guardrail_rule')}")
+            print(f"💡 Web Solution: {vac.get('web_solution')}")
+            print(f"📊 Immunity Resilience Score: {result.get('immunity_score', 95)}/100\n")
+            return 0
+
+    state = engine.load_immune_state()
+    if as_json:
+        print(json.dumps(state, indent=2))
+        return 0
+
+    print("\n" + "=" * 78)
+    print(" 🧬 HALLWRIGHT AUTONOMOUS IMMUNE LEDGER & SELF-EVOLUTION SYSTEM")
+    print("=" * 78)
+    print(f" [GENERATION]     : Generation {state.get('generation', 1)}")
+    print(f" [IMMUNITY SCORE] : {state.get('immunity_score', 90)}/100 Resilience")
+    print(f" [TOTAL VACCINES] : {state.get('total_vaccines', len(state.get('vaccines', [])))} Guardrail Invariants")
+    print(f" [LAST EVOLVED]   : {state.get('last_evolved_at', 'N/A')}")
+    print("-" * 78)
+    print(" 💉 ACTIVE SYNTHESIZED IMMUNITY VACCINES:")
+    for v in state.get("vaccines", []):
+        print(f"  • [{v.get('id')}] (Gen {v.get('generation')}) [{v.get('category').upper()}]: {v.get('error_signature')}")
+        print(f"    Rule    : {v.get('guardrail_rule')}")
+        print(f"    Solution: {v.get('web_solution')[:90]}...\n")
+    print("=" * 78 + "\n")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         prog="hallwright",
@@ -1238,6 +1302,14 @@ def main():
     p_heal.add_argument("--file", "-f", help="Target source file associated with the error")
     p_heal.add_argument("--json", "-j", action="store_true", help="Output healing report in JSON format")
 
+    # evolve / immunitet / vaccine
+    p_evo = subparsers.add_parser("evolve", aliases=["immunitet", "vaccine"], help="Inspect or trigger autonomous non-blocking self-evolution")
+    p_evo.add_argument("defect", nargs="?", default="", help="Defect text, traceback, or pattern to ingest and evolve against")
+    p_evo.add_argument("--async", "-a", dest="is_async", action="store_true", help="Run evolution in non-blocking background thread (AI agent is never halted)")
+    p_evo.add_argument("--status", "-s", action="store_true", help="Display current generation, immunity score, and synthesized vaccines")
+    p_evo.add_argument("--json", "-j", action="store_true", help="Output immune ledger in JSON format")
+
+
     args = parser.parse_args()
 
     if not args.subcommand or args.subcommand == "status":
@@ -1250,6 +1322,9 @@ def main():
         return cmd_fix(args)
     elif args.subcommand in ("heal", "research-fix", "davola"):
         return cmd_heal(args)
+    elif args.subcommand in ("evolve", "immunitet", "vaccine"):
+        return cmd_evolve(args)
+
     elif args.subcommand == "memory":
         return cmd_memory(args)
     elif args.subcommand == "doctor":

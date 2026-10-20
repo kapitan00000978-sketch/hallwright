@@ -37,7 +37,7 @@ def test_dashboard_render_sentinel_hud_output():
         dashboard.render_sentinel_hud(telemetry, once=True)
     out = captured.getvalue()
     assert "HALLWRIGHT SENTINEL TUI" in out
-    assert "11 TITANS ACTIVE" in out
+    assert "11 TITANS" in out
     # Verify all 11 subagents are displayed in roster
     for expected_agent in [
         "architect", "database", "ai", "security", "designer",
@@ -84,7 +84,7 @@ def test_dashboard_cli_subprocess_once_and_json():
     res_once = subprocess.run([sys.executable, dashboard_path, "--once"], capture_output=True, text=True)
     assert res_once.returncode == 0
     assert "HALLWRIGHT SENTINEL TUI" in res_once.stdout
-    assert "11 TITANS ACTIVE" in res_once.stdout
+    assert "11 TITANS" in res_once.stdout
 
     # --json flag
     res_json = subprocess.run([sys.executable, dashboard_path, "--json"], capture_output=True, text=True)

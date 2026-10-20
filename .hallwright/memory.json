@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Hallwright Engineering Core",
-  "lastUpdated": "2026-10-20T06:08:40.875510+00:00",
+  "lastUpdated": "2026-10-20T06:37:55.639876+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -163,10 +163,10 @@
       "id": "mis-0015",
       "category": "stub",
       "pattern": "Silent exception suppression detected. Log or handle errors.",
-      "lesson": "Rejected in pre-commit audit (.\\hallwright_cli.py:886). Resolve Silent exception suppression detected. Log or handle errors. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\evolution.py:121). Resolve Silent exception suppression detected. Log or handle errors. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-18T02:35:32.998172+00:00",
-      "updatedAt": "2026-10-18T03:02:43.605499+00:00"
+      "updatedAt": "2026-10-20T06:37:55.639876+00:00"
     },
     {
       "id": "mis-0016",
@@ -251,7 +251,7 @@
       "lesson": "Resolved 'ZeroDivisionError division by zero'. Defense: 2. Architecture Defense: Validate boundaries, use parameterized calls, and handle exceptions explicitly.",
       "severity": "high",
       "recordedAt": "2026-10-20T05:54:09.681571+00:00",
-      "updatedAt": "2026-10-20T05:57:06.458283+00:00"
+      "updatedAt": "2026-10-20T06:19:43.674960+00:00"
     },
     {
       "id": "sca-0003",
@@ -260,7 +260,7 @@
       "lesson": "Resolved 'TypeError 'NoneType' object is not callable'. Defense: 2. Architecture Defense: Validate boundaries, use parameterized calls, and handle exceptions explicitly.",
       "severity": "high",
       "recordedAt": "2026-10-20T05:54:12.213199+00:00",
-      "updatedAt": "2026-10-20T05:57:08.848403+00:00"
+      "updatedAt": "2026-10-20T06:19:45.998013+00:00"
     },
     {
       "id": "sca-0004",

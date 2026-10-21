@@ -115,20 +115,22 @@ Hallwright (repo `kapitan00000978-sketch/hallwright`; formerly Hallwright, forme
   - Implemented `compact`: When `INDEX.md` exceeds 30 lines, archives oldest 10 sessions to `.hallwright/memory/sessions/archive/` and merges them into a single summary line.
   - Implemented atomic writes (`tempfile.mkstemp` + `os.replace`), exclusive lockfile concurrency protection, and secret refusal pattern matching (`sk-...`, `ghp_...`, `password=...`).
   - Verified live command flow: `start`, `note`, `show`, `verify`, `finish`.
+- **HWMEM Step 2 & 3 (Safety, Concurrency & Comprehensive unittest Suite):**
+  - Created standard `unittest` test suite in `tests/test_hwmem.py`.
+  - Verified lifecycle flow: `test_start_note_finish_flow` passed.
+  - Verified security refusal: `test_secret_refusal` passed (rejects `sk-...`, `ghp_...`, `password=...` without saving to disk).
+  - Verified compaction: `test_index_cap_and_compact` passed (compacts 32 sessions to <= 30 index lines, archives 10 files, merges summary line).
+  - Verified resilience: `test_corrupt_and_missing_file_resilience` passed (survives missing files, corrupt binary noise, and console encoding quirks).
+  - Verified diagnostics: `test_verify_detects_missing_path_and_binary` passed (detects missing files/commands; passes on real files).
+  - Verified concurrency: `test_concurrent_writers` passed (4 parallel threads writing 20 notes simultaneously with zero data corruption).
+  - Test result: 6/6 tests passing in 1.497s (`python -m unittest tests/test_hwmem.py`). Gatekeeper audit: 100/100 certified clean.
 
 ### Remaining
-- **HWMEM Step 2:** Deep concurrency & safety stress-testing (corrupt file recovery, dual concurrent writers).
-- **HWMEM Step 3:** Comprehensive `unittest` suite in `tests/test_hwmem.py`.
 - **HWMEM Step 4:** Agent instructions file `skills/hwmem/SKILL.md` (< 200 words).
 - **HWMEM Step 5:** `tokens.py` & `measure.py` (10 demo sessions, comparison table labeled ESTIMATE).
 - **HWMEM Step 6:** `experiments/RESULTS.md` A/B benchmark scenario.
 
 ### Next Command
-- Step 2 & 3: Run comprehensive unit test suite: `python -m unittest tests/test_hwmem.py`
+- Step 4: Create `skills/hwmem/SKILL.md` (< 200 words).
 
-### Decisions
-- Standard library only (`os`, `sys`, `re`, `tempfile`, `shutil`, `argparse`, `pathlib`, `time`, `datetime`).
-- Session file structure strictly follows 6 sections with `.hallwright.memory` marker.
-- Storage path: `.hallwright/memory/INDEX.md` and `.hallwright/memory/sessions/`.
-- Secret detection blocks writes before disk access.
 

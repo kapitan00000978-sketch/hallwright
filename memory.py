@@ -17,6 +17,13 @@ from pathlib import Path
 
 logger = logging.getLogger("hwmem")
 
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except (AttributeError, OSError) as enc_err:
+        logger.debug("Stdout encoding reconfigure skipped: %s", enc_err)
+
 MEMORY_DIR = Path(".hallwright/memory")
 SESSIONS_DIR = MEMORY_DIR / "sessions"
 ARCHIVE_DIR = SESSIONS_DIR / "archive"
@@ -117,8 +124,9 @@ def _list_session_files() -> list:
         f for f in SESSIONS_DIR.glob("*.md")
         if f.is_file() and not f.name.startswith("tmp_") and f.name != "INDEX.md"
     ]
-    files.sort(key=lambda p: p.name)
+    files.sort(key=lambda p: (p.stat().st_mtime, p.name))
     return files
+
 
 
 def _get_latest_session_file() -> Path:
@@ -346,7 +354,12 @@ def cmd_show(max_tokens: int = 400) -> int:
     if len(full_output) > char_cap:
         full_output = full_output[:char_cap] + "\n\n[... Truncated by hwmem --max-tokens cap ...]"
 
-    print(full_output)
+    try:
+        print(full_output)
+    except UnicodeEncodeError as enc_err:
+        logger.debug("Console print fallback due to encoding: %s", enc_err)
+        enc = getattr(sys.stdout, "encoding", None) or "ascii"
+        sys.stdout.write(full_output.encode(enc, errors="replace").decode(enc) + "\n")
     return 0
 
 

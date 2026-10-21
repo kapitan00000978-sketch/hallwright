@@ -139,11 +139,18 @@ Hallwright (repo `kapitan00000978-sketch/hallwright`; formerly Hallwright, forme
     - Token Reduction Rate: 72.66% reduction (ESTIMATE)
   - Verified 100/100 Gatekeeper score across `tokens.py` and `measure.py`.
 
+- **HWMEM Step 6 (Experimental Protocol & Results Table):**
+  - Created `experiments/RESULTS.md` with a fixed real-world 3-step Todo CLI scenario (Core -> JSON -> CSV).
+  - Defined Arm A (Control without memory) and Arm B (Treatment with hwmem) protocol for fresh chat sessions.
+  - Provided empty 6-run results table (3 runs per arm) with columns: `arm`, `run#`, `input tokens`, `output tokens`, `files read`, `tool calls`, `step 3 finished`, `tests pass`, `notes`.
+  - Configured token fields to be filled manually from user's agent billing display (zero fabricated numbers).
+
 ### Remaining
-- **HWMEM Step 6:** `experiments/RESULTS.md` A/B benchmark scenario.
+- None! All 6 steps of the HWMEM project specification are fully implemented, tested, and verified.
 
 ### Next Command
-- Step 6: Create `experiments/RESULTS.md` with fixed real A/B scenario and empty results table.
+- User can run `python memory.py show` or inspect `experiments/RESULTS.md` to conduct the real A/B trials.
+
 
 
 

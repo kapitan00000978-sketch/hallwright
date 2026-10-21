@@ -204,6 +204,7 @@ COUNCIL_AUDITORS = {
     "SECRET": "Gabriel Frost (Cybersecurity Auditor)",
     "DANGEROUS": "Gabriel Frost & Arthur Pendelton",
     "AST": "Marcus Sterling & Dr. Evelyn Reed",
+    "DESIGN": "Elena 'The Visionary' Rostova (Design & Spatial Systems)",
 }
 
 
@@ -367,6 +368,85 @@ def scan_multilingual_structural(code: str, filename: str = "") -> List[Dict[str
     return findings
 
 
+def scan_ui_design_standards(code: str, filename: str = "") -> List[Dict[str, Any]]:
+    """
+    Elena Rostova UI/UX Craftsmanship & Anti-Generic Guardrail.
+    Protects AI agents from generating flat, dead, low-contrast, or unstyled designs:
+    - Rejects flat pitch-black voids without atmospheric lighting/depth
+    - Flags generic default browser fonts (Arial / Times New Roman) without modern typography stack
+    - Enforces responsive viewport meta tags in HTML documents
+    """
+    findings: List[Dict[str, Any]] = []
+    norm_fn = filename.lower().replace("\\", "/")
+    
+    # Exclude vendor and node_modules
+    if any(p in norm_fn for p in ["/.vendor/", "/node_modules/", "vision_proof", "hallwright_demo"]):
+        return []
+    if norm_fn.endswith(".py") and "/tests/" in norm_fn:
+        return []
+
+    # Target only UI files (HTML, CSS, Vue, Svelte) or in-memory HTML scans
+    is_ui_file = norm_fn.endswith((".html", ".htm", ".vue", ".svelte", ".css"))
+    if not (is_ui_file or (not filename and "<html" in code)):
+        return []
+
+    lines = code.splitlines()
+
+    # 1. Reject flat pitch-black void with zero atmospheric lighting
+    has_black_void = bool(re.search(r"""(?i)(?:class=["'][^"']*\bbg-black\b|background(?:-color)?\s*:\s*(?:#000(?:000)?|black|#050505|#08090d)\b)""", code))
+    has_atmospheric_depth = bool(re.search(r"""(?i)(?:radial-gradient|linear-gradient|conic-gradient|ambient-glow|ambient-mesh|stars-canvas|<canvas\b|backdrop-filter|box-shadow\s*:\s*0\s+0|border-beam)""", code))
+
+    if has_black_void and not has_atmospheric_depth:
+        for idx, line in enumerate(lines, 1):
+            if re.search(r"""(?i)(?:\bbg-black\b|background(?:-color)?\s*:\s*(?:#000|black|#050505|#08090d))""", line):
+                if not is_ignored(line):
+                    findings.append({
+                        "rule_id": "DESIGN_FLAT_PITCH_BLACK_VOID",
+                        "category": "DESIGN",
+                        "auditor": COUNCIL_AUDITORS.get("DESIGN", "Elena 'The Visionary' Rostova"),
+                        "file": filename,
+                        "line": idx,
+                        "matched_text": line.strip()[:60],
+                        "message": "Flat pitch-black void detected with zero atmospheric lighting. Elena Rostova Invariant: Enforce layered ambient mesh or cosmic depth tokens.",
+                        "deduction": 20
+                    })
+                break
+
+    # 2. Flag generic default browser fonts without modern typography stack
+    generic_font_pattern = r"""(?i)font-family\s*:\s*['"]?(?:Arial|Times New Roman|Courier New|Verdana)['"]?\s*;"""
+    for idx, line in enumerate(lines, 1):
+        if re.search(generic_font_pattern, line):
+            if not is_ignored(line):
+                findings.append({
+                    "rule_id": "DESIGN_GENERIC_FONT",
+                    "category": "DESIGN",
+                    "auditor": COUNCIL_AUDITORS.get("DESIGN", "Elena 'The Visionary' Rostova"),
+                    "file": filename,
+                    "line": idx,
+                    "matched_text": line.strip()[:60],
+                    "message": "Generic default browser font detected without cohesive typography hierarchy. Use Plus Jakarta Sans, Outfit, or modern system stack.",
+                    "deduction": 15
+                })
+                break
+
+    # 3. Enforce responsive viewport meta tag in full HTML documents (.html / .htm)
+    if norm_fn.endswith((".html", ".htm")) or (not filename and "<html" in code):
+        if "<html" in code and "<head" in code:
+            if not re.search(r"""<meta\s+name=["']viewport["']""", code, re.IGNORECASE):
+                findings.append({
+                    "rule_id": "DESIGN_MISSING_VIEWPORT",
+                    "category": "DESIGN",
+                    "auditor": COUNCIL_AUDITORS.get("DESIGN", "Elena 'The Visionary' Rostova"),
+                    "file": filename,
+                    "line": 1,
+                    "matched_text": "<head>",
+                    "message": "Missing responsive viewport meta tag. Mobile ergonomics violated.",
+                    "deduction": 15
+                })
+
+    return findings
+
+
 def scan_code(code: str, filename: str = "", config: Optional[Dict[str, Any]] = None, config_override: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """
     Audits a string of source code against all Artisan rules.
@@ -524,6 +604,13 @@ def scan_code(code: str, filename: str = "", config: Optional[Dict[str, Any]] = 
     struct_results = scan_multilingual_structural(code, filename=filename)
     existing_keys = {(f["rule_id"], f["line"]) for f in findings}
     for item in struct_results:
+        if (item["rule_id"], item["line"]) not in existing_keys:
+            findings.append(item)
+
+    # Elena Rostova UI/UX Craftsmanship & Anti-Generic Guardrail
+    design_results = scan_ui_design_standards(code, filename=filename)
+    existing_keys = {(f["rule_id"], f["line"]) for f in findings}
+    for item in design_results:
         if (item["rule_id"], item["line"]) not in existing_keys:
             findings.append(item)
 

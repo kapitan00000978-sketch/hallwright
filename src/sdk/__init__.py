@@ -24,8 +24,10 @@ from .web_healer import AutonomousWebHealer, HealingResult
 from .visual_learner import VisualPCLearner
 from .visual_primitives import VisualPrimitivesEngine
 from .visual_transmuter import VisualTransmuter
+from .blackboard import SwarmBlackboard
 
 __all__ = [
+    "SwarmBlackboard",
     "VisualPCLearner",
     "VisualPrimitivesEngine",
     "VisualTransmuter",

@@ -36,6 +36,31 @@ class VisualPrimitivesEngine:
     def get_magic_ui_css() -> str:
         """Returns Magic UI inspired modern CSS effects (border-beam, particles, bento, dock)."""
         return """
+/* --- 60FPS Fluid Physics & Hardware Compositing System --- */
+:root {
+  --ease-fluid: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 180ms;
+  --duration-base: 280ms;
+  --duration-slow: 500ms;
+}
+
+.gpu-accelerated {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* --- Magic UI & Park UI Premier Effects --- */
 .magic-border-beam {
   position: relative;
@@ -45,7 +70,8 @@ class VisualPrimitivesEngine:
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
   overflow: hidden;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+  transition: transform var(--duration-base) var(--ease-fluid), border-color var(--duration-base) var(--ease-fluid), box-shadow var(--duration-base) var(--ease-fluid);
+  will-change: transform;
 }
 
 .magic-border-beam:hover {
@@ -65,7 +91,7 @@ class VisualPrimitivesEngine:
   filter: blur(80px);
   pointer-events: none;
   z-index: 0;
-  animation: floatAura 8s ease-in-out infinite alternate;
+  animation: floatAura 8s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
 }
 
 @keyframes floatAura {
@@ -77,12 +103,36 @@ class VisualPrimitivesEngine:
   position: relative;
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #1d4ed8 100%);
   box-shadow: 0 0 25px rgba(2, 132, 199, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-  transition: all 0.25s ease;
+  transition: transform var(--duration-base) var(--ease-fluid), box-shadow var(--duration-base) var(--ease-fluid);
+  will-change: transform;
 }
 
 .btn-glow:hover {
   box-shadow: 0 0 35px rgba(56, 189, 248, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.5);
   transform: translateY(-1px) scale(1.02);
+}
+
+.btn-glow:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.hover-lift {
+  transition: transform var(--duration-base) var(--ease-fluid), box-shadow var(--duration-base) var(--ease-fluid);
+  will-change: transform;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.tactile-press {
+  transition: transform var(--duration-fast) var(--ease-snappy);
+  will-change: transform;
+}
+
+.tactile-press:active {
+  transform: scale(0.97);
 }
 
 .glass-card {
@@ -91,7 +141,8 @@ class VisualPrimitivesEngine:
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--duration-base) var(--ease-fluid), border-color var(--duration-base) var(--ease-fluid), box-shadow var(--duration-base) var(--ease-fluid);
+  will-change: transform;
 }
 
 .gradient-headline {
@@ -136,7 +187,8 @@ class VisualPrimitivesEngine:
   color: #f8fafc;
   border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+  transition: transform var(--duration-fast) var(--ease-fluid), background var(--duration-fast) var(--ease-fluid);
+  will-change: transform;
   font-size: 1.2rem;
 }
 
@@ -158,7 +210,8 @@ class VisualPrimitivesEngine:
   z-index: 10000;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.15s ease;
+  transition: opacity var(--duration-fast) var(--ease-fluid);
+  will-change: opacity;
 }
 
 .kbar-overlay.active {
@@ -175,7 +228,8 @@ class VisualPrimitivesEngine:
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
   overflow: hidden;
   transform: translateY(-8px) scale(0.98);
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--duration-fast) var(--ease-fluid);
+  will-change: transform;
 }
 
 .kbar-overlay.active .kbar-box {
@@ -227,7 +281,7 @@ class VisualPrimitivesEngine:
   color: #cbd5e1;
   cursor: pointer;
   font-size: 0.92rem;
-  transition: background 0.1s ease, color 0.1s ease;
+  transition: background var(--duration-fast) var(--ease-fluid), color var(--duration-fast) var(--ease-fluid);
 }
 
 .kbar-item:hover, .kbar-item.selected {

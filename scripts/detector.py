@@ -459,6 +459,50 @@ def scan_ui_design_standards(code: str, filename: str = "") -> List[Dict[str, An
                     "message": "Stereotypical AI purple/violet palette cliché detected. Elena Rostova Invariant: Use mature, industry-grade palettes (electric cyan #06b6d4, sapphire #2563eb, emerald #10b981, champagne #f59e0b, or monochrome obsidian titanium).",
                     "deduction": 20
                 })
+    # 5. Ban janky layout-reflow animations (width/height/margin/top/left)
+    reflow_anim_pattern = r"""(?i)transition\s*:\s*(?:width|height|margin|padding|top|left|bottom|right)\s+[0-9]"""
+    linear_transition_pattern = r"""(?i)transition\s*:\s*(?:all|[a-z\-]+)\s+[0-9.]+(?:s|ms)\s+linear\b"""
+    hyperactive_bounce_pattern = r"""(?i)animation\s*:\s*(?:spin|bounce|shake|wiggle)\s+[0-9.]+(?:s|ms)\s+(?:infinite|linear\s+infinite)\b"""
+
+    for idx, line in enumerate(lines, 1):
+        if re.search(reflow_anim_pattern, line):
+            if not is_ignored(line):
+                findings.append({
+                    "rule_id": "DESIGN_JANKY_ANIMATION_REFLOW",
+                    "category": "DESIGN",
+                    "auditor": COUNCIL_AUDITORS.get("DESIGN", "Elena 'The Visionary' Rostova"),
+                    "file": filename,
+                    "line": idx,
+                    "matched_text": line.strip()[:60],
+                    "message": "Janky animation or layout reflow transition detected. Elena Rostova Invariant: Only animate GPU transforms (transform, opacity) using calibrated cubic-bezier easing (e.g. cubic-bezier(0.16, 1, 0.3, 1)). Never animate width/height/margin/top/left.",
+                    "deduction": 15
+                })
+                break
+        elif re.search(linear_transition_pattern, line):
+            if not is_ignored(line):
+                findings.append({
+                    "rule_id": "DESIGN_ROBOTIC_LINEAR_ANIMATION",
+                    "category": "DESIGN",
+                    "auditor": COUNCIL_AUDITORS.get("DESIGN", "Elena 'The Visionary' Rostova"),
+                    "file": filename,
+                    "line": idx,
+                    "matched_text": line.strip()[:60],
+                    "message": "Robotic linear transition detected. Elena Rostova Invariant: Physics requires natural acceleration and damping. Use cubic-bezier easing (e.g., cubic-bezier(0.16, 1, 0.3, 1) or cubic-bezier(0.34, 1.56, 0.64, 1)) instead of mechanical linear curves.",
+                    "deduction": 15
+                })
+                break
+        elif re.search(hyperactive_bounce_pattern, line):
+            if not is_ignored(line):
+                findings.append({
+                    "rule_id": "DESIGN_HYPERACTIVE_ANIMATION",
+                    "category": "DESIGN",
+                    "auditor": COUNCIL_AUDITORS.get("DESIGN", "Elena 'The Visionary' Rostova"),
+                    "file": filename,
+                    "line": idx,
+                    "matched_text": line.strip()[:60],
+                    "message": "Cheap hyperactive spinning/bouncing animation detected. Elena Rostova Invariant: Professional enterprise software utilizes subtle, ambient 60FPS micro-interactions, never dizzying infinite spin or bounce loops on UI controls.",
+                    "deduction": 15
+                })
                 break
 
     return findings

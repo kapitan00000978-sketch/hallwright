@@ -49,3 +49,17 @@ Har bir dizayn quyidagi dunyo durdonalari bilan solishtiriladi:
      * **Emerald & Mint:** `#10b981`, `#059669`, `#34d399` (zamonaviy boylik, moliya va ishonch).
      * **Monochrome Obsidian, Titanium & Cold Platinum:** `#020617`, `#0f172a`, `#334155`, `#94a3b8`, `#f8fafc` (Apple va Linear minimalist fazosi).
      * **Champagne & Warm Amber:** `#f59e0b`, `#d97706` (hashamatli va nozik premium urg'ular).
+5. **60FPS Silliq Animatsiya va Fizika Standarti (Anti-Jank Animation Protocol):**
+   - **Taqiqlangan Qoidabuzarliklar (Rejection Triggers):**
+     * **Layout Reflow Trashing (`DESIGN_JANKY_ANIMATION_REFLOW`):** `transition: width`, `height`, `margin`, `padding`, `top`, `left` kabi layout parametrlarini animatsiya qilish qat'iyan man etiladi. Bu CPU reflow keltirib chiqarib, 15-20fps qotishlarni paydo qiladi.
+     * **Robotik Chiziqli O'tishlar (`DESIGN_ROBOTIC_LINEAR_ANIMATION`):** `transition: all 0.2s linear` yoki `transition: ... linear`. Tabiiy jism hech qachon qotib qolgan chiziqli tezlikda harakatlanmaydi; bu 1998-yilgi arzon effektlarni eslatadi.
+     * **Arzon Giperaktiv Aylanuvchi/Sakrovchi Halqalar (`DESIGN_HYPERACTIVE_ANIMATION`):** Tugma yoki kartochkalarda cheksiz aylanuvchi (`spin infinite`), sakrovchi (`bounce infinite`) yoki titrovchi arzon shovqinlar taqiqlanadi.
+     * **To'satdan Uziluvchi Sakrashlar:** `:hover` holatida umuman transitionsiz bir lahzada sakrash yoki 50ms lik ko'zni charchatuvchi miltillashlar.
+   - **Majburiy 60FPS Fizika Qoidalari (Elena Rostova Invariant):**
+     * **Faqat GPU Transformatsiyalari:** Barcha interaktiv o'tishlar faqat apparat tezlatgichiga yo'naltirilgan `transform` (`translate3d`, `scale`, `rotate`) va `opacity` orqali amalga oshirilishi shart.
+     * **Kalibrlangan Kubik Bezye Egri Chiziqlari (Fluid Physics):**
+       - `--ease-fluid: cubic-bezier(0.16, 1, 0.3, 1)` (Apple/Linear uslubidagi silliq sekinlashuv).
+       - `--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1)` (nozik taktil prujina effekti).
+       - `--ease-snappy: cubic-bezier(0.2, 0, 0, 1)` (tezkor, kechikishsiz buyruq paneli javobi).
+     * **Apparat Kompozitsiyasi (GPU Compositing Layer):** Yuqori chastotali animatsiya qatlamlarida `will-change: transform, opacity;` va `transform: translateZ(0);` ishlatiladi.
+     * **Aksessibillik (Reduced Motion):** Har doim `@media (prefers-reduced-motion: reduce)` bloki kiritilib, harakatga sezgir foydalanuvchilar himoyalanadi.

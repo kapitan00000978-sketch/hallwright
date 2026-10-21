@@ -1,6 +1,6 @@
 {
   "name": "hallwright",
-  "version": "2.0.0",
+  "version": "0.10.87",
   "description": "Hallwright: A guardrail layer for AI coding agents: pre-commit gate, living project memory, and subagent/skill definitions.",
   "main": "bin/hallwright.js",
   "bin": {

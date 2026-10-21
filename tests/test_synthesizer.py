@@ -176,3 +176,47 @@ def test_analytics_ui_synthesis_domain_adaptation():
     assert "renderTransactions" in js
 
 
+def test_subtitle_ui_synthesis_domain_adaptation():
+    synth = DomainCodeSynthesizer()
+    task = "Video subtitr va vaqt taxlash studio interfeysi"
+    assert synth.detect_domain(task) == "subtitle"
+
+    html = synth.synthesize_ui_html(task, lang="uz")
+    assert "Subtitle Studio Pro" in html
+    assert "video-stage-box" in html
+    assert "subtitle-overlay" in html
+    assert "timeline-scrubber" in html
+    assert "btn-shift-plus-100" in html
+    assert "cues-container" in html
+
+    js = synth.synthesize_ui_js(task, lang="uz")
+    assert "class ApplicationState" in js
+    assert "shiftOffset" in js
+    assert "exportSRT" in js
+    assert "exportVTT" in js
+    assert "exportJSON" in js
+    # Invariant: Gabriel Frost XSS defense
+    assert "innerHTML" not in js
+
+
+def test_harmonic_color_palette():
+    synth = DomainCodeSynthesizer()
+    
+    # Subtitle Palette: Cinematic Obsidian & Sky/Amber
+    sub_css = synth.synthesize_ui_css("Video subtitr taxlash")
+    assert "--primary: #0284c7;" in sub_css
+    assert "--accent: #f59e0b;" in sub_css
+    assert "#07090e" in sub_css
+    
+    # Ecommerce Palette: Royal Indigo & Emerald
+    ecom_css = synth.synthesize_ui_css("Katta savat va onlayn do'kon")
+    assert "--primary: #6366f1;" in ecom_css
+    assert "--accent: #10b981;" in ecom_css
+    
+    # Analytics Palette: Cyber Cobalt & Teal
+    ana_css = synth.synthesize_ui_css("Monitoring statistika va grafiklar")
+    assert "--primary: #2563eb;" in ana_css
+    assert "--accent: #0d9488;" in ana_css
+
+
+

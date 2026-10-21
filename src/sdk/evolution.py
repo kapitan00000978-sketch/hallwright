@@ -158,6 +158,23 @@ class SelfEvolutionEngine:
                     "vaccines": []
                 }
 
+    def ingest_defect(
+        self,
+        defect_info: Any,
+        file_path: Optional[str] = None
+    ) -> threading.Thread:
+        """
+        Unified defect ingestion interface. Accepts string or dict,
+        and launches non-blocking background immunity evolution.
+        """
+        if isinstance(defect_info, dict):
+            defect_text = defect_info.get("error_signature") or defect_info.get("task") or str(defect_info)
+            if not file_path:
+                file_path = defect_info.get("file_path")
+        else:
+            defect_text = str(defect_info)
+        return self.ingest_and_evolve_async(defect_text=defect_text, file_path=file_path)
+
     def ingest_and_evolve_async(
         self,
         defect_text: str,

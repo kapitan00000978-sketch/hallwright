@@ -3,6 +3,8 @@ node_modules/
 .venv/
 env/
 venv/
+.vendor/
+vendor/
 __pycache__/
 *.py[cod]
 *.egg-info/
@@ -28,6 +30,7 @@ scratch/
 
 # Runtime Hallwright Session State & Screenshots
 .hallwright/screenshots/
+.hallwright/vision/
 .hallwright/*.db*
 .hallwright/gate/
 .hallwright/agent_sessions.json

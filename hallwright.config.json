@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/artisan.json",
-  "version": "1.0.0",
+  "version": "0.10.87",
   "mode": "strict",
   "threshold_score": 100,
   "rules": {
@@ -51,7 +51,9 @@
     ".venv",
     "__pycache__",
     "tests",
-    "bench"
+    "bench",
+    ".vendor",
+    "vendor"
   ],
   "exclude_files": [
     "detector.py",

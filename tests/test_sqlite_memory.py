@@ -75,3 +75,65 @@ def test_sqlite_store_checkpoint_and_export():
         assert count >= 1
         convs = store2.get_conventions()
         assert any(c["id"] == "conv-01" for c in convs)
+
+
+def test_sqlite_store_search_lessons():
+    """Verify that SqliteMemoryStore searches lessons across tokens with ranking."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        db_path = os.path.join(tmpdir, "test_memory.db")
+        store = SqliteMemoryStore(db_path=db_path)
+
+        store.record_lesson("lsn-1", "security", "sql injection via string format", "Use parameterized queries.", severity="CRITICAL")
+        store.record_lesson("lsn-2", "performance", "slow unindexed join query", "Add index on foreign key columns.", severity="HIGH")
+        store.record_lesson("lsn-3", "auth", "plain text password storage", "Use bcrypt hashing.", severity="CRITICAL")
+
+        # 1. Search by token 'parameterized'
+        res1 = store.search_lessons("parameterized")
+        assert len(res1) == 1
+        assert res1[0]["id"] == "lsn-1"
+
+        # 2. Search by multiple tokens with severity ranking
+        res2 = store.search_lessons("query")
+        assert len(res2) == 2
+        # Critical severity should rank first
+        assert res2[0]["id"] == "lsn-1"
+        assert res2[1]["id"] == "lsn-2"
+
+        # 3. Search with category filter
+        res3 = store.search_lessons("query", category="performance")
+        assert len(res3) == 1
+        assert res3[0]["id"] == "lsn-2"
+
+
+def test_sqlite_store_sync_from_immune_system():
+    """Verify that SqliteMemoryStore imports evolved vaccines from immune_system.json."""
+    import json
+    with tempfile.TemporaryDirectory() as tmpdir:
+        db_path = os.path.join(tmpdir, "test_memory.db")
+        immune_path = os.path.join(tmpdir, "immune_system.json")
+        store = SqliteMemoryStore(db_path=db_path)
+
+        immune_payload = {
+            "vaccines": [
+                {
+                    "id": "vac-999",
+                    "category": "runtime",
+                    "error_signature": "ZeroDivisionError in billing calculation",
+                    "web_solution": "Guard divisor against zero before dividing",
+                    "guardrail_rule": "GUARD_DIVISORS"
+                }
+            ]
+        }
+        with open(immune_path, "w", encoding="utf-8") as f:
+            json.dump(immune_payload, f)
+
+        imported = store.sync_from_immune_system(immune_path)
+        assert imported == 1
+
+        lessons = store.get_lessons(category="runtime")
+        assert len(lessons) == 1
+        assert lessons[0]["id"] == "vac-999"
+        assert lessons[0]["auditor"] == "ImmuneSystem"
+        assert lessons[0]["severity"] == "CRITICAL"
+        assert "GUARD_DIVISORS" in lessons[0]["lesson"]
+

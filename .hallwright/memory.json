@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Hallwright Engineering Core",
-  "lastUpdated": "2026-10-20T15:35:26.764939+00:00",
+  "lastUpdated": "2026-10-21T09:17:06.361178+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -60,7 +60,7 @@
       "lesson": "Always enforce pagination limits.",
       "severity": "high",
       "recordedAt": "2026-10-15T15:08:39.779478+00:00",
-      "updatedAt": "2026-10-20T15:34:26.139455+00:00"
+      "updatedAt": "2026-10-21T09:17:02.052678+00:00"
     },
     {
       "id": "mis-0004",
@@ -69,7 +69,7 @@
       "lesson": "Always verify algorithm is HS256/RS256",
       "severity": "high",
       "recordedAt": "2026-10-15T18:30:24.182735+00:00",
-      "updatedAt": "2026-10-20T15:33:42.194297+00:00"
+      "updatedAt": "2026-10-20T18:15:02.583061+00:00"
     },
     {
       "id": "mis-0005",
@@ -209,6 +209,33 @@
       "lesson": "Hallwright remediator transformed silent catches/stubs into structured logging.",
       "severity": "high",
       "recordedAt": "2026-10-19T11:11:40.033619+00:00"
+    },
+    {
+      "id": "suc-0003",
+      "category": "swarm_delivery",
+      "pattern": "Swarm delivery: Build secure user login authentication with SQLite",
+      "lesson": "Successfully synthesized 8 artifacts across 8 stages with 100/100 Gatekeeper compliance.",
+      "severity": "high",
+      "recordedAt": "2026-10-20T20:02:00.595813+00:00",
+      "updatedAt": "2026-10-21T09:16:05.273384+00:00"
+    },
+    {
+      "id": "suc-0004",
+      "category": "swarm_delivery",
+      "pattern": "Swarm delivery: Build zero-latency cache manager",
+      "lesson": "Successfully synthesized 8 artifacts across 9 stages with 100/100 Gatekeeper compliance.",
+      "severity": "high",
+      "recordedAt": "2026-10-20T20:02:04.147788+00:00",
+      "updatedAt": "2026-10-21T09:17:06.361178+00:00"
+    },
+    {
+      "id": "suc-0005",
+      "category": "swarm_delivery",
+      "pattern": "Swarm delivery: Build fast session token manager",
+      "lesson": "Successfully synthesized 8 artifacts across 9 stages with 100/100 Gatekeeper compliance.",
+      "severity": "high",
+      "recordedAt": "2026-10-20T20:04:17.368366+00:00",
+      "updatedAt": "2026-10-21T09:14:57.951001+00:00"
     }
   ],
   "conventions": [
@@ -221,6 +248,15 @@
       "id": "conv-002",
       "category": "security",
       "rule": "All credentials and private keys must be loaded from environment variables, never hardcoded."
+    },
+    {
+      "id": "con-0003",
+      "category": "ui_design",
+      "pattern": "Preferred visual ergonomics: faqat eng zamonaviy shisha effektlari va micro-ani",
+      "lesson": "LEARNED USER PREFERENCE: User demanded 'faqat eng zamonaviy shisha effektlari va micro-animatsiyalar bo'lsin'. Apply calibrated theme: is_dark=True, dominant hues: #090b10, #090e15, #0c0b17, contrast: 43.33x. Integrate Magic UI micro-interactions.",
+      "severity": "high",
+      "recordedAt": "2026-10-21T03:43:40.421982+00:00",
+      "updatedAt": "2026-10-21T09:16:07.973857+00:00"
     }
   ],
   "anti_patterns": [
@@ -233,6 +269,15 @@
       "id": "anti-002",
       "pattern": "dynamic code evaluation (eval / exec)",
       "reason": "Opens critical arbitrary remote code execution (RCE) vulnerabilities."
+    },
+    {
+      "id": "ant-0003",
+      "category": "ui_design",
+      "pattern": "Generic / Outdated UI pattern rejected by user (Luminance: 0.08)",
+      "lesson": "REJECTED DESIGN PATTERN: User explicitly rejected layout style ('bunday oddiy oq fonli dizayn kerak emas'). Never generate flat, boring cards or dull enterprise grids (e.g. medax-style). Instead, enforce Elena Rostova ultra-luxury frosted glass, Magic UI border beams, and R3F spatial 3D depth.",
+      "severity": "critical",
+      "recordedAt": "2026-10-21T03:43:41.388959+00:00",
+      "updatedAt": "2026-10-21T09:16:08.611115+00:00"
     }
   ],
   "lessons": [
@@ -251,7 +296,7 @@
       "lesson": "Resolved 'ZeroDivisionError division by zero'. Defense: 2. Architecture Defense: Validate boundaries, use parameterized calls, and handle exceptions explicitly.",
       "severity": "high",
       "recordedAt": "2026-10-20T05:54:09.681571+00:00",
-      "updatedAt": "2026-10-20T15:35:24.989774+00:00"
+      "updatedAt": "2026-10-21T09:16:14.595097+00:00"
     },
     {
       "id": "sca-0003",
@@ -260,7 +305,7 @@
       "lesson": "Resolved 'TypeError 'NoneType' object is not callable'. Defense: 2. Architecture Defense: Validate boundaries, use parameterized calls, and handle exceptions explicitly.",
       "severity": "high",
       "recordedAt": "2026-10-20T05:54:12.213199+00:00",
-      "updatedAt": "2026-10-20T15:35:26.764939+00:00"
+      "updatedAt": "2026-10-21T09:16:15.642450+00:00"
     },
     {
       "id": "sca-0004",

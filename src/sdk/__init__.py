@@ -2,6 +2,8 @@
 Hallwright SDK & Craftsmanship Engine
 """
 
+__version__ = "0.10.87"
+
 from .craftsman import CraftsmanAgent, COUNCIL_MEMBERS
 from .context_selector import SmartMasterSelector
 from .learning_memory import LearningMemory
@@ -18,10 +20,15 @@ from .pdk import (
 )
 from .plugin_loader import PluginLoader
 from .search_engine import SearchEngine, SearchHit, SearchResultSet, SearchScope
-from .prompt_engine import PromptEngine, PromptQualityScore, OptimizationResult
 from .web_healer import AutonomousWebHealer, HealingResult
+from .visual_learner import VisualPCLearner
+from .visual_primitives import VisualPrimitivesEngine
+from .visual_transmuter import VisualTransmuter
 
 __all__ = [
+    "VisualPCLearner",
+    "VisualPrimitivesEngine",
+    "VisualTransmuter",
     "CraftsmanAgent",
     "COUNCIL_MEMBERS",
     "SmartMasterSelector",

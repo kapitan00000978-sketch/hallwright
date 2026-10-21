@@ -11,8 +11,11 @@ import os
 import json
 import re
 import tempfile
+import logging
 from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
+
+logger = logging.getLogger("hallwright.memory")
 
 try:
     from src.memory.store import SqliteMemoryStore
@@ -24,38 +27,131 @@ except ImportError:
 
 DEFAULT_MEMORY_PATH = os.path.join(".hallwright", "memory.json")
 
-# Semantic domain synonym expansion mapping
+
+def normalize_token(word: str) -> str:
+    """Normalizes token, stripping apostrophes and inflectional suffixes in Uzbek and English."""
+    w = word.lower().strip()
+    w = w.replace("‘", "'").replace("’", "'").replace("`", "'")
+    w = w.replace("o'", "o").replace("g'", "g").replace("'", "")
+    # Uzbek suffix stemming
+    w = re.sub(r"(ning|dan|dir|lar|lik|chi|miz|siz|ga|ka|qa|da|ni|si|i)$", "", w)
+    # English suffix stemming
+    w = re.sub(r"(ing|tion|ment|able|ity|ed|es|s)$", "", w)
+    return w if len(w) >= 2 else word.lower()
+
+
+# Semantic domain synonym expansion mapping (Multilingual Uzbek + English)
 SYNONYM_MAP: Dict[str, List[str]] = {
-    "login": ["auth", "authentication", "session", "credential"],
-    "signup": ["auth", "registration", "user"],
-    "password": ["auth", "hash", "secret", "credential"],
-    "jwt": ["auth", "token", "signature", "bearer"],
-    "payment": ["stripe", "billing", "charge", "checkout", "idempotency"],
-    "stripe": ["payment", "billing", "charge", "idempotency"],
-    "money": ["payment", "finance", "billing"],
-    "db": ["database", "sql", "query", "migration"],
-    "sql": ["database", "query", "injection", "orm"],
-    "postgres": ["database", "sql", "pool"],
-    "mysql": ["database", "sql", "pool"],
-    "sqlite": ["database", "sql"],
-    "rest": ["api", "endpoint", "http", "route"],
-    "fastapi": ["api", "endpoint", "route"],
-    "express": ["api", "endpoint", "route"],
-    "speed": ["performance", "latency", "cache", "slow"],
-    "slow": ["performance", "latency", "bottleneck", "optimization"],
-    "css": ["ui", "design", "style", "layout"],
-    "frontend": ["ui", "design", "component", "react"],
-    "ui": ["design", "frontend", "layout", "contrast"]
+    # Auth & Security & Credentials
+    "login": ["auth", "authentication", "session", "credential", "kirish", "parol", "user"],
+    "signup": ["auth", "registration", "user", "royxat", "ro'yxat"],
+    "password": ["auth", "hash", "secret", "credential", "parol", "bcrypt", "argon2"],
+    "parol": ["password", "auth", "hash", "secret", "credential", "login", "shifrlash", "xavfsizlik"],
+    "jwt": ["auth", "token", "signature", "bearer", "maxfiy"],
+    "auth": ["authentication", "session", "credential", "login", "signup", "password", "parol", "himoya", "xavfsizlik"],
+    "security": ["xavfsizlik", "himoya", "auth", "xss", "sqli", "injection", "credential", "secret", "guard"],
+    "xavfsizlik": ["security", "auth", "himoya", "sanitization", "xss", "sqli", "csrf", "secret"],
+    "himoya": ["security", "guard", "defense", "protection", "xavfsizlik", "sanitization"],
+    "token": ["jwt", "bearer", "secret", "auth", "credential"],
+
+    # Payments & Checkout & Cart
+    "payment": ["stripe", "billing", "charge", "checkout", "idempotency", "tolov", "to'lov", "savat", "karta", "order"],
+    "stripe": ["payment", "billing", "charge", "idempotency", "checkout"],
+    "billing": ["payment", "stripe", "charge", "invoice", "tolov"],
+    "money": ["payment", "finance", "billing", "pul"],
+    "tolov": ["payment", "stripe", "billing", "charge", "checkout", "idempotency", "savat", "karta", "narx"],
+    "to'lov": ["payment", "stripe", "billing", "charge", "checkout", "idempotency", "savat", "karta"],
+    "savat": ["cart", "checkout", "payment", "order", "buyurtma", "tolov"],
+    "cart": ["savat", "checkout", "payment", "order", "buyurtma"],
+    "order": ["buyurtma", "checkout", "payment", "savat"],
+    "buyurtma": ["order", "checkout", "payment", "savat"],
+
+    # Database & Storage & SQL
+    "db": ["database", "sql", "query", "migration", "baza", "jadval"],
+    "database": ["db", "sql", "query", "migration", "sqlite", "postgres", "mysql", "baza", "jadval", "schema"],
+    "sql": ["database", "query", "injection", "orm", "sqli", "baza"],
+    "sqlite": ["database", "sql", "baza", "wal", "store", "memory", "storage"],
+    "postgres": ["database", "sql", "pool", "baza"],
+    "mysql": ["database", "sql", "pool", "baza"],
+    "baza": ["database", "db", "sql", "sqlite", "postgres", "query", "jadval", "schema", "migration", "sorov", "so'rov"],
+    "jadval": ["table", "database", "baza", "schema", "column"],
+    "query": ["sql", "database", "orm", "sorov", "so'rov"],
+    "sorov": ["query", "sql", "database"],
+
+    # Memory & State & Cache & Checkpoints
+    "memory": ["xotira", "cache", "kesh", "store", "persist", "checkpoint", "sqlite", "state"],
+    "xotira": ["memory", "cache", "kesh", "store", "persist", "saqlash", "checkpoint", "sqlite", "yodda", "state"],
+    "xotirani": ["memory", "cache", "kesh", "store", "persist", "saqlash", "xotira", "sqlite"],
+    "kesh": ["cache", "memory", "speed", "tezlik", "latency"],
+    "cache": ["kesh", "memory", "speed", "latency", "optimization"],
+    "store": ["memory", "storage", "baza", "persist", "saqlash"],
+    "persist": ["memory", "store", "saqlash", "sqlite", "checkpoint"],
+    "checkpoint": ["continuity", "state", "restore", "resume", "tiklash", "memory"],
+
+    # Subtitles & Timing & Media
+    "subtitle": ["subtitr", "vtt", "srt", "caption", "timing", "sync", "offset", "scrubber", "titr"],
+    "subtitles": ["subtitle", "subtitr", "vtt", "srt", "caption"],
+    "subtitr": ["subtitle", "vtt", "srt", "caption", "timing", "sync", "vaqt", "titr", "transcription", "audio", "video"],
+    "subtitrlar": ["subtitle", "subtitles", "vtt", "srt", "caption", "subtitr"],
+    "titr": ["subtitle", "subtitr", "caption", "srt", "vtt"],
+    "caption": ["subtitle", "subtitr", "srt", "vtt"],
+    "srt": ["subtitle", "subtitr", "vtt", "timing", "caption"],
+    "vtt": ["subtitle", "subtitr", "srt", "timing", "caption"],
+    "timing": ["vaqt", "sync", "offset", "delay", "timestamp", "duration"],
+    "vaqt": ["time", "timing", "sync", "offset", "timestamp"],
+    "sync": ["timing", "offset", "alignment", "vaqt", "sinxron"],
+
+    # Performance & Speed & Optimization
+    "speed": ["performance", "latency", "cache", "slow", "tezlik", "optimization"],
+    "slow": ["performance", "latency", "bottleneck", "optimization", "sekin", "kechikish"],
+    "tezlik": ["speed", "performance", "latency", "kechikish", "cache", "optimization", "samaradorlik", "tez"],
+    "kechikish": ["latency", "delay", "slow", "tezlik", "performance"],
+    "latency": ["speed", "tezlik", "kechikish", "slow", "performance"],
+    "performance": ["speed", "tezlik", "latency", "cache", "optimization"],
+
+    # UI & UX & Design & Color
+    "css": ["ui", "design", "style", "layout", "theme", "rang"],
+    "frontend": ["ui", "design", "component", "react", "html"],
+    "ui": ["design", "frontend", "layout", "contrast", "dizayn", "interfeys"],
+    "ux": ["design", "ui", "usability", "dizayn", "ergonomics"],
+    "design": ["dizayn", "ui", "ux", "style", "css", "layout", "contrast", "palette"],
+    "dizayn": ["design", "ui", "ux", "style", "css", "color", "palette", "rang", "interfeys"],
+    "rang": ["color", "palette", "contrast", "design", "dizayn", "style", "theme"],
+    "ranglar": ["color", "colors", "palette", "dizayn", "design"],
+    "interfeys": ["ui", "interface", "design", "dizayn", "frontend"],
+
+    # Errors & Defects & Remedies & Vaccines
+    "error": ["defect", "bug", "exception", "failure", "xato", "muammo"],
+    "defect": ["error", "bug", "flaw", "issue", "xato", "muammo"],
+    "xato": ["error", "defect", "bug", "exception", "muammo", "kamchilik", "failure"],
+    "muammo": ["problem", "issue", "defect", "bug", "xato", "nosozlik"],
+    "bug": ["error", "defect", "issue", "xato"],
+    "vaccine": ["vaksina", "immunity", "guardrail", "rule", "healed", "defect"],
+    "vaksina": ["vaccine", "immunity", "guardrail", "rule", "davolash", "healer"],
+    "typeerror": ["type", "typeguard", "runtime", "none", "null", "guard"],
+    "keyerror": ["dictionary", "dict", "lookup", "get", "fallback", "runtime"],
+    "zerodivision": ["math", "division", "zero", "guard", "runtime"],
+
+    # Testing & Verification
+    "test": ["sinov", "pytest", "audit", "verification", "assertion", "coverage", "tekshirish"],
+    "sinov": ["test", "pytest", "audit", "tekshiruv"],
+    "tekshirish": ["verification", "audit", "test", "check", "inspect"]
 }
 
 
 class LearningMemory:
     """
     Persistent learning memory manager for Hallwright AI coding assistants.
+    Supports JSON persistence, SQLite WAL caching, and automated immune system syncing.
     """
 
-    def __init__(self, memory_path: str = DEFAULT_MEMORY_PATH):
-        self.memory_path = memory_path
+    def __init__(self, memory_path: Optional[str] = None, workspace_root: Optional[str] = None):
+        if memory_path:
+            self.memory_path = memory_path
+        elif workspace_root:
+            self.memory_path = os.path.join(workspace_root, ".hallwright", "memory.json")
+        else:
+            self.memory_path = DEFAULT_MEMORY_PATH
         self._ensure_storage()
         db_dir = os.path.dirname(self.memory_path) or ".hallwright"
         self.db_path = os.path.join(db_dir, "memory.db")
@@ -133,7 +229,8 @@ class LearningMemory:
                     if key not in data:
                         data[key] = []
                 return data
-        except (json.JSONDecodeError, OSError):
+        except (json.JSONDecodeError, OSError) as load_err:
+            logger.debug("Memory json load fallback: %s", load_err)
             return {
                 "version": "2.0.0",
                 "scarTissue": [],
@@ -161,9 +258,45 @@ class LearningMemory:
                     logging.debug("Failed to remove temp memory file: %s", cleanup_err)
             raise
 
+    def sync_with_immune_system(self, immune_path: Optional[str] = None) -> int:
+        """Dynamically ingests evolved vaccines from immune_system.json into SQLite and memory."""
+        if immune_path is None:
+            dir_name = os.path.dirname(self.memory_path) or ".hallwright"
+            immune_path = os.path.join(dir_name, "immune_system.json")
+        if not os.path.exists(immune_path):
+            return 0
+        try:
+            with open(immune_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, OSError) as sync_err:
+            logger.debug("Failed reading immune system for sync: %s", sync_err)
+            return 0
+
+        imported = 0
+        vaccines = data.get("vaccines", [])
+        for v in vaccines:
+            vid = v.get("id") or f"vac-{imported+1:03d}"
+            cat = v.get("category", "runtime")
+            pat = v.get("error_signature", "")
+            sol = v.get("web_solution", "")
+            rule = v.get("guardrail_rule", "INVARIANT")
+            lesson = f"{sol} [Invariant: {rule}]" if sol else rule
+            if pat and lesson and self.store:
+                self.store.record_lesson(
+                    lesson_id=vid,
+                    category=cat,
+                    pattern=pat,
+                    lesson=lesson,
+                    auditor="ImmuneSystem",
+                    severity="CRITICAL"
+                )
+                imported += 1
+        return imported
+
     def get_lessons(self, task: str = "", category: Optional[str] = None, limit: int = 5) -> List[Dict[str, Any]]:
         """
-        Retrieves relevant lessons, mistakes, and scar tissue matching the task or category.
+        Retrieves relevant lessons, mistakes, scar tissue, and active immune vaccines matching the task or category.
+        Employs multilingual stemming, BM25-like weighting, and fuzzy token matching.
         """
         data = self.load_data()
         all_items: List[Dict[str, Any]] = []
@@ -185,18 +318,51 @@ class LearningMemory:
                 "source": "anti_pattern"
             })
 
+        # Dynamically load active evolved vaccines from immune_system.json
+        dir_name = os.path.dirname(self.memory_path) or ".hallwright"
+        immune_path = os.path.join(dir_name, "immune_system.json")
+        if os.path.exists(immune_path):
+            try:
+                with open(immune_path, "r", encoding="utf-8") as f:
+                    imm_data = json.load(f)
+                for v in imm_data.get("vaccines", []):
+                    sol = v.get("web_solution", "")
+                    rule = v.get("guardrail_rule", "INVARIANT")
+                    all_items.append({
+                        "id": v.get("id"),
+                        "category": v.get("category", "runtime"),
+                        "pattern": v.get("error_signature", ""),
+                        "lesson": f"{sol} [Invariant: {rule}]" if sol else rule,
+                        "severity": "critical",
+                        "generation": v.get("generation", 1),
+                        "source": "vaccine"
+                    })
+            except (json.JSONDecodeError, OSError) as imm_err:
+                logger.debug("Immune system ledger skipped or empty: %s", imm_err)
+
         if not task and not category:
+            # Sort with priority to critical items and vaccines
+            all_items.sort(key=lambda x: (
+                1 if x.get("source") == "vaccine" else 0,
+                1 if (x.get("severity") or "").lower() == "critical" else 0
+            ), reverse=True)
             return all_items[:limit]
 
-        raw_tokens = set(re.findall(r"\b[a-z0-9_\-\.]{2,}\b", (task or "").lower()))
+        clean_task = (task or "").lower().strip()
+        raw_tokens = set(re.findall(r"\b[a-z0-9_\-\.]{2,}\b", clean_task))
         task_tokens = set(raw_tokens)
-        for t in raw_tokens:
+        for t in list(raw_tokens):
+            norm_t = normalize_token(t)
+            task_tokens.add(norm_t)
             if t in SYNONYM_MAP:
                 task_tokens.update(SYNONYM_MAP[t])
+            if norm_t in SYNONYM_MAP:
+                task_tokens.update(SYNONYM_MAP[norm_t])
+
         scored_items = []
 
         for item in all_items:
-            score = 0
+            score = 0.0
             item_cat = (item.get("category") or "").lower()
             item_pattern = (item.get("pattern") or "").lower()
             item_lesson = (item.get("lesson") or "").lower()
@@ -208,27 +374,64 @@ class LearningMemory:
                 else:
                     continue  # Strict category filter if specified
 
-            # Token overlap scoring
+            # Full phrase matching boost
+            if clean_task and len(clean_task) >= 3:
+                if clean_task in item_pattern:
+                    score += 6.0
+                elif clean_task in item_lesson:
+                    score += 4.5
+                elif clean_task in item_cat:
+                    score += 5.0
+
+            # Token overlap & Stem matching
             for token in task_tokens:
+                tok_norm = normalize_token(token)
+                # Category match
                 if token in item_cat:
-                    score += 3.0
-                if token in item_pattern:
+                    score += 3.5
+                elif tok_norm in item_cat:
                     score += 2.5
+
+                # Pattern match
+                if token in item_pattern:
+                    score += 3.0
+                elif tok_norm in item_pattern:
+                    score += 2.0
+
+                # Lesson match
                 if token in item_lesson:
-                    score += 1.5
+                    score += 2.0
+                elif tok_norm in item_lesson:
+                    score += 1.2
 
             # Severity boost
             sev = (item.get("severity") or "").lower()
             if sev == "critical":
-                score += 2.0
+                score += 2.5
             elif sev == "high":
-                score += 1.0
+                score += 1.2
+
+            # Source boost
+            src = item.get("source", "")
+            if src == "vaccine":
+                score += 2.5
+            elif src == "scarTissue":
+                score += 1.5
 
             if score > 0:
                 scored_items.append((score, item))
 
         scored_items.sort(key=lambda x: x[0], reverse=True)
-        return [item for _, item in scored_items[:limit]]
+        deduped = []
+        seen = set()
+        for _, itm in scored_items:
+            key = (itm.get("category", ""), itm.get("pattern", "")[:60])
+            if key not in seen:
+                seen.add(key)
+                deduped.append(itm)
+                if len(deduped) >= limit:
+                    break
+        return deduped
 
     def record_learning(
         self,
@@ -239,8 +442,8 @@ class LearningMemory:
         severity: str = "high"
     ) -> Dict[str, Any]:
         """
-        Records a new learning experience into memory.json.
-        record_type: 'mistake' | 'success' | 'convention' | 'anti_pattern' | 'lesson'
+        Records a new learning experience into memory.json and SQLite.
+        record_type: 'mistake' | 'success' | 'convention' | 'anti_pattern' | 'lesson' | 'rule' | 'vaccine'
         """
         data = self.load_data()
         now_iso = datetime.now(timezone.utc).isoformat()
@@ -254,7 +457,9 @@ class LearningMemory:
             "convention": "conventions",
             "anti_pattern": "anti_patterns",
             "lesson": "lessons",
-            "scartissue": "scarTissue"
+            "scartissue": "scarTissue",
+            "rule": "scarTissue",
+            "vaccine": "scarTissue"
         }
         target_key = target_map.get(clean_type, "lessons")
         records = data.setdefault(target_key, [])
@@ -309,7 +514,7 @@ class LearningMemory:
 
     def format_warning_snippet(self, task: str) -> str:
         """
-        Returns a ready-to-inject warning markdown block based on matching lessons.
+        Returns a ready-to-inject warning markdown block based on matching lessons and active immunity.
         """
         lessons = self.get_lessons(task=task, limit=4)
         if not lessons:
@@ -319,5 +524,7 @@ class LearningMemory:
         for item in lessons:
             cat = item.get("category", "code").upper()
             lesson = item.get("lesson", "")
-            lines.append(f"- **[{cat}]**: {lesson}")
+            src = item.get("source", "")
+            badge = " [VACCINE]" if src == "vaccine" else ""
+            lines.append(f"- **[{cat}{badge}]**: {lesson}")
         return "\n".join(lines)

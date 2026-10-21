@@ -509,6 +509,45 @@ TOOLS = [
             },
             "required": ["tier"]
         }
+    },
+    {
+        "name": "hallwright_learn_from_pc",
+        "description": "Observes user PC state using ultra-lightweight micro-snapshots (<=192px) and adaptively trains agent aesthetic models based on user demands and feedback.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "demand": {
+                    "type": "string",
+                    "description": "User requirement, feedback, or visual constraint (e.g. 'menga bunaqa sayt kerak emas', 'zamonaviy dark mode va 3D bo\\'lsin')"
+                },
+                "image_path": {
+                    "type": "string",
+                    "description": "Optional path to screenshot or reference image (auto-falls back to screen or workspace artifacts if omitted)"
+                }
+            },
+            "required": ["demand"]
+        }
+    },
+    {
+        "name": "hallwright_transmute_ui",
+        "description": "Automatically upgrades and refactors any generic, flat HTML page into an elite interface with Magic UI border beams, 3D spatial canvas, and kbar Command Hub based on learned PC preferences.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "html": {
+                    "type": "string",
+                    "description": "Raw HTML string to upgrade (optional if file_path is specified)"
+                },
+                "file_path": {
+                    "type": "string",
+                    "description": "Path to HTML file to upgrade (optional if html is specified)"
+                },
+                "output_path": {
+                    "type": "string",
+                    "description": "Optional destination path for the upgraded HTML file"
+                }
+            }
+        }
     }
 ]
 
@@ -902,6 +941,40 @@ def handle_set_tier(args):
         return {"status": "error", "message": str(err)}
 
 
+def handle_learn_from_pc(args):
+    try:
+        from visual_learner import VisualPCLearner
+    except ImportError:
+        try:
+            from src.sdk.visual_learner import VisualPCLearner
+        except ImportError:
+            return {"status": "error", "message": "VisualPCLearner module could not be loaded."}
+
+    demand = args.get("demand", "")
+    image_path = args.get("image_path")
+    learner = VisualPCLearner(workspace_root=".")
+    return learner.train_from_pc(user_demand=demand, source_image=image_path)
+
+
+def handle_transmute_ui(args):
+    try:
+        from visual_transmuter import VisualTransmuter
+    except ImportError:
+        try:
+            from src.sdk.visual_transmuter import VisualTransmuter
+        except ImportError:
+            return {"status": "error", "message": "VisualTransmuter module could not be loaded."}
+
+    html = args.get("html")
+    file_path = args.get("file_path")
+    transmuter = VisualTransmuter(workspace_root=".")
+    if file_path:
+        return transmuter.transmute_file(file_path, output_path=args.get("output_path"))
+    elif html:
+        return transmuter.transmute_html(html)
+    return {"status": "error", "message": "Either 'html' string or 'file_path' must be provided."}
+
+
 def validate_tool_arguments(tool_def, args):
     """
     Validates arguments against the tool's inputSchema per MCP JSON-RPC 2.0 specs.
@@ -1070,6 +1143,10 @@ def dispatch_request(req):
             output = handle_get_tier(args)
         elif hw_name == "hallwright_set_tier":
             output = handle_set_tier(args)
+        elif hw_name == "hallwright_learn_from_pc":
+            output = handle_learn_from_pc(args)
+        elif hw_name == "hallwright_transmute_ui":
+            output = handle_transmute_ui(args)
         else:
             return {
                 "jsonrpc": "2.0",

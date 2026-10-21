@@ -17,6 +17,8 @@ from typing import List, Dict, Any, Optional
 
 logger = logging.getLogger("hallwright.cli")
 
+__version__ = "0.10.87"
+
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
@@ -1702,6 +1704,84 @@ def cmd_sovereign(args: argparse.Namespace) -> int:
         print(f"   + {fw}")
     print("=" * 78)
     print(" ✨ Mission autonomously achieved with zero babysitting and zero defect!\n")
+def cmd_learn_pc(args) -> int:
+    """Handles learn-pc / vision-learn command for adaptive micro-snapshot training."""
+    from visual_learner import VisualPCLearner
+    learner = VisualPCLearner(workspace_root=".")
+
+    if getattr(args, "profile", False):
+        profile = learner.get_learned_profile()
+        if getattr(args, "json", False):
+            print(json.dumps(profile, indent=2))
+        else:
+            print("\n🎨 [HALLWRIGHT VISUAL INTELLIGENCE PROFILE]")
+            print(f"  • Total PC Training Episodes: {profile['total_trainings']}")
+            print(f"  • Preferred Theme            : {profile['preferred_theme'].upper()}")
+            print(f"  • Banned Anti-Patterns Count : {profile['banned_patterns_count']}")
+            if profile.get("latest_episode"):
+                ep = profile["latest_episode"]
+                print(f"  • Latest Learned Demand      : \"{ep.get('user_demand')}\"")
+                print(f"  • Micro-Snapshot Thumbnail   : {ep.get('thumbnail')}")
+            print("========================================================================\n")
+        return 0
+
+    demand = getattr(args, "demand", "Optimize visual layout and contrast")
+    image_path = getattr(args, "image", None)
+    result = learner.train_from_pc(user_demand=demand, source_image=image_path)
+
+    if getattr(args, "json", False):
+        print(json.dumps(result, indent=2))
+        return 0
+
+    print("\n🧠 [HALLWRIGHT ADAPTIVE VISUAL PC LEARNING]")
+    print(f"  🎯 User Demand       : \"{result['user_demand']}\"")
+    print(f"  🏷️  Classification   : {result['type'].upper()} ({result['learned_rule']})")
+    print(f"  🖼️  Micro-Snapshot   : {result['micro_snapshot']['thumbnail_path']} ({result['micro_snapshot']['dimensions']}, {result['micro_snapshot']['file_size_kb']} KB)")
+    f = result['micro_snapshot']['features']
+    print(f"  🎨 Extracted Palette : {', '.join(f['dominant_colors'])}")
+    print(f"  💡 Luminance/Theme   : {f['average_luminance']} ({'DARK' if f['is_dark_mode'] else 'LIGHT'}) | Contrast: {f['contrast_ratio']}x")
+    print(f"  📝 Ingested Lesson   : {result['lesson']}")
+    print("========================================================================")
+    print("✨ Successfully trained agent from user PC state with zero token waste!\n")
+    return 0
+
+
+def cmd_transmute_ui(args) -> int:
+    """Handles transmute / upgrade-ui command to transform flat HTML into modern luxury interface."""
+    try:
+        from visual_transmuter import VisualTransmuter
+    except ImportError:
+        try:
+            from src.sdk.visual_transmuter import VisualTransmuter
+        except ImportError:
+            print("[-] Error: VisualTransmuter module could not be loaded.", file=sys.stderr)
+            return 1
+
+    transmuter = VisualTransmuter(workspace_root=".")
+    input_file = getattr(args, "input", None)
+    output_file = getattr(args, "output", None)
+
+    if not input_file:
+        print("[-] Error: --input <path_to_html_file> is required.", file=sys.stderr)
+        return 1
+
+    res = transmuter.transmute_file(input_path=input_file, output_path=output_file)
+    if res.get("status") != "TRANSMUTED":
+        print(f"[-] Transmutation error: {res.get('message')}", file=sys.stderr)
+        return 1
+
+    if getattr(args, "json", False):
+        print(json.dumps(res, indent=2))
+        return 0
+
+    print("\n✨ [HALLWRIGHT AUTONOMOUS VISUAL TRANSMUTATION]")
+    print(f"  📄 Source HTML          : {input_file}")
+    print(f"  🚀 Upgraded Target      : {res.get('output_file')}")
+    print(f"  🔮 Components Transmuted: {res.get('upgrades_count')}")
+    print(f"  ⚡ Injected Primitives  : {', '.join(res.get('injected_primitives', []))}")
+    print(f"  📊 Saliency Score        : {res.get('saliency_score')}/100 (Grade: {res.get('saliency_grade')})")
+    print(f"  🛡️ Enforced Rule        : {res.get('banned_rules_enforced')}")
+    print("========================================================================\n")
     return 0
 
 
@@ -1710,6 +1790,7 @@ def main():
         prog="hallwright",
         description="Hallwright Guardrail Layer & Quality Protocol for AI Coding Agents"
     )
+    parser.add_argument("--version", "-V", action="version", version=f"%(prog)s v{__version__}")
     subparsers = parser.add_subparsers(dest="subcommand", help="Hallwright command to execute")
 
     # init
@@ -1905,8 +1986,18 @@ def main():
     p_sov = subparsers.add_parser("sovereign", aliases=["run", "execute", "ijro", "bajar"], help="Execute Tier 3 Sovereign Autonomous Loop (Research, Swarm, Code & UI Generation, AST Audit, Minification)")
     p_sov.add_argument("task", help="The mission or engineering task to execute autonomously end-to-end")
     p_sov.add_argument("--output-dir", "-o", default="sovereign_out", help="Destination folder for synthesized files (default: sovereign_out)")
-    p_sov.add_argument("--skip-web", "-nw", action="store_true", help="Bypass live internet technical research")
-    p_sov.add_argument("--json", "-j", action="store_true", help="Output telemetry in JSON format")
+    # learn-pc / vision-learn / pc-train
+    p_vlearn = subparsers.add_parser("learn-pc", aliases=["vision-learn", "pc-train"], help="Visually inspect user PC and adaptively train aesthetic model via micro-snapshots")
+    p_vlearn.add_argument("--demand", "-d", default="Optimize visual layout and contrast", help="User demand, preference, or rejected pattern")
+    p_vlearn.add_argument("--image", "-i", help="Optional specific image or screenshot to learn from")
+    p_vlearn.add_argument("--profile", action="store_true", help="Display accumulated learned visual intelligence profile")
+    p_vlearn.add_argument("--json", "-j", action="store_true", help="Output learning result in JSON format")
+
+    # transmute / upgrade-ui / modernlashtir
+    p_trans = subparsers.add_parser("transmute", aliases=["upgrade-ui", "modernlashtir"], help="Automatically upgrade flat HTML page into luxury interface using learned preferences")
+    p_trans.add_argument("--input", "-i", required=True, help="Path to input HTML file")
+    p_trans.add_argument("--output", "-o", help="Path to write upgraded HTML file")
+    p_trans.add_argument("--json", "-j", action="store_true", help="Output result in JSON format")
 
     args = parser.parse_args()
 
@@ -1968,6 +2059,10 @@ def main():
         return cmd_taxonomy(args)
     elif args.subcommand in ("search", "find", "qidiruv"):
         return cmd_search(args)
+    elif args.subcommand in ("learn-pc", "vision-learn", "pc-train"):
+        return cmd_learn_pc(args)
+    elif args.subcommand in ("transmute", "upgrade-ui", "modernlashtir"):
+        return cmd_transmute_ui(args)
     elif args.subcommand == "mcp":
         from server import main as mcp_main
         mcp_main()

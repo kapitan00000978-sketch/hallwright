@@ -102,3 +102,67 @@ def test_learning_memory_synonym_expansion():
         lessons = mem.get_lessons(task="User login flow", limit=3)
         assert len(lessons) > 0
         assert any(l["category"] == "auth" for l in lessons)
+
+
+def test_learning_memory_uzbek_and_multilingual_search():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        mem_path = os.path.join(tmpdir, "test_memory.json")
+        mem = LearningMemory(mem_path)
+        
+        # 1. Uzbek query for password/auth
+        auth_lessons = mem.get_lessons(task="parol tekshirish va kirish tizimi", limit=3)
+        assert len(auth_lessons) > 0
+        assert any(l["category"] == "auth" for l in auth_lessons)
+
+        # 2. Uzbek query for payment/cart
+        payment_lessons = mem.get_lessons(task="to'lov savat billing", limit=3)
+        assert len(payment_lessons) > 0
+        assert any(l["category"] == "payment" for l in payment_lessons)
+
+        # 3. Uzbek query for database
+        db_lessons = mem.get_lessons(task="baza jadval so'rovlar", limit=3)
+        assert len(db_lessons) > 0
+        assert any(l["category"] == "database" for l in db_lessons)
+
+
+def test_learning_memory_immune_system_vaccine_sync():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        hallwright_dir = os.path.join(tmpdir, ".hallwright")
+        os.makedirs(hallwright_dir, exist_ok=True)
+        mem_path = os.path.join(hallwright_dir, "memory.json")
+        immune_path = os.path.join(hallwright_dir, "immune_system.json")
+
+        immune_data = {
+            "version": "1.0.0",
+            "generation": 3,
+            "vaccines": [
+                {
+                    "id": "vac-006",
+                    "generation": 3,
+                    "category": "runtime",
+                    "error_signature": "TypeError: unexpected NoneType operation without typeguard",
+                    "root_cause": "Unchecked None value passed to string method",
+                    "web_solution": "Apply defensive None checking before invoking string operations",
+                    "guardrail_rule": "ALWAYS_CHECK_NONE_BEFORE_METHOD_CALL"
+                }
+            ]
+        }
+        with open(immune_path, "w", encoding="utf-8") as f:
+            json.dump(immune_data, f)
+
+        mem = LearningMemory(mem_path)
+        lessons = mem.get_lessons(task="TypeError NoneType typeguard", limit=3)
+        assert len(lessons) > 0
+        vaccine_entry = next((l for l in lessons if l.get("id") == "vac-006"), None)
+        assert vaccine_entry is not None
+        assert vaccine_entry["source"] == "vaccine"
+        assert vaccine_entry["severity"] == "critical"
+        assert "ALWAYS_CHECK_NONE_BEFORE_METHOD_CALL" in vaccine_entry["lesson"]
+
+
+def test_learning_memory_workspace_root_init():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        mem = LearningMemory(workspace_root=tmpdir)
+        assert os.path.normpath(mem.memory_path) == os.path.normpath(os.path.join(tmpdir, ".hallwright", "memory.json"))
+        data = mem.load_data()
+        assert data["version"] == "2.0.0"

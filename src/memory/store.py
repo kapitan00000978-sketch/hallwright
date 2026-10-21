@@ -132,6 +132,58 @@ class SqliteMemoryStore:
             rows = cursor.fetchall()
             return [dict(row) for row in rows]
 
+    def search_lessons(self, query: str = "", category: Optional[str] = None, limit: int = 10) -> List[Dict[str, Any]]:
+        """Searches lessons by query tokens with ranking and category filtering."""
+        clean_query = query.strip()
+        if not clean_query and not category:
+            return self.get_lessons(limit=limit)
+
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            clauses = []
+            params: List[Any] = []
+
+            if category:
+                clauses.append("category = ?")
+                params.append(category)
+
+            tokens = [t.lower() for t in clean_query.split() if len(t) >= 2]
+            if tokens:
+                token_clauses = []
+                for token in tokens:
+                    stems = [token]
+                    if token.endswith("y") and len(token) > 2:
+                        stems.append(token[:-1] + "i")
+                    elif token.endswith("ies") and len(token) > 3:
+                        stems.append(token[:-3] + "y")
+                    elif token.endswith("s") and len(token) > 3:
+                        stems.append(token[:-1])
+                    sub_or = []
+                    for s in stems:
+                        sub_or.append("(LOWER(pattern) LIKE ? OR LOWER(lesson) LIKE ? OR LOWER(category) LIKE ?)")
+                        wildcard = f"%{s}%"
+                        params.extend([wildcard, wildcard, wildcard])
+                    token_clauses.append("(" + " OR ".join(sub_or) + ")")
+                clauses.append("(" + " OR ".join(token_clauses) + ")")
+
+            where_str = ("WHERE " + " AND ".join(clauses)) if clauses else ""
+            sql = f"""
+                SELECT id, category, pattern, lesson, auditor, severity, created_at,
+                    CASE
+                        WHEN LOWER(severity) = 'critical' THEN 3
+                        WHEN LOWER(severity) = 'high' THEN 2
+                        ELSE 1
+                    END as sev_rank
+                FROM lessons
+                {where_str}
+                ORDER BY sev_rank DESC, created_at DESC
+                LIMIT ?;
+            """
+            params.append(limit)
+            cursor.execute(sql, tuple(params))
+            rows = cursor.fetchall()
+            return [dict(row) for row in rows]
+
     # ---------------------------------------------------------
     # Conventions operations
     # ---------------------------------------------------------
@@ -247,6 +299,44 @@ class SqliteMemoryStore:
                 self.record_convention(cid, cat, rule)
                 imported += 1
 
+        # Automatically sync sibling immune_system.json if available
+        base_dir = os.path.dirname(json_path) or ".hallwright"
+        immune_path = os.path.join(base_dir, "immune_system.json")
+        if os.path.exists(immune_path):
+            imported += self.sync_from_immune_system(immune_path)
+
+        return imported
+
+    def sync_from_immune_system(self, immune_path: str) -> int:
+        """Seeds SQLite lessons table with evolved vaccines from immune_system.json."""
+        if not os.path.exists(immune_path):
+            return 0
+        try:
+            with open(immune_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, OSError) as e:
+            logger.warning(f"Failed to read immune system for sync: {e}")
+            return 0
+
+        imported = 0
+        vaccines = data.get("vaccines", [])
+        for v in vaccines:
+            vid = v.get("id") or f"vac_{int(time.time()*1000)}"
+            cat = v.get("category", "runtime")
+            pat = v.get("error_signature", "")
+            sol = v.get("web_solution", "")
+            rule = v.get("guardrail_rule", "INVARIANT")
+            lesson = f"{sol} [Invariant: {rule}]" if sol else rule
+            if pat and lesson:
+                self.record_lesson(
+                    lesson_id=vid,
+                    category=cat,
+                    pattern=pat,
+                    lesson=lesson,
+                    auditor="ImmuneSystem",
+                    severity="CRITICAL"
+                )
+                imported += 1
         return imported
 
     def export_to_json(self, json_path: str) -> bool:

@@ -125,12 +125,16 @@ Hallwright (repo `kapitan00000978-sketch/hallwright`; formerly Hallwright, forme
   - Verified concurrency: `test_concurrent_writers` passed (4 parallel threads writing 20 notes simultaneously with zero data corruption).
   - Test result: 6/6 tests passing in 1.497s (`python -m unittest tests/test_hwmem.py`). Gatekeeper audit: 100/100 certified clean.
 
+- **HWMEM Step 4 (Agent Instructions SKILL.md):**
+  - Created `skills/hwmem/SKILL.md` (160 words, strictly under 200 words limit).
+  - Explicitly instructs agents to run `python memory.py show` at session start, read only that, start a session file immediately, log atomic notes, open older sessions only on index match, never trust memory over actual code, and verify before commit.
+
 ### Remaining
-- **HWMEM Step 4:** Agent instructions file `skills/hwmem/SKILL.md` (< 200 words).
 - **HWMEM Step 5:** `tokens.py` & `measure.py` (10 demo sessions, comparison table labeled ESTIMATE).
 - **HWMEM Step 6:** `experiments/RESULTS.md` A/B benchmark scenario.
 
 ### Next Command
-- Step 4: Create `skills/hwmem/SKILL.md` (< 200 words).
+- Step 5: Implement `tokens.py` and `measure.py` with 10 demo sessions comparison table.
+
 
 

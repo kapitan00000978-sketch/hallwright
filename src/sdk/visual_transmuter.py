@@ -168,11 +168,15 @@ body {
         else:
             transmuted = f"<head>{injected_head}</head>\n" + transmuted
 
-        # 4. Inject 3D Spatial Canvas into top of body
+        # 4. Inject Ambient Glow, Starfield Canvas, and 3D Spatial Canvas into top of body
         spatial_html = self.engine.get_spatial_canvas_html()
         canvas_block = f"""
+  <!-- Ambient Atmospheric Lighting & Starfield Canvas -->
+  <div class="ambient-glow-top" aria-hidden="true"></div>
+  <canvas id="stars-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;"></canvas>
+
   <!-- 3D Spatial Canvas Primitive -->
-  <section class="spatial-hero-wrapper" style="max-width: 1200px; margin: 24px auto; padding: 0 16px;">
+  <section class="spatial-hero-wrapper" style="max-width: 1200px; margin: 24px auto; padding: 0 16px; position: relative; z-index: 1;">
     {spatial_html}
   </section>
 """

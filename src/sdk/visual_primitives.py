@@ -42,6 +42,7 @@ class VisualPrimitivesEngine:
   border-radius: var(--radius-md, 16px);
   background: var(--bg-card, rgba(15, 23, 42, 0.75));
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
   overflow: hidden;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
@@ -51,6 +52,53 @@ class VisualPrimitivesEngine:
   transform: translateY(-4px);
   border-color: var(--primary-light, #38bdf8);
   box-shadow: 0 12px 32px -8px var(--primary-glow, rgba(56, 189, 248, 0.25));
+}
+
+.ambient-glow-top {
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1000px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.28) 0%, rgba(79, 70, 229, 0.18) 40%, rgba(6, 182, 212, 0.08) 70%, transparent 85%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatAura 8s ease-in-out infinite alternate;
+}
+
+@keyframes floatAura {
+  0% { transform: translateX(-50%) translateY(0px) scale(1); }
+  100% { transform: translateX(-50%) translateY(30px) scale(1.08); }
+}
+
+.btn-glow {
+  position: relative;
+  background: linear-gradient(135deg, #9333ea 0%, #7e22ce 50%, #4f46e5 100%);
+  box-shadow: 0 0 25px rgba(147, 51, 234, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transition: all 0.25s ease;
+}
+
+.btn-glow:hover {
+  box-shadow: 0 0 35px rgba(168, 85, 247, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px) scale(1.02);
+}
+
+.glass-card {
+  background: rgba(11, 16, 32, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gradient-headline {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 45%, #c084fc 80%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .magic-bento-grid {
@@ -441,8 +489,53 @@ class KbarCommandHub {
   }
 }
 
+class StarfieldCanvasEngine {
+  constructor(canvasId = 'stars-canvas') {
+    this.canvas = document.getElementById(canvasId);
+    if (!this.canvas) return;
+    this.ctx = this.canvas.getContext('2d');
+    if (!this.ctx) return;
+    this.stars = [];
+    this.init();
+  }
+
+  init() {
+    const resize = () => {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    for (let i = 0; i < 100; i++) {
+      this.stars.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 1.2 + 0.3,
+        a: Math.random(),
+        speed: Math.random() * 0.006 + 0.002
+      });
+    }
+
+    const draw = () => {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.stars.forEach(s => {
+        s.a += s.speed;
+        const alpha = (Math.sin(s.a) + 1) / 2 * 0.6 + 0.1;
+        this.ctx.beginPath();
+        this.ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        this.ctx.fillStyle = `rgba(192, 132, 252, ${alpha})`;
+        this.ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    };
+    draw();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   new SpatialCanvasEngine('spatial-hero-canvas');
+  new StarfieldCanvasEngine('stars-canvas');
   new KbarCommandHub();
 });
 """

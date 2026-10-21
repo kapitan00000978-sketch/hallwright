@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Hallwright Engineering Core",
-  "lastUpdated": "2026-10-21T09:17:06.361178+00:00",
+  "lastUpdated": "2026-10-21T11:24:17.532392+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -256,7 +256,7 @@
       "lesson": "LEARNED USER PREFERENCE: User demanded 'faqat eng zamonaviy shisha effektlari va micro-animatsiyalar bo'lsin'. Apply calibrated theme: is_dark=True, dominant hues: #090b10, #090e15, #0c0b17, contrast: 43.33x. Integrate Magic UI micro-interactions.",
       "severity": "high",
       "recordedAt": "2026-10-21T03:43:40.421982+00:00",
-      "updatedAt": "2026-10-21T09:16:07.973857+00:00"
+      "updatedAt": "2026-10-21T11:24:16.862898+00:00"
     }
   ],
   "anti_patterns": [
@@ -277,7 +277,15 @@
       "lesson": "REJECTED DESIGN PATTERN: User explicitly rejected layout style ('bunday oddiy oq fonli dizayn kerak emas'). Never generate flat, boring cards or dull enterprise grids (e.g. medax-style). Instead, enforce Elena Rostova ultra-luxury frosted glass, Magic UI border beams, and R3F spatial 3D depth.",
       "severity": "critical",
       "recordedAt": "2026-10-21T03:43:41.388959+00:00",
-      "updatedAt": "2026-10-21T09:16:08.611115+00:00"
+      "updatedAt": "2026-10-21T11:24:17.532392+00:00"
+    },
+    {
+      "id": "ant-0004",
+      "category": "ui_design",
+      "pattern": "flat pitch-black dead UI without atmospheric depth",
+      "lesson": "Never generate raw flat pitch-black pages with static boxes. Always enforce layered ambient aura, starfield/mesh background, interactive live widgets, and Magic UI border beams per Elena Rostova standards.",
+      "severity": "critical",
+      "recordedAt": "2026-10-21T11:15:40.044329+00:00"
     }
   ],
   "lessons": [

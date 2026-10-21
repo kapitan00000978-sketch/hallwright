@@ -38,3 +38,6 @@ Har bir dizayn quyidagi dunyo durdonalari bilan solishtiriladi:
 ## 📐 EMPIRICAL VERIFICATION DIRECTIVES
 1. Kod hajmi emas, **ekrandagi yakuniy natija** (computed pixels, contrast ratios, 60fps rendering) baholanadi.
 2. Interfeys bahosi **85/100** dan past bo‘lsa, u qabul qilinmaydi va mukammal darajaga yetkazilguncha avtonom tarzda takomillashtiriladi.
+3. **Avtonom Transmutatsiya Majburiyati (AI Agent Plugin Invariant):**
+   - Hech qachon inson qo'li bilan tuzatishini kutmang: AI agent yaratgan yoki o'zgartirgan har qanday HTML/CSS interfeysi darhol `hallwright_transmute_ui` yoki `VisualTransmuter` vositasidan o'tkazilishi shart.
+   - Har bir veb-sahifa kosmik chuqurlik (`--bg-main: #04060d`), ambient mesh yorug'ligi (`.ambient-glow-top`), harakatdagi zarrachalar (`#stars-canvas`), shaffof shisha (`.glass-card`), lazerli chegaralar (`.magic-border-beam`) va taktil yorug'likka ega tugmalar (`.btn-glow`) bilan ta'minlanishi shart. Yassi, o'lik qora fonlar qat'iyan rad etiladi.

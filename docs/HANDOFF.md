@@ -145,11 +145,21 @@ Hallwright (repo `kapitan00000978-sketch/hallwright`; formerly Hallwright, forme
   - Provided empty 6-run results table (3 runs per arm) with columns: `arm`, `run#`, `input tokens`, `output tokens`, `files read`, `tool calls`, `step 3 finished`, `tests pass`, `notes`.
   - Configured token fields to be filled manually from user's agent billing display (zero fabricated numbers).
 
+- **HWMEM Step 7 (Session 2 Live Evaluation Run — "continue the project"):**
+  - Read `python memory.py show` with zero extraneous repository search.
+  - Detected `Next:` objective directly from previous session: implement Step 3 CSV export (`todo export --format csv`).
+  - Implemented `export_csv(filepath)` and `todo export --format csv` in `experiments/todo_cli/todo.py`.
+  - Added `test_step3_csv_export` to `experiments/todo_cli/tests/test_todo.py`.
+  - Verified 100% test pass rate (`3/3 passed in 0.045s`) and 100/100 Gatekeeper score across 566 files.
+  - Finalized session `todo-cli-step3-csv-export` via `python memory.py finish` and verified with `python memory.py verify`.
+  - Recorded Arm B Run #1 metrics in `experiments/RESULTS.md`.
+
 ### Remaining
-- None! All 6 steps of the HWMEM project specification are fully implemented, tested, and verified.
+- User fills manual billing telemetry (Input/Output tokens) in `experiments/RESULTS.md` table for Run #1.
+- Additional benchmark runs (Arm A control runs vs Arm B runs) as desired.
 
 ### Next Command
-- User can run `python memory.py show` or inspect `experiments/RESULTS.md` to conduct the real A/B trials.
+- `python memory.py show` or `python -m unittest experiments/todo_cli/tests/test_todo.py`
 
 
 

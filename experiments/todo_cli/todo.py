@@ -87,6 +87,16 @@ class TodoList:
         self.items = [TodoItem.from_dict(d) for d in data.get("todos", [])]
 
 
+    def export_csv(self, filepath: str = "todos.csv") -> int:
+        import csv
+        with open(filepath, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(["id", "title", "completed", "created_at"])
+            for item in self.items:
+                writer.writerow([item.id, item.title, str(item.completed), item.created_at])
+        return len(self.items)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Tiny Todo CLI")
     parser.add_argument("--file", "-f", default=DEFAULT_DB_FILE, help="Path to JSON storage file")
@@ -103,6 +113,10 @@ def main() -> int:
 
     p_del = subparsers.add_parser("delete", help="Delete an item")
     p_del.add_argument("id", type=int, help="Task ID")
+
+    p_exp = subparsers.add_parser("export", help="Export tasks to file")
+    p_exp.add_argument("--format", choices=["csv"], default="csv", help="Export format (default: csv)")
+    p_exp.add_argument("--output", "-o", default="todos.csv", help="Output file path (default: todos.csv)")
 
     args = parser.parse_args()
 
@@ -138,6 +152,14 @@ def main() -> int:
             return 0
         else:
             print(f"Error: Task #{args.id} not found", file=sys.stderr)
+            return 1
+    elif args.subcommand == "export":
+        if args.format == "csv":
+            count = todo_list.export_csv(args.output)
+            print(f"Exported {count} tasks to {args.output}")
+            return 0
+        else:
+            print(f"Unsupported format: {args.format}", file=sys.stderr)
             return 1
     else:
         parser.print_help()

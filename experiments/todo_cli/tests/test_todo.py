@@ -65,6 +65,28 @@ class TestTodoCLI(unittest.TestCase):
         self.assertFalse(reloaded.items[1].completed)
         self.assertEqual(reloaded._next_id, 3)
 
+    def test_step3_csv_export(self):
+        """Tests Step 3: CSV file export."""
+        csv_file = os.path.join(self.temp_dir, "export.csv")
+        todos = TodoList()
+        todos.add("Task Alpha")
+        todos.add("Task Beta")
+        todos.complete(1)
+
+        count = todos.export_csv(csv_file)
+        self.assertEqual(count, 2)
+        self.assertTrue(os.path.exists(csv_file))
+
+        with open(csv_file, "r", encoding="utf-8") as f:
+            lines = [line.strip() for line in f if line.strip()]
+
+        self.assertEqual(lines[0], "id,title,completed,created_at")
+        self.assertIn("Task Alpha", lines[1])
+        self.assertIn("True", lines[1])
+        self.assertIn("Task Beta", lines[2])
+        self.assertIn("False", lines[2])
+
 
 if __name__ == "__main__":
     unittest.main()
+

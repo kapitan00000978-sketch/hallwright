@@ -50,7 +50,7 @@ The user provides ONLY the prompt:
 | **Arm A (No Memory)** | 1 | | | | | | | |
 | **Arm A (No Memory)** | 2 | | | | | | | |
 | **Arm A (No Memory)** | 3 | | | | | | | |
-| **Arm B (With hwmem)** | 1 | | | | | | | |
+| **Arm B (With hwmem)** | 1 | *(User fill)* | *(User fill)* | 2 | 4 | Yes | Yes | Executed Step 3 CSV export immediately from `Next:` directive; zero exploratory search. |
 | **Arm B (With hwmem)** | 2 | | | | | | | |
 | **Arm B (With hwmem)** | 3 | | | | | | | |
 

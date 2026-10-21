@@ -129,12 +129,22 @@ Hallwright (repo `kapitan00000978-sketch/hallwright`; formerly Hallwright, forme
   - Created `skills/hwmem/SKILL.md` (160 words, strictly under 200 words limit).
   - Explicitly instructs agents to run `python memory.py show` at session start, read only that, start a session file immediately, log atomic notes, open older sessions only on index match, never trust memory over actual code, and verify before commit.
 
+- **HWMEM Step 5 (Token Counting & A/B Measurement Benchmark):**
+  - Implemented `tokens.py` with automatic `tiktoken` detection (`cl100k_base`) and `chars / 4` fallback, with strict `(ESTIMATE)` labeling.
+  - Implemented `measure.py` with 10 realistic software engineering demo sessions (DB, Auth, API, RBAC, Rate Limiter, Export, Leak Fix, Metrics).
+  - Executed live A/B measurement:
+    - Arm (A) Naive Full Concatenation: 1,302 tokens (ESTIMATE)
+    - Arm (B) hwmem Compact Memory: 356 tokens (ESTIMATE)
+    - Tokens Saved: 946 tokens (ESTIMATE)
+    - Token Reduction Rate: 72.66% reduction (ESTIMATE)
+  - Verified 100/100 Gatekeeper score across `tokens.py` and `measure.py`.
+
 ### Remaining
-- **HWMEM Step 5:** `tokens.py` & `measure.py` (10 demo sessions, comparison table labeled ESTIMATE).
 - **HWMEM Step 6:** `experiments/RESULTS.md` A/B benchmark scenario.
 
 ### Next Command
-- Step 5: Implement `tokens.py` and `measure.py` with 10 demo sessions comparison table.
+- Step 6: Create `experiments/RESULTS.md` with fixed real A/B scenario and empty results table.
+
 
 
 

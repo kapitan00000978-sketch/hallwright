@@ -444,6 +444,23 @@ def scan_ui_design_standards(code: str, filename: str = "") -> List[Dict[str, An
                     "deduction": 15
                 })
 
+    # 4. Ban cliché AI purple/violet palettes (siyohrang taqiqlansin)
+    purple_cliche_pattern = r"""(?i)(?:\b(?:from|to|via|bg|text|border)-purple-[4-9]00\b|#(?:9333ea|a855f7|7e22ce|c084fc|7c3aed|8b5cf6)\b)"""
+    for idx, line in enumerate(lines, 1):
+        if re.search(purple_cliche_pattern, line):
+            if not is_ignored(line):
+                findings.append({
+                    "rule_id": "DESIGN_BANNED_PURPLE_CLICHE",
+                    "category": "DESIGN",
+                    "auditor": COUNCIL_AUDITORS.get("DESIGN", "Elena 'The Visionary' Rostova"),
+                    "file": filename,
+                    "line": idx,
+                    "matched_text": line.strip()[:60],
+                    "message": "Stereotypical AI purple/violet palette cliché detected. Elena Rostova Invariant: Use mature, industry-grade palettes (electric cyan #06b6d4, sapphire #2563eb, emerald #10b981, champagne #f59e0b, or monochrome obsidian titanium).",
+                    "deduction": 20
+                })
+                break
+
     return findings
 
 

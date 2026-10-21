@@ -61,7 +61,7 @@ class VisualPrimitivesEngine:
   transform: translateX(-50%);
   width: 1000px;
   height: 550px;
-  background: radial-gradient(circle, rgba(147, 51, 234, 0.28) 0%, rgba(79, 70, 229, 0.18) 40%, rgba(6, 182, 212, 0.08) 70%, transparent 85%);
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, rgba(37, 99, 235, 0.18) 40%, rgba(16, 185, 129, 0.08) 70%, transparent 85%);
   filter: blur(80px);
   pointer-events: none;
   z-index: 0;
@@ -75,13 +75,13 @@ class VisualPrimitivesEngine:
 
 .btn-glow {
   position: relative;
-  background: linear-gradient(135deg, #9333ea 0%, #7e22ce 50%, #4f46e5 100%);
-  box-shadow: 0 0 25px rgba(147, 51, 234, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #1d4ed8 100%);
+  box-shadow: 0 0 25px rgba(2, 132, 199, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
   transition: all 0.25s ease;
 }
 
 .btn-glow:hover {
-  box-shadow: 0 0 35px rgba(168, 85, 247, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 35px rgba(56, 189, 248, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.5);
   transform: translateY(-1px) scale(1.02);
 }
 
@@ -95,7 +95,7 @@ class VisualPrimitivesEngine:
 }
 
 .gradient-headline {
-  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 45%, #c084fc 80%, #818cf8 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 50%, #38bdf8 80%, #2563eb 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -524,7 +524,7 @@ class StarfieldCanvasEngine {
         const alpha = (Math.sin(s.a) + 1) / 2 * 0.6 + 0.1;
         this.ctx.beginPath();
         this.ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        this.ctx.fillStyle = `rgba(192, 132, 252, ${alpha})`;
+        this.ctx.fillStyle = `rgba(56, 189, 248, ${alpha})`;
         this.ctx.fill();
       });
       requestAnimationFrame(draw);

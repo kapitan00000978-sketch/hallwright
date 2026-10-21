@@ -41,3 +41,11 @@ Har bir dizayn quyidagi dunyo durdonalari bilan solishtiriladi:
 3. **Avtonom Transmutatsiya Majburiyati (AI Agent Plugin Invariant):**
    - Hech qachon inson qo'li bilan tuzatishini kutmang: AI agent yaratgan yoki o'zgartirgan har qanday HTML/CSS interfeysi darhol `hallwright_transmute_ui` yoki `VisualTransmuter` vositasidan o'tkazilishi shart.
    - Har bir veb-sahifa kosmik chuqurlik (`--bg-main: #04060d`), ambient mesh yorug'ligi (`.ambient-glow-top`), harakatdagi zarrachalar (`#stars-canvas`), shaffof shisha (`.glass-card`), lazerli chegaralar (`.magic-border-beam`) va taktil yorug'likka ega tugmalar (`.btn-glow`) bilan ta'minlanishi shart. Yassi, o'lik qora fonlar qat'iyan rad etiladi.
+4. **Qat'iy Ranglar Standarti (Siyohrang Shiorlar Taqiqlanadi — DESIGN_BANNED_PURPLE_CLICHE):**
+   - **Taqiqlangan:** AI agentlar o'rtasida odat bo'lib qolgan arzon siyohrang/binafsha (`#9333ea`, `#a855f7`, `from-purple-500`, `#7c3aed`) shablonlari qat'iyan taqiqlanadi.
+   - **Talab qilinadigan Jiddiy va Elita Palitralar:**
+     * **Electric Cyan & Ice Blue:** `#06b6d4`, `#38bdf8`, `#0ea5e9` (yuqori texnologik, nafis va toza).
+     * **Deep Cobalt & Sapphire:** `#1d4ed8`, `#2563eb`, `#3b82f6` (Stripe va Linear uslubidagi nufuzli biznes ko'ki).
+     * **Emerald & Mint:** `#10b981`, `#059669`, `#34d399` (zamonaviy boylik, moliya va ishonch).
+     * **Monochrome Obsidian, Titanium & Cold Platinum:** `#020617`, `#0f172a`, `#334155`, `#94a3b8`, `#f8fafc` (Apple va Linear minimalist fazosi).
+     * **Champagne & Warm Amber:** `#f59e0b`, `#d97706` (hashamatli va nozik premium urg'ular).

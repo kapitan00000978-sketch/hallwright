@@ -91,3 +91,26 @@ def test_ui_guardrail_rejects_missing_viewport():
     res = scan_code(no_viewport_html, filename="no_viewport.html")
     rule_ids = [f["rule_id"] for f in res["findings"]]
     assert "DESIGN_MISSING_VIEWPORT" in rule_ids
+
+
+def test_ui_guardrail_rejects_purple_cliche():
+    purple_html = """<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purple Cliche Page</title>
+  <style>body { background: radial-gradient(#fff, #000); }</style>
+</head>
+<body>
+  <div class="from-purple-600 to-indigo-600">
+    <button class="bg-purple-500">Boring AI Purple</button>
+  </div>
+</body>
+</html>"""
+    res = scan_code(purple_html, filename="purple_page.html")
+    assert res["status"] == "REJECTED"
+    rule_ids = [f["rule_id"] for f in res["findings"]]
+    assert "DESIGN_BANNED_PURPLE_CLICHE" in rule_ids
+    flaw = next(f for f in res["findings"] if f["rule_id"] == "DESIGN_BANNED_PURPLE_CLICHE")
+    assert "electric cyan" in flaw["message"]
+

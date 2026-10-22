@@ -63,3 +63,13 @@ Har bir dizayn quyidagi dunyo durdonalari bilan solishtiriladi:
        - `--ease-snappy: cubic-bezier(0.2, 0, 0, 1)` (tezkor, kechikishsiz buyruq paneli javobi).
      * **Apparat Kompozitsiyasi (GPU Compositing Layer):** Yuqori chastotali animatsiya qatlamlarida `will-change: transform, opacity;` va `transform: translateZ(0);` ishlatiladi.
      * **Aksessibillik (Reduced Motion):** Har doim `@media (prefers-reduced-motion: reduce)` bloki kiritilib, harakatga sezgir foydalanuvchilar himoyalanadi.
+
+6. **WebGL & 3D Fazoviy Tajribalar (Awwwards & Three.js Standarti):**
+   - **Taqiqlangan Soxtalik:** 2D Canvas orqali matematik formulalar bilan nuqta yoki chiziqli 2D "soxta 3D" chizish qat'iyan taqiqlanadi.
+   - **Talab qilinadigan WebGL 2.0 Standarti:**
+     * **Yadro:** `THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" })` + `THREE.ACESFilmicToneMapping`.
+     * **PBR Materiallar:** `THREE.MeshPhysicalMaterial` (transmission, clearcoat, roughness, metalness) yoki `THREE.MeshStandardMaterial` orqali realistik shisha va metall to'qimalari.
+     * **Kamera va Boshqaruv:** `THREE.PerspectiveCamera` + `THREE.OrbitControls` (inersiyali damping: 0.05).
+     * **Yorug'lik:** Kamida 3 nuqtali dinamik rangli chiroqlar tizimi (Key, Accent/Fill, Rim light) + Ambient yorug'lik.
+     * **Zarrachalar:** `THREE.Points` va `BufferGeometry` orqali koinot chuqurligi (Nebula Stardust).
+     * **Interaktivlik:** `THREE.Raycaster` yordamida 3D ob'yektlarga sichqoncha reaksiyasi va hover effekti.

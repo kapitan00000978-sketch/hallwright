@@ -46,6 +46,10 @@ class DomainCodeSynthesizer:
         ],
         "pipeline": [
             "pipeline", "stream", "batch", "transform", "etl", "processor"
+        ],
+        "3d": [
+            "3d", "three", "threejs", "three.js", "webgl", "webgpu", "spatial",
+            "canvas3d", "mesh", "shader", "orbitcontrols", "gltf", "pbr", "awwwards"
         ]
     }
 
@@ -106,6 +110,8 @@ class DomainCodeSynthesizer:
             return self._synthesize_scraper_module(mod_name, task)
         elif dom == "pipeline":
             return self._synthesize_pipeline_module(mod_name, task)
+        elif dom == "3d":
+            return self._synthesize_3d_module(mod_name, task)
         else:
             return self._synthesize_general_module(mod_name, task)
 
@@ -861,10 +867,42 @@ class DataPipeline:
         return header + body
 
 
+    def _synthesize_3d_module(self, name: str, task: str) -> str:
+        clean_task = task.replace('"', '').replace("'", "")
+        html_repr = '\'<!DOCTYPE html>\\n<html lang="uz">\\n<head>\\n  <meta charset="UTF-8">\\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\\n  <title>__TITLE__</title>\\n  <style>\\n    * { margin: 0; padding: 0; box-sizing: border-box; }\\n    body { background: #030712; color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, \\\'Segoe UI\\\', Roboto, sans-serif; overflow: hidden; }\\n    #webgl-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; z-index: 1; }\\n    .hud-layer { position: fixed; inset: 0; z-index: 10; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 24px; }\\n    .glass-card { pointer-events: auto; background: rgba(8, 14, 30, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(0, 245, 255, 0.2); border-radius: 12px; padding: 14px 20px; box-shadow: 0 12px 36px rgba(0,0,0,0.5); }\\n    .title-badge { display: inline-block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2px; color: #00f5ff; font-weight: 700; margin-bottom: 4px; }\\n    .hud-title { font-size: 1.25rem; font-weight: 700; }\\n    .metrics-bar { display: flex; gap: 16px; font-size: 0.85rem; color: #94a3b8; margin-top: 8px; }\\n    .metrics-val { color: #00f5ff; font-weight: 600; font-family: monospace; }\\n    .controls-deck { display: flex; gap: 10px; }\\n    .glass-btn { background: rgba(0, 245, 255, 0.12); color: #00f5ff; border: 1px solid rgba(0, 245, 255, 0.3); padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }\\n    .glass-btn:hover { background: #00f5ff; color: #030712; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,245,255,0.4); }\\n  </style>\\n  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>\\n  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>\\n</head>\\n<body>\\n  <canvas id="webgl-canvas"></canvas>\\n  <div class="hud-layer">\\n    <header class="glass-card">\\n      <span class="title-badge">Awwwards 3D WebGL Engine</span>\\n      <h1 class="hud-title">__TITLE__</h1>\\n      <div class="metrics-bar">\\n        <div>FPS: <span id="fps-stat" class="metrics-val">60</span></div>\\n        <div>Shaders: <span class="metrics-val">PBR Physical</span></div>\\n        <div>Particles: <span class="metrics-val">3,500</span></div>\\n      </div>\\n    </header>\\n    <footer class="controls-deck">\\n      <button id="toggle-wireframe-btn" class="glass-btn">Toggle Wireframe</button>\\n      <button id="reset-cam-btn" class="glass-btn">Reset Camera</button>\\n    </footer>\\n  </div>\\n  <script>\\n    (function() {\\n      const canvas = document.getElementById("webgl-canvas");\\n      const scene = new THREE.Scene();\\n      scene.background = new THREE.Color(0x030712);\\n      scene.fog = new THREE.FogExp2(0x030712, 0.025);\\n\\n      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);\\n      camera.position.set(0, 1.2, 5.5);\\n\\n      const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, powerPreference: "high-performance" });\\n      renderer.setSize(window.innerWidth, window.innerHeight);\\n      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));\\n      renderer.toneMapping = THREE.ACESFilmicToneMapping;\\n      renderer.toneMappingExposure = 1.15;\\n      renderer.outputEncoding = THREE.sRGBEncoding;\\n\\n      const controls = new THREE.OrbitControls(camera, canvas);\\n      controls.enableDamping = true;\\n      controls.dampingFactor = 0.05;\\n      controls.autoRotate = true;\\n      controls.autoRotateSpeed = 1.2;\\n\\n      const ambientLight = new THREE.AmbientLight(0x0a1128, 0.9);\\n      scene.add(ambientLight);\\n\\n      const dirLight = new THREE.DirectionalLight(0xffffff, 1.4);\\n      dirLight.position.set(5, 10, 7);\\n      scene.add(dirLight);\\n\\n      const pLightCyan = new THREE.PointLight(0x00f5ff, 2.5, 30);\\n      pLightCyan.position.set(-4, 3, 2);\\n      scene.add(pLightCyan);\\n\\n      const pLightPurple = new THREE.PointLight(0xa855f7, 2.5, 30);\\n      pLightPurple.position.set(4, -2, -2);\\n      scene.add(pLightPurple);\\n\\n      const knotGeo = new THREE.TorusKnotGeometry(1.6, 0.42, 180, 32);\\n      const knotMat = new THREE.MeshPhysicalMaterial({\\n        color: 0x00f5ff,\\n        metalness: 0.25,\\n        roughness: 0.10,\\n        clearcoat: 1.0,\\n        clearcoatRoughness: 0.12,\\n        transmission: 0.65,\\n        ior: 1.52,\\n        wireframe: false\\n      });\\n      const knotMesh = new THREE.Mesh(knotGeo, knotMat);\\n      scene.add(knotMesh);\\n\\n      const partGeo = new THREE.BufferGeometry();\\n      const partCount = 3500;\\n      const posArr = new Float32Array(partCount * 3);\\n      for(let i=0; i < partCount * 3; i++) {\\n        posArr[i] = (Math.random() - 0.5) * 45;\\n      }\\n      partGeo.setAttribute("position", new THREE.BufferAttribute(posArr, 3));\\n      const partMat = new THREE.PointsMaterial({ size: 0.045, color: 0x5df8ff, transparent: true, opacity: 0.75, blending: THREE.AdditiveBlending });\\n      const particles = new THREE.Points(partGeo, partMat);\\n      scene.add(particles);\\n\\n      let lastTime = performance.now();\\n      let frames = 0;\\n      const fpsElem = document.getElementById("fps-stat");\\n\\n      function animate(time) {\\n        requestAnimationFrame(animate);\\n        controls.update();\\n\\n        const t = time * 0.001;\\n        pLightCyan.position.x = Math.sin(t * 0.8) * 5;\\n        pLightCyan.position.z = Math.cos(t * 0.8) * 5;\\n        pLightPurple.position.x = -Math.sin(t * 0.6) * 5;\\n        pLightPurple.position.z = -Math.cos(t * 0.6) * 5;\\n\\n        particles.rotation.y = t * 0.03;\\n\\n        frames++;\\n        if (time > lastTime + 1000) {\\n          if (fpsElem) fpsElem.textContent = Math.round((frames * 1000) / (time - lastTime));\\n          frames = 0;\\n          lastTime = time;\\n        }\\n\\n        renderer.render(scene, camera);\\n      }\\n      animate(performance.now());\\n\\n      window.addEventListener("resize", () => {\\n        camera.aspect = window.innerWidth / window.innerHeight;\\n        camera.updateProjectionMatrix();\\n        renderer.setSize(window.innerWidth, window.innerHeight);\\n      });\\n\\n      const wfBtn = document.getElementById("toggle-wireframe-btn");\\n      if (wfBtn) {\\n        wfBtn.addEventListener("click", () => {\\n          knotMat.wireframe = !knotMat.wireframe;\\n        });\\n      }\\n      const resetBtn = document.getElementById("reset-cam-btn");\\n      if (resetBtn) {\\n        resetBtn.addEventListener("click", () => {\\n          camera.position.set(0, 1.2, 5.5);\\n          controls.target.set(0, 0, 0);\\n          controls.update();\\n        });\\n      }\\n    })();\\n  </script>\\n</body>\\n</html>\''
+        template = '"""Three.js WebGL 3D Spatial Computing and Scene Generation Engine.\nGenerated for task: __TASK__\nEnforces Awwwards-grade WebGL 2.0 standards: PBR physical materials, ACES Filmic tone mapping,\ndynamic multi-point lighting, particle nebulae, and OrbitControls spatial ergonomics.\n"""\n\nfrom dataclasses import dataclass\nfrom typing import Dict, Any, List, Optional\n\n_HTML_TEMPLATE = __HTML_REPR__\n\n\n@dataclass\nclass ThreeJSSceneConfig:\n    fov: float = 60.0\n    near: float = 0.1\n    far: float = 1000.0\n    clear_color: str = "#030712"\n    antialias: bool = True\n    tone_mapping: str = "ACESFilmic"\n    output_encoding: str = "sRGB"\n    pixel_ratio_max: float = 2.0\n\n\nclass ThreeJSSceneBuilder:\n    """Enterprise 3D Scene Builder for WebGL / Three.js applications."""\n\n    def __init__(self, scene_name: str = __TASK_REPR__, config: Optional[ThreeJSSceneConfig] = None):\n        self.scene_name = scene_name\n        self.config = config or ThreeJSSceneConfig()\n        self.geometries: List[Dict[str, Any]] = []\n        self.lights: List[Dict[str, Any]] = []\n        self.particle_systems: List[Dict[str, Any]] = []\n        self._init_default_pbr_stage()\n\n    def _init_default_pbr_stage(self) -> None:\n        self.add_geometry(\n            name="hero_quantum_knot",\n            geo_type="TorusKnotGeometry",\n            params={"radius": 1.6, "tube": 0.42, "tubularSegments": 180, "radialSegments": 32},\n            material_type="MeshPhysicalMaterial",\n            material_params={\n                "color": "#00f5ff",\n                "metalness": 0.25,\n                "roughness": 0.10,\n                "clearcoat": 1.0,\n                "clearcoatRoughness": 0.12,\n                "transmission": 0.65,\n                "ior": 1.52,\n                "wireframe": False\n            }\n        )\n        self.add_light(light_type="AmbientLight", color="#0a1128", intensity=0.85)\n        self.add_light(light_type="DirectionalLight", color="#ffffff", intensity=1.5, position=(5.0, 10.0, 7.0))\n        self.add_light(light_type="PointLight", color="#00f5ff", intensity=3.0, position=(-4.0, 3.0, 2.0), distance=35.0)\n        self.add_light(light_type="PointLight", color="#a855f7", intensity=2.8, position=(4.0, -2.0, -2.0), distance=35.0)\n        self.add_particles(count=3500, spread=45.0, color="#5df8ff", size=0.045)\n\n    def add_geometry(self, name: str, geo_type: str, params: Dict[str, Any], material_type: str, material_params: Dict[str, Any]) -> "ThreeJSSceneBuilder":\n        self.geometries.append({\n            "name": name,\n            "geo_type": geo_type,\n            "params": params,\n            "material_type": material_type,\n            "material_params": material_params\n        })\n        return self\n\n    def add_light(self, light_type: str, color: str, intensity: float, position: tuple = (0.0, 0.0, 0.0), distance: float = 0.0) -> "ThreeJSSceneBuilder":\n        self.lights.append({\n            "type": light_type,\n            "color": color,\n            "intensity": intensity,\n            "position": list(position),\n            "distance": distance\n        })\n        return self\n\n    def add_particles(self, count: int = 3500, spread: float = 40.0, color: str = "#00f5ff", size: float = 0.04) -> "ThreeJSSceneBuilder":\n        self.particle_systems.append({\n            "count": count,\n            "spread": spread,\n            "color": color,\n            "size": size\n        })\n        return self\n\n    def export_manifest(self) -> Dict[str, Any]:\n        return {\n            "scene_name": self.scene_name,\n            "config": {\n                "fov": self.config.fov,\n                "clear_color": self.config.clear_color,\n                "antialias": self.config.antialias,\n                "tone_mapping": self.config.tone_mapping\n            },\n            "geometries_count": len(self.geometries),\n            "lights_count": len(self.lights),\n            "particle_systems_count": len(self.particle_systems),\n            "geometries": self.geometries,\n            "lights": self.lights\n        }\n\n    def export_html_bundle(self, title: Optional[str] = None) -> str:\n        page_title = title or (self.scene_name + " — Three.js WebGL Experience")\n        return _HTML_TEMPLATE.replace("__TITLE__", page_title)\n'
+        return template.replace("__TASK__", clean_task).replace("__TASK_REPR__", repr(clean_task)).replace("__HTML_REPR__", html_repr)
+
     @staticmethod
     def get_domain_palette(dom: str) -> Dict[str, str]:
         """Provides mathematically harmonized color palettes based on dominant chromatic temperature."""
-        if dom == "subtitle":
+        if dom == "3d":
+            # Cosmic Obsidian & Quantum Cyan/Nebula Purple (Awwwards 3D WebGL Aesthetic)
+            return {
+                "bg_canvas": "#030712",
+                "bg_main": "#030712",
+                "bg_surface": "#080e1e",
+                "bg_card": "rgba(10, 16, 32, 0.72)",
+                "bg_card_hover": "rgba(16, 26, 50, 0.88)",
+                "bg_drawer": "rgba(6, 11, 24, 0.96)",
+                "primary": "#00f5ff",
+                "primary_hover": "#00d0db",
+                "primary_light": "#5df8ff",
+                "primary_glow": "rgba(0, 245, 255, 0.40)",
+                "accent": "#a855f7",
+                "accent_hover": "#9333ea",
+                "accent_light": "#c084fc",
+                "accent_glow": "rgba(168, 85, 247, 0.40)",
+                "border_subtle": "rgba(0, 245, 255, 0.12)",
+                "border_light": "rgba(0, 245, 255, 0.25)",
+                "border_glow": "rgba(0, 245, 255, 0.55)",
+                "ambient_grad_1": "radial-gradient(circle at 20% 15%, rgba(0, 245, 255, 0.15) 0px, transparent 55%)",
+                "ambient_grad_2": "radial-gradient(circle at 80% 85%, rgba(168, 85, 247, 0.12) 0px, transparent 50%)",
+                "btn_gradient": "linear-gradient(135deg, #00f5ff 0%, #0284c7 100%)",
+                "btn_gradient_hover": "linear-gradient(135deg, #5df8ff 0%, #00f5ff 100%)",
+                "brand_gradient": "linear-gradient(135deg, #00f5ff 0%, #a855f7 100%)",
+            }
+        elif dom == "subtitle":
             # Cinematic Obsidian Darkroom (DaVinci/Premiere studio aesthetic)
             return {
                 "bg_canvas": "#07090e",
@@ -2561,6 +2599,8 @@ body {{
             return self._synthesize_analytics_html(task, lang)
         elif dom == "subtitle":
             return self._synthesize_subtitle_html(task, lang)
+        elif dom == "3d":
+            return self._synthesize_3d_html(task, lang)
         else:
             return self._synthesize_general_html(task, lang)
 
@@ -3140,6 +3180,61 @@ body {{
 """
         return template.replace("__LANG__", lang).replace("__TITLE__", title)
 
+    def _synthesize_3d_html(self, task: str, lang: str = "uz") -> str:
+        is_uz = lang == "uz"
+        title = f"{task} — 3D Spatial Experience" if not is_uz else f"{task} — 3D Fazoviy WebGL Tajriba"
+        return f"""<!DOCTYPE html>
+<html lang="{lang}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body class="spatial-experience">
+  <canvas id="webgl-canvas"></canvas>
+
+  <div class="hud-overlay">
+    <header class="hud-header glass-panel">
+      <div class="brand-group">
+        <span class="hud-badge">✨ Awwwards WebGL 2.0</span>
+        <h1 class="hud-title">{title}</h1>
+      </div>
+      <div class="hud-stats-group">
+        <div class="stat-pill"><span class="stat-label">FPS:</span> <span id="fps-counter" class="stat-value">60</span></div>
+        <div class="stat-pill"><span class="stat-label">Verts:</span> <span id="verts-counter" class="stat-value">24,560</span></div>
+        <div class="stat-pill"><span class="stat-label">Draws:</span> <span id="draws-counter" class="stat-value">6</span></div>
+      </div>
+    </header>
+
+    <aside class="hud-controls glass-panel">
+      <h2 class="controls-title">🎛️ Boshqaruv Markazi</h2>
+      <div class="control-row">
+        <label for="material-select">Material Mode:</label>
+        <select id="material-select" class="hud-select">
+          <option value="pbr">PBR Quantum Glass</option>
+          <option value="wireframe">Holographic Wireframe</option>
+          <option value="obsidian">Obsidian Gold Chrome</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label for="particle-density">Zarrachalar zichligi:</label>
+        <input type="range" id="particle-density" min="1000" max="8000" value="3500" class="hud-slider">
+      </div>
+      <div class="control-actions">
+        <button id="toggle-autorotate-btn" class="btn btn-primary">Aylanishni To'xtatish</button>
+        <button id="reset-view-btn" class="btn btn-secondary">Kamerani Qaytarish</button>
+      </div>
+    </aside>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>"""
+
+
     def synthesize_ui_js(self, task: str, lang: str = "uz") -> str:
         """Generates reactive, production-grade client-side state engine."""
         dom = self.detect_domain(task)
@@ -3149,6 +3244,8 @@ body {{
             return self._synthesize_analytics_js(task, lang)
         elif dom == "subtitle":
             return self._synthesize_subtitle_js(task, lang)
+        elif dom == "3d":
+            return self._synthesize_3d_js(task, lang)
         else:
             return self._synthesize_general_js(task, lang)
 
@@ -4461,6 +4558,242 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 """
+
+    def _synthesize_3d_js(self, task: str, lang: str = "uz") -> str:
+        return """/**
+ * Hallwright Awwwards-Grade Three.js WebGL Spatial Engine
+ * Elena Rostova & Gabriel Frost Master Edition
+ * High-performance PBR materials, ACES Filmic tone mapping, dynamic light rig,
+ * interactive raycasting, particle nebulae, and OrbitControls.
+ */
+
+(function () {
+  'use strict';
+
+  if (typeof THREE === 'undefined') {
+    console.error('Three.js library is not loaded.');
+    return;
+  }
+
+  const canvas = document.getElementById('webgl-canvas');
+  if (!canvas) return;
+
+  // Scene & Fog Setup
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x030712);
+  scene.fog = new THREE.FogExp2(0x030712, 0.022);
+
+  // Camera Setup
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 1.4, 5.8);
+
+  // Renderer Setup
+  const renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    antialias: true,
+    powerPreference: 'high-performance'
+  });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.2;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  // OrbitControls
+  let controls = null;
+  if (typeof THREE.OrbitControls !== 'undefined') {
+    controls = new THREE.OrbitControls(camera, canvas);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 1.0;
+  }
+
+  // Lighting Rig
+  const ambientLight = new THREE.AmbientLight(0x0a1128, 0.9);
+  scene.add(ambientLight);
+
+  const mainLight = new THREE.DirectionalLight(0xffffff, 1.5);
+  mainLight.position.set(6, 12, 8);
+  scene.add(mainLight);
+
+  const cyanLight = new THREE.PointLight(0x00f5ff, 3.0, 35);
+  cyanLight.position.set(-5, 4, 3);
+  scene.add(cyanLight);
+
+  const purpleLight = new THREE.PointLight(0xa855f7, 2.8, 35);
+  purpleLight.position.set(5, -3, -3);
+  scene.add(purpleLight);
+
+  // Quantum Nexus Meshes
+  const knotGeo = new THREE.TorusKnotGeometry(1.6, 0.42, 200, 36);
+  const knotMat = new THREE.MeshPhysicalMaterial({
+    color: 0x00f5ff,
+    metalness: 0.25,
+    roughness: 0.10,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.12,
+    transmission: 0.65,
+    ior: 1.52,
+    wireframe: false
+  });
+  const knotMesh = new THREE.Mesh(knotGeo, knotMat);
+  scene.add(knotMesh);
+
+  // Orbiting Satellite Rings
+  const ringGeo = new THREE.TorusGeometry(2.8, 0.035, 16, 100);
+  const ringMat = new THREE.MeshStandardMaterial({
+    color: 0xa855f7,
+    metalness: 0.8,
+    roughness: 0.2,
+    emissive: 0x581c87,
+    emissiveIntensity: 0.5
+  });
+  const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+  ringMesh.rotation.x = Math.PI / 3;
+  scene.add(ringMesh);
+
+  // Particle Nebula
+  const particleCount = 3500;
+  const particleGeo = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  for (let i = 0; i < particleCount * 3; i++) {
+    positions[i] = (Math.random() - 0.5) * 50;
+  }
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const particleMat = new THREE.PointsMaterial({
+    size: 0.045,
+    color: 0x5df8ff,
+    transparent: true,
+    opacity: 0.75,
+    blending: THREE.AdditiveBlending
+  });
+  const particles = new THREE.Points(particleGeo, particleMat);
+  scene.add(particles);
+
+  // Interaction Raycaster
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2(-999, -999);
+  let isHovered = false;
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  });
+
+  // Metrics
+  let lastTime = performance.now();
+  let frameCount = 0;
+  const fpsCounter = document.getElementById('fps-counter');
+
+  // Animation Loop
+  function animate(now) {
+    requestAnimationFrame(animate);
+
+    if (controls) controls.update();
+
+    const t = now * 0.001;
+
+    // Light dynamic orbit
+    cyanLight.position.x = Math.sin(t * 0.7) * 6;
+    cyanLight.position.z = Math.cos(t * 0.7) * 6;
+    purpleLight.position.x = -Math.sin(t * 0.5) * 6;
+    purpleLight.position.z = -Math.cos(t * 0.5) * 6;
+
+    // Mesh animations
+    ringMesh.rotation.z = t * 0.15;
+    particles.rotation.y = t * 0.025;
+
+    // Raycast hover effect
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(knotMesh);
+    if (intersects.length > 0) {
+      if (!isHovered) {
+        document.body.style.cursor = 'pointer';
+        isHovered = true;
+      }
+      knotMesh.scale.lerp(new THREE.Vector3(1.08, 1.08, 1.08), 0.1);
+    } else {
+      if (isHovered) {
+        document.body.style.cursor = 'default';
+        isHovered = false;
+      }
+      knotMesh.scale.lerp(new THREE.Vector3(1.0, 1.0, 1.0), 0.1);
+    }
+
+    // FPS calculation
+    frameCount++;
+    if (now > lastTime + 1000) {
+      if (fpsCounter) {
+        fpsCounter.textContent = String(Math.round((frameCount * 1000) / (now - lastTime)));
+      }
+      frameCount = 0;
+      lastTime = now;
+    }
+
+    renderer.render(scene, camera);
+  }
+  animate(performance.now());
+
+  // Window Resize
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // HUD Controls
+  const matSelect = document.getElementById('material-select');
+  if (matSelect) {
+    matSelect.addEventListener('change', (e) => {
+      const mode = e.target.value;
+      if (mode === 'wireframe') {
+        knotMat.wireframe = true;
+        knotMat.color.setHex(0x5df8ff);
+      } else if (mode === 'obsidian') {
+        knotMat.wireframe = false;
+        knotMat.color.setHex(0xd4af37);
+        knotMat.metalness = 0.95;
+        knotMat.roughness = 0.08;
+        knotMat.transmission = 0.0;
+      } else {
+        knotMat.wireframe = false;
+        knotMat.color.setHex(0x00f5ff);
+        knotMat.metalness = 0.25;
+        knotMat.roughness = 0.10;
+        knotMat.transmission = 0.65;
+      }
+    });
+  }
+
+  const autorotateBtn = document.getElementById('toggle-autorotate-btn');
+  if (autorotateBtn && controls) {
+    autorotateBtn.addEventListener('click', () => {
+      controls.autoRotate = !controls.autoRotate;
+      autorotateBtn.textContent = controls.autoRotate ? "Aylanishni To'xtatish" : "Aylantirish";
+    });
+  }
+
+  const resetBtn = document.getElementById('reset-view-btn');
+  if (resetBtn && controls) {
+    resetBtn.addEventListener('click', () => {
+      camera.position.set(0, 1.4, 5.8);
+      controls.target.set(0, 0, 0);
+      controls.update();
+    });
+  }
+})();
+"""
+
+    def synthesize_3d_webgl(self, task: str, lang: str = "uz") -> str:
+        """Synthesizes a self-contained, standalone production-ready Three.js WebGL HTML bundle."""
+        html = self.synthesize_ui_html(task, lang)
+        css = self.synthesize_ui_css(task, lang)
+        js = self.synthesize_ui_js(task, lang)
+        standalone = html.replace('<link rel="stylesheet" href="style.css">', f"<style>\n{css}\n</style>")
+        standalone = standalone.replace('<script src="app.js"></script>', f"<script>\n{js}\n</script>")
+        return standalone
+
 
     def synthesize_test(self, code: str, module_name: str = "core_service") -> str:
         """Generates real pytest assertions that test the synthesized code comprehensively."""

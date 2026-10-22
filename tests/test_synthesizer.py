@@ -218,5 +218,84 @@ def test_harmonic_color_palette():
     assert "--primary: #2563eb;" in ana_css
     assert "--accent: #0d9488;" in ana_css
 
+    # 3D Palette: Cosmic Obsidian & Quantum Cyan/Nebula Purple
+    spatial_css = synth.synthesize_ui_css("Awwwards Three.js WebGL 3D Portal")
+    assert "--primary: #00f5ff;" in spatial_css
+    assert "--accent: #a855f7;" in spatial_css
+    assert "#030712" in spatial_css
+
+
+def test_detect_domain_3d():
+    synth = DomainCodeSynthesizer()
+    assert synth.detect_domain("Create Three.js WebGL 3D spatial interactive portal") == "3d"
+    assert synth.detect_domain("Awwwards level mesh and PBR shader scene") == "3d"
+    assert synth.detect_domain("WebGL canvas3d camera orbitcontrols experience") == "3d"
+
+
+def test_synthesize_3d_code_syntax():
+    synth = DomainCodeSynthesizer()
+    code = synth.synthesize_code("Quantum Nexus 3D Three.js experience", domain="3d")
+    parsed = ast.parse(code)
+    assert isinstance(parsed, ast.Module)
+    assert "class ThreeJSSceneBuilder:" in code
+    assert "class ThreeJSSceneConfig:" in code
+    assert "def export_manifest" in code
+    assert "def export_html_bundle" in code
+    assert "TorusKnotGeometry" in code
+    assert "MeshPhysicalMaterial" in code
+    assert "TODO" not in code
+
+
+def test_threejs_scene_builder_execution():
+    synth = DomainCodeSynthesizer()
+    code = synth.synthesize_code("Quantum Nexus 3D Three.js experience", domain="3d")
+    local_scope = {}
+    exec(code, local_scope)
+    BuilderClass = local_scope["ThreeJSSceneBuilder"]
+    builder = BuilderClass(scene_name="Quantum Realm")
+    manifest = builder.export_manifest()
+
+    assert manifest["scene_name"] == "Quantum Realm"
+    assert manifest["geometries_count"] >= 1
+    assert manifest["lights_count"] >= 3
+    assert manifest["particle_systems_count"] >= 1
+
+    html_bundle = builder.export_html_bundle()
+    assert "<!DOCTYPE html>" in html_bundle
+    assert "three.min.js" in html_bundle
+    assert "OrbitControls.js" in html_bundle
+    assert "THREE.ACESFilmicToneMapping" in html_bundle
+    assert "THREE.MeshPhysicalMaterial" in html_bundle
+
+
+def test_3d_ui_synthesis_domain_adaptation():
+    synth = DomainCodeSynthesizer()
+    task = "Awwwards Three.js WebGL Quantum Portal"
+
+    html = synth.synthesize_ui_html(task, lang="uz")
+    assert "<!DOCTYPE html>" in html
+    assert "three.min.js" in html
+    assert "OrbitControls.js" in html
+    assert "webgl-canvas" in html
+    assert "Awwwards WebGL 2.0" in html
+    assert "fps-counter" in html
+    assert "material-select" in html
+
+    js = synth.synthesize_ui_js(task, lang="uz")
+    assert "THREE.PerspectiveCamera" in js
+    assert "THREE.ACESFilmicToneMapping" in js
+    assert "THREE.TorusKnotGeometry" in js
+    assert "THREE.MeshPhysicalMaterial" in js
+    assert "THREE.Raycaster" in js
+    assert "requestAnimationFrame" in js
+    # Invariant: Gabriel Frost XSS defense
+    assert "innerHTML" not in js
+
+    standalone = synth.synthesize_3d_webgl(task, lang="uz")
+    assert "<!DOCTYPE html>" in standalone
+    assert "<style>" in standalone
+    assert "<script>" in standalone
+    assert "THREE.WebGLRenderer" in standalone
+
 
 

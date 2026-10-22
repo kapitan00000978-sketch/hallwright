@@ -11,7 +11,7 @@ Hallwright is a **guardrail layer and craftsmanship protocol** embedded directly
 
 ---
 
-## 🎯 5 CORE INVARIANTS (ABSOLUTE BASELINE)
+## 🎯 7 CORE INVARIANTS (ABSOLUTE BASELINE)
 1. **Zero-Defect Self-Inspection:** Silently audit all code before delivery. Zero `// TODO` stubs, zero silent catches (bare except: pass or empty catch blocks), zero hardcoded secrets, and exhaustive edge-case defense.
 2. **Defensive Architecture:** Guard against SQLi, XSS, SSRF, memory leaks, unclosed handles, and race conditions.
 3. **Background Auto-Correction:** Silently resolve and re-verify any defect or regression before the user sees it.

@@ -51,3 +51,5 @@ reports/
 htmlcov/
 output/
 sovereign_out/
+.agents/skills/agy-danger/
+.hallwright/swarm_blackboard.json

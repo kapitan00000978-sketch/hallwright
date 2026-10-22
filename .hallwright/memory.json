@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Hallwright Engineering Core",
-  "lastUpdated": "2026-10-21T11:24:17.532392+00:00",
+  "lastUpdated": "2026-10-22T14:04:43.298118+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations"
@@ -60,7 +60,7 @@
       "lesson": "Always enforce pagination limits.",
       "severity": "high",
       "recordedAt": "2026-10-15T15:08:39.779478+00:00",
-      "updatedAt": "2026-10-21T09:17:02.052678+00:00"
+      "updatedAt": "2026-10-22T14:04:21.140935+00:00"
     },
     {
       "id": "mis-0004",
@@ -217,7 +217,7 @@
       "lesson": "Successfully synthesized 8 artifacts across 8 stages with 100/100 Gatekeeper compliance.",
       "severity": "high",
       "recordedAt": "2026-10-20T20:02:00.595813+00:00",
-      "updatedAt": "2026-10-21T09:16:05.273384+00:00"
+      "updatedAt": "2026-10-22T13:59:38.038113+00:00"
     },
     {
       "id": "suc-0004",
@@ -226,7 +226,7 @@
       "lesson": "Successfully synthesized 8 artifacts across 9 stages with 100/100 Gatekeeper compliance.",
       "severity": "high",
       "recordedAt": "2026-10-20T20:02:04.147788+00:00",
-      "updatedAt": "2026-10-21T09:17:06.361178+00:00"
+      "updatedAt": "2026-10-22T14:04:24.251180+00:00"
     },
     {
       "id": "suc-0005",
@@ -235,7 +235,7 @@
       "lesson": "Successfully synthesized 8 artifacts across 9 stages with 100/100 Gatekeeper compliance.",
       "severity": "high",
       "recordedAt": "2026-10-20T20:04:17.368366+00:00",
-      "updatedAt": "2026-10-21T09:14:57.951001+00:00"
+      "updatedAt": "2026-10-22T14:04:43.298118+00:00"
     }
   ],
   "conventions": [
@@ -256,7 +256,7 @@
       "lesson": "LEARNED USER PREFERENCE: User demanded 'faqat eng zamonaviy shisha effektlari va micro-animatsiyalar bo'lsin'. Apply calibrated theme: is_dark=True, dominant hues: #090b10, #090e15, #0c0b17, contrast: 43.33x. Integrate Magic UI micro-interactions.",
       "severity": "high",
       "recordedAt": "2026-10-21T03:43:40.421982+00:00",
-      "updatedAt": "2026-10-21T11:24:16.862898+00:00"
+      "updatedAt": "2026-10-22T13:59:42.162372+00:00"
     }
   ],
   "anti_patterns": [
@@ -277,7 +277,7 @@
       "lesson": "REJECTED DESIGN PATTERN: User explicitly rejected layout style ('bunday oddiy oq fonli dizayn kerak emas'). Never generate flat, boring cards or dull enterprise grids (e.g. medax-style). Instead, enforce Elena Rostova ultra-luxury frosted glass, Magic UI border beams, and R3F spatial 3D depth.",
       "severity": "critical",
       "recordedAt": "2026-10-21T03:43:41.388959+00:00",
-      "updatedAt": "2026-10-21T11:24:17.532392+00:00"
+      "updatedAt": "2026-10-22T13:59:43.070549+00:00"
     },
     {
       "id": "ant-0004",
@@ -304,7 +304,7 @@
       "lesson": "Resolved 'ZeroDivisionError division by zero'. Defense: 2. Architecture Defense: Validate boundaries, use parameterized calls, and handle exceptions explicitly.",
       "severity": "high",
       "recordedAt": "2026-10-20T05:54:09.681571+00:00",
-      "updatedAt": "2026-10-21T09:16:14.595097+00:00"
+      "updatedAt": "2026-10-22T13:59:51.911715+00:00"
     },
     {
       "id": "sca-0003",
@@ -313,7 +313,7 @@
       "lesson": "Resolved 'TypeError 'NoneType' object is not callable'. Defense: 2. Architecture Defense: Validate boundaries, use parameterized calls, and handle exceptions explicitly.",
       "severity": "high",
       "recordedAt": "2026-10-20T05:54:12.213199+00:00",
-      "updatedAt": "2026-10-21T09:16:15.642450+00:00"
+      "updatedAt": "2026-10-22T13:59:53.829833+00:00"
     },
     {
       "id": "sca-0004",

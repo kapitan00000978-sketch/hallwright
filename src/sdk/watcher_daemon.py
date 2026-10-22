@@ -131,11 +131,19 @@ class WatcherDaemon:
                             from visual_transmuter import VisualTransmuter
                             transmuter = VisualTransmuter(workspace_root=self.workspace_root)
                             bak_path = f"{file_path}.bak"
+                            raw_content = ""
                             if not os.path.exists(bak_path):
                                 with open(file_path, "r", encoding="utf-8") as rf:
-                                    with open(bak_path, "w", encoding="utf-8") as wf:
-                                        wf.write(rf.read())
-                            t_res = transmuter.transmute_file(file_path, output_path=file_path)
+                                    raw_content = rf.read()
+                                with open(bak_path, "w", encoding="utf-8") as wf:
+                                    wf.write(raw_content)
+                            else:
+                                with open(file_path, "r", encoding="utf-8") as rf:
+                                    raw_content = rf.read()
+                            raw_lower = raw_content.lower()
+                            wants_3d = any(w in raw_lower for w in ["spatial", "3d", "canvas-3d", "torus", "hero-3d"])
+                            wants_kbar = any(w in raw_lower for w in ["kbar", "command-palette", "ctrl+k", "cmd+k", "search-palette"])
+                            t_res = transmuter.transmute_file(file_path, output_path=file_path, force_spatial=wants_3d, force_kbar=wants_kbar)
                             if t_res.get("status") == "TRANSMUTED":
                                 healed = True
                         except Exception as t_err:

@@ -101,7 +101,10 @@ class VisualTransmuter:
     def transmute_html(
         self,
         html_content: str,
-        custom_title: Optional[str] = None
+        custom_title: Optional[str] = None,
+        force_spatial: bool = True,
+        force_stars: bool = False,
+        force_kbar: bool = True
     ) -> Dict[str, Any]:
         """
         Transmutes a raw HTML document into an ultra-luxury, modern UI
@@ -168,11 +171,11 @@ body {
         else:
             transmuted = f"<head>{injected_head}</head>\n" + transmuted
 
-        # 4. Context-aware injection: only inject 3D/stars if page explicitly desires creative spatial effects
+        # 4. Context-aware injection: inject 3D/stars/kbar if forced or if page desires creative effects
         content_lower = html_content.lower()
-        wants_3d = any(w in content_lower for w in ["spatial", "3d", "canvas-3d", "torus", "hero-3d"])
-        wants_stars = any(w in content_lower for w in ["starfield", "stars", "cosmic", "galaxy", "astronomy"])
-        wants_kbar = any(w in content_lower for w in ["kbar", "command-palette", "ctrl+k", "cmd+k", "search-palette"])
+        wants_3d = force_spatial or any(w in content_lower for w in ["spatial", "3d", "canvas-3d", "torus", "hero-3d"])
+        wants_stars = force_stars or any(w in content_lower for w in ["starfield", "stars", "cosmic", "galaxy", "astronomy"])
+        wants_kbar = force_kbar or any(w in content_lower for w in ["kbar", "command-palette", "ctrl+k", "cmd+k", "search-palette"])
 
         canvas_parts = ['  <!-- Ambient Atmospheric Lighting -->', '  <div class="ambient-glow-top" aria-hidden="true"></div>']
         if wants_stars:
@@ -249,7 +252,10 @@ body {
     def transmute_file(
         self,
         input_path: str,
-        output_path: Optional[str] = None
+        output_path: Optional[str] = None,
+        force_spatial: bool = True,
+        force_stars: bool = False,
+        force_kbar: bool = True
     ) -> Dict[str, Any]:
         """
         Reads an existing HTML file from disk, transmutes it, and writes the upgraded version.
@@ -264,7 +270,12 @@ body {
             logger.debug("Failed reading file for transmutation: %s", read_err)
             return {"status": "ERROR", "message": str(read_err)}
 
-        result = self.transmute_html(raw_html)
+        result = self.transmute_html(
+            raw_html,
+            force_spatial=force_spatial,
+            force_stars=force_stars,
+            force_kbar=force_kbar
+        )
         if result.get("status") != "TRANSMUTED":
             return result
 

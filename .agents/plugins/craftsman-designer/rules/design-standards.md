@@ -39,8 +39,8 @@ Har bir dizayn quyidagi dunyo durdonalari bilan solishtiriladi:
 1. Kod hajmi emas, **ekrandagi yakuniy natija** (computed pixels, contrast ratios, 60fps rendering) baholanadi.
 2. Interfeys bahosi **85/100** dan past bo‘lsa, u qabul qilinmaydi va mukammal darajaga yetkazilguncha avtonom tarzda takomillashtiriladi.
 3. **Avtonom Transmutatsiya Majburiyati (AI Agent Plugin Invariant):**
-   - Hech qachon inson qo'li bilan tuzatishini kutmang: AI agent yaratgan yoki o'zgartirgan har qanday HTML/CSS interfeysi darhol `hallwright_transmute_ui` yoki `VisualTransmuter` vositasidan o'tkazilishi shart.
-   - Har bir veb-sahifa kosmik chuqurlik (`--bg-main: #04060d`), ambient mesh yorug'ligi (`.ambient-glow-top`), harakatdagi zarrachalar (`#stars-canvas`), shaffof shisha (`.glass-card`), lazerli chegaralar (`.magic-border-beam`) va taktil yorug'likka ega tugmalar (`.btn-glow`) bilan ta'minlanishi shart. Yassi, o'lik qora fonlar qat'iyan rad etiladi.
+   - Har bir veb-sahifa o‘z maqsadiga (biznes, CRM, SaaS, landing page, dashboard) mos ravishda professional tipografiya, 8pt toza grid, nafis chegaralar, yumshoq kartochkalar (`.glass-card` yoki zamonaviy tekis panellar), 60FPS silliq o‘tishlar va taktil tugmalar bilan ta’minlanishi shart.
+   - Kosmik zarrachalar (`#stars-canvas`) va 3D modellar faqat mos keluvchi ijodiy/gaming sahifalarida ishlatiladi. Oddiy CRM, do'kon yoki dashboard sahifalariga 3D torus yoki yulduzlarni majburlab tiqish QAT'IYAN TAQIQLANADI. Asosiy maqsad: toza, engil, ergonomik va tezkor professional interfeys.
 4. **Qat'iy Ranglar Standarti (Siyohrang Shiorlar Taqiqlanadi — DESIGN_BANNED_PURPLE_CLICHE):**
    - **Taqiqlangan:** AI agentlar o'rtasida odat bo'lib qolgan arzon siyohrang/binafsha (`#9333ea`, `#a855f7`, `from-purple-500`, `#7c3aed`) shablonlari qat'iyan taqiqlanadi.
    - **Talab qilinadigan Jiddiy va Elita Palitralar:**

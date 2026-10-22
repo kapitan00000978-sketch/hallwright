@@ -168,50 +168,64 @@ body {
         else:
             transmuted = f"<head>{injected_head}</head>\n" + transmuted
 
-        # 4. Inject Ambient Glow, Starfield Canvas, and 3D Spatial Canvas into top of body
-        spatial_html = self.engine.get_spatial_canvas_html()
-        canvas_block = f"""
-  <!-- Ambient Atmospheric Lighting & Starfield Canvas -->
-  <div class="ambient-glow-top" aria-hidden="true"></div>
-  <canvas id="stars-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;"></canvas>
+        # 4. Context-aware injection: only inject 3D/stars if page explicitly desires creative spatial effects
+        content_lower = html_content.lower()
+        wants_3d = any(w in content_lower for w in ["spatial", "3d", "canvas-3d", "torus", "hero-3d"])
+        wants_stars = any(w in content_lower for w in ["starfield", "stars", "cosmic", "galaxy", "astronomy"])
+        wants_kbar = any(w in content_lower for w in ["kbar", "command-palette", "ctrl+k", "cmd+k", "search-palette"])
 
-  <!-- 3D Spatial Canvas Primitive -->
-  <section class="spatial-hero-wrapper" style="max-width: 1200px; margin: 24px auto; padding: 0 16px; position: relative; z-index: 1;">
-    {spatial_html}
-  </section>
-"""
+        canvas_parts = ['  <!-- Ambient Atmospheric Lighting -->', '  <div class="ambient-glow-top" aria-hidden="true"></div>']
+        if wants_stars:
+            canvas_parts.append('  <canvas id="stars-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;"></canvas>')
+        if wants_3d:
+            spatial_html = self.engine.get_spatial_canvas_html()
+            canvas_parts.append(f'  <!-- 3D Spatial Canvas Primitive -->\n  <section class="spatial-hero-wrapper" style="max-width: 1200px; margin: 24px auto; padding: 0 16px; position: relative; z-index: 1;">\n    {spatial_html}\n  </section>')
+
+        canvas_block = "\n".join(canvas_parts)
         if "<body" in transmuted:
-            # Insert after <body> opening tag
             body_match = re.search(r"<body[^>]*>", transmuted, re.IGNORECASE)
             if body_match:
                 end_pos = body_match.end()
-                transmuted = transmuted[:end_pos] + "\n" + canvas_block + transmuted[end_pos:]
+                transmuted = transmuted[:end_pos] + "\n" + canvas_block + "\n" + transmuted[end_pos:]
         else:
             transmuted = f"<body>\n{canvas_block}\n{transmuted}\n</body>"
 
-        # 5. Inject kbar Overlay and Scripts before </body>
-        kbar_html = self.engine.get_kbar_html()
-        visual_js = self.engine.get_visual_engine_js()
+        # 5. Inject kbar Overlay and Scripts before </body> only when appropriate or requested
+        runtime_parts = []
+        if wants_kbar:
+            kbar_html = self.engine.get_kbar_html()
+            runtime_parts.append(kbar_html)
 
-        runtime_script = f"""
-  {kbar_html}
+        if wants_3d or wants_stars or wants_kbar:
+            visual_js = self.engine.get_visual_engine_js()
+            inits = []
+            if wants_3d:
+                inits.append("new SpatialCanvasEngine('spatial-hero-canvas');")
+            if wants_stars:
+                inits.append("new StarfieldCanvasEngine('stars-canvas');")
+            if wants_kbar:
+                inits.append("new KbarCommandHub();")
+            inits_str = "\n        ".join(inits)
+            runtime_script = f"""
   <script>
     {visual_js}
-
     document.addEventListener('DOMContentLoaded', () => {{
       try {{
-        new SpatialCanvasEngine('spatial-hero-canvas');
-        new KbarCommandHub();
+        {inits_str}
       }} catch (initErr) {{
         console.debug('Visual Primitives initialization skipped:', initErr);
       }}
     }});
   </script>
 """
-        if "</body>" in transmuted:
-            transmuted = transmuted.replace("</body>", f"{runtime_script}\n</body>", 1)
-        else:
-            transmuted = transmuted + f"\n{runtime_script}"
+            runtime_parts.append(runtime_script)
+
+        if runtime_parts:
+            full_runtime = "\n".join(runtime_parts)
+            if "</body>" in transmuted:
+                transmuted = transmuted.replace("</body>", f"{full_runtime}\n</body>", 1)
+            else:
+                transmuted = transmuted + f"\n{full_runtime}"
 
         # 6. Saliency audit
         saliency = self.audit_visual_saliency(transmuted)

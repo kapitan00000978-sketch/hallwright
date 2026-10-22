@@ -393,12 +393,12 @@ def scan_ui_design_standards(code: str, filename: str = "") -> List[Dict[str, An
     lines = code.splitlines()
 
     # 1. Reject flat pitch-black void with zero atmospheric lighting
-    has_black_void = bool(re.search(r"""(?i)(?:class=["'][^"']*\bbg-black\b|background(?:-color)?\s*:\s*(?:#000(?:000)?|black|#050505|#08090d)\b)""", code))
-    has_atmospheric_depth = bool(re.search(r"""(?i)(?:radial-gradient|linear-gradient|conic-gradient|ambient-glow|ambient-mesh|stars-canvas|<canvas\b|backdrop-filter|box-shadow\s*:\s*0\s+0|border-beam)""", code))
+    has_black_void = bool(re.search(r"""(?i)(?:class=["'][^"']*\bbg-black\b|background(?:-color)?\s*:\s*(?:#000(?:000)?|black)\b)""", code))
+    has_atmospheric_depth = bool(re.search(r"""(?i)(?:radial-gradient|linear-gradient|conic-gradient|ambient-glow|ambient-mesh|stars-canvas|<canvas\b|backdrop-filter|box-shadow\s*:\s*0\s+0|border-beam|glass-card|magic-border)""", code))
 
     if has_black_void and not has_atmospheric_depth:
         for idx, line in enumerate(lines, 1):
-            if re.search(r"""(?i)(?:\bbg-black\b|background(?:-color)?\s*:\s*(?:#000|black|#050505|#08090d))""", line):
+            if re.search(r"""(?i)(?:\bbg-black\b|background(?:-color)?\s*:\s*(?:#000|black)\b)""", line):
                 if not is_ignored(line):
                     findings.append({
                         "rule_id": "DESIGN_FLAT_PITCH_BLACK_VOID",

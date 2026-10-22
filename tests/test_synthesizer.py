@@ -298,4 +298,34 @@ def test_3d_ui_synthesis_domain_adaptation():
     assert "THREE.WebGLRenderer" in standalone
 
 
+def test_semantic_chromatic_mood_adaptation():
+    synth = DomainCodeSynthesizer()
+
+    # 1. Gold / Luxury
+    gold_css = synth.synthesize_ui_css("Hashamatli oltin va qimmatbaho zargarlik buyumlari do'koni")
+    assert "--primary: #d4af37;" in gold_css
+    assert "--accent: #f59e0b;" in gold_css
+
+    # 2. Crimson / Red / Gaming
+    gaming_css = synth.synthesize_ui_css("Esport gaming battle arena with crimson fire")
+    assert "--primary: #ef4444;" in gaming_css
+    assert "--accent: #f97316;" in gaming_css
+
+    # 3. Emerald / Green / Eco / Fintech
+    eco_css = synth.synthesize_ui_css("Yashil tabiat va zumrad eco loyiha portali")
+    assert "--primary: #10b981;" in eco_css
+    assert "--accent: #06b6d4;" in eco_css
+
+    # 4. Cyberpunk / Neon
+    cyber_css = synth.synthesize_ui_css("Cyberpunk neon night arcade simulator")
+    assert "--primary: #ff007f;" in cyber_css
+    assert "--accent: #00f5ff;" in cyber_css
+
+    # 5. Minimalist Monochrome
+    mono_css = synth.synthesize_ui_css("Minimalist monochrome architectural portfolio")
+    assert "--primary: #f8fafc;" in mono_css
+    assert "--accent: #94a3b8;" in mono_css
+
+
+
 

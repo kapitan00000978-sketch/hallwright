@@ -873,38 +873,219 @@ class DataPipeline:
         template = '"""Three.js WebGL 3D Spatial Computing and Scene Generation Engine.\nGenerated for task: __TASK__\nEnforces Awwwards-grade WebGL 2.0 standards: PBR physical materials, ACES Filmic tone mapping,\ndynamic multi-point lighting, particle nebulae, and OrbitControls spatial ergonomics.\n"""\n\nfrom dataclasses import dataclass\nfrom typing import Dict, Any, List, Optional\n\n_HTML_TEMPLATE = __HTML_REPR__\n\n\n@dataclass\nclass ThreeJSSceneConfig:\n    fov: float = 60.0\n    near: float = 0.1\n    far: float = 1000.0\n    clear_color: str = "#030712"\n    antialias: bool = True\n    tone_mapping: str = "ACESFilmic"\n    output_encoding: str = "sRGB"\n    pixel_ratio_max: float = 2.0\n\n\nclass ThreeJSSceneBuilder:\n    """Enterprise 3D Scene Builder for WebGL / Three.js applications."""\n\n    def __init__(self, scene_name: str = __TASK_REPR__, config: Optional[ThreeJSSceneConfig] = None):\n        self.scene_name = scene_name\n        self.config = config or ThreeJSSceneConfig()\n        self.geometries: List[Dict[str, Any]] = []\n        self.lights: List[Dict[str, Any]] = []\n        self.particle_systems: List[Dict[str, Any]] = []\n        self._init_default_pbr_stage()\n\n    def _init_default_pbr_stage(self) -> None:\n        self.add_geometry(\n            name="hero_quantum_knot",\n            geo_type="TorusKnotGeometry",\n            params={"radius": 1.6, "tube": 0.42, "tubularSegments": 180, "radialSegments": 32},\n            material_type="MeshPhysicalMaterial",\n            material_params={\n                "color": "#00f5ff",\n                "metalness": 0.25,\n                "roughness": 0.10,\n                "clearcoat": 1.0,\n                "clearcoatRoughness": 0.12,\n                "transmission": 0.65,\n                "ior": 1.52,\n                "wireframe": False\n            }\n        )\n        self.add_light(light_type="AmbientLight", color="#0a1128", intensity=0.85)\n        self.add_light(light_type="DirectionalLight", color="#ffffff", intensity=1.5, position=(5.0, 10.0, 7.0))\n        self.add_light(light_type="PointLight", color="#00f5ff", intensity=3.0, position=(-4.0, 3.0, 2.0), distance=35.0)\n        self.add_light(light_type="PointLight", color="#a855f7", intensity=2.8, position=(4.0, -2.0, -2.0), distance=35.0)\n        self.add_particles(count=3500, spread=45.0, color="#5df8ff", size=0.045)\n\n    def add_geometry(self, name: str, geo_type: str, params: Dict[str, Any], material_type: str, material_params: Dict[str, Any]) -> "ThreeJSSceneBuilder":\n        self.geometries.append({\n            "name": name,\n            "geo_type": geo_type,\n            "params": params,\n            "material_type": material_type,\n            "material_params": material_params\n        })\n        return self\n\n    def add_light(self, light_type: str, color: str, intensity: float, position: tuple = (0.0, 0.0, 0.0), distance: float = 0.0) -> "ThreeJSSceneBuilder":\n        self.lights.append({\n            "type": light_type,\n            "color": color,\n            "intensity": intensity,\n            "position": list(position),\n            "distance": distance\n        })\n        return self\n\n    def add_particles(self, count: int = 3500, spread: float = 40.0, color: str = "#00f5ff", size: float = 0.04) -> "ThreeJSSceneBuilder":\n        self.particle_systems.append({\n            "count": count,\n            "spread": spread,\n            "color": color,\n            "size": size\n        })\n        return self\n\n    def export_manifest(self) -> Dict[str, Any]:\n        return {\n            "scene_name": self.scene_name,\n            "config": {\n                "fov": self.config.fov,\n                "clear_color": self.config.clear_color,\n                "antialias": self.config.antialias,\n                "tone_mapping": self.config.tone_mapping\n            },\n            "geometries_count": len(self.geometries),\n            "lights_count": len(self.lights),\n            "particle_systems_count": len(self.particle_systems),\n            "geometries": self.geometries,\n            "lights": self.lights\n        }\n\n    def export_html_bundle(self, title: Optional[str] = None) -> str:\n        page_title = title or (self.scene_name + " — Three.js WebGL Experience")\n        return _HTML_TEMPLATE.replace("__TITLE__", page_title)\n'
         return template.replace("__TASK__", clean_task).replace("__TASK_REPR__", repr(clean_task)).replace("__HTML_REPR__", html_repr)
 
-    @staticmethod
-    def get_domain_palette(dom: str) -> Dict[str, str]:
-        """Provides mathematically harmonized color palettes based on dominant chromatic temperature."""
-        if dom == "3d":
-            # Cosmic Obsidian & Quantum Cyan/Nebula Purple (Awwwards 3D WebGL Aesthetic)
+    @classmethod
+    def get_domain_palette(cls, dom: str, task: Optional[str] = None) -> Dict[str, str]:
+        """Provides mathematically harmonized color palettes based on task chromatic psychology and domain.
+        Adheres to Elena Rostova's 60-30-10 rule and strict anti-cliche guidelines.
+        """
+        raw_text = f"{task or ''}".lower()
+
+        def _has_kw(words):
+            pattern = r'(?i)\b(?:' + '|'.join(re.escape(w) for w in words) + r')\b'
+            return bool(re.search(pattern, raw_text))
+
+        # 1. Explicit Chromatic Descriptors & Semantic Mood (Uzbek & English)
+        # Gold / Luxury / Champagne
+        if _has_kw(["gold", "oltin", "jewelry", "zargar", "luxury", "hashamat", "royal", "rolex", "watch", "soat", "perfume", "amber"]):
             return {
-                "bg_canvas": "#030712",
-                "bg_main": "#030712",
-                "bg_surface": "#080e1e",
-                "bg_card": "rgba(10, 16, 32, 0.72)",
-                "bg_card_hover": "rgba(16, 26, 50, 0.88)",
-                "bg_drawer": "rgba(6, 11, 24, 0.96)",
-                "primary": "#00f5ff",
-                "primary_hover": "#00d0db",
-                "primary_light": "#5df8ff",
-                "primary_glow": "rgba(0, 245, 255, 0.40)",
-                "accent": "#a855f7",
-                "accent_hover": "#9333ea",
-                "accent_light": "#c084fc",
-                "accent_glow": "rgba(168, 85, 247, 0.40)",
-                "border_subtle": "rgba(0, 245, 255, 0.12)",
-                "border_light": "rgba(0, 245, 255, 0.25)",
-                "border_glow": "rgba(0, 245, 255, 0.55)",
-                "ambient_grad_1": "radial-gradient(circle at 20% 15%, rgba(0, 245, 255, 0.15) 0px, transparent 55%)",
-                "ambient_grad_2": "radial-gradient(circle at 80% 85%, rgba(168, 85, 247, 0.12) 0px, transparent 50%)",
-                "btn_gradient": "linear-gradient(135deg, #00f5ff 0%, #0284c7 100%)",
-                "btn_gradient_hover": "linear-gradient(135deg, #5df8ff 0%, #00f5ff 100%)",
-                "brand_gradient": "linear-gradient(135deg, #00f5ff 0%, #a855f7 100%)",
+                "name": "Imperial Champagne & Warm Amber (Luxury)",
+                "bg_canvas": "#090806",
+                "bg_main": "#090806",
+                "bg_surface": "#12100c",
+                "bg_card": "rgba(22, 19, 14, 0.78)",
+                "bg_card_hover": "rgba(32, 28, 20, 0.92)",
+                "bg_drawer": "rgba(15, 13, 9, 0.96)",
+                "primary": "#d4af37",
+                "primary_hover": "#c59b27",
+                "primary_light": "#f3e5ab",
+                "primary_glow": "rgba(212, 175, 55, 0.38)",
+                "accent": "#f59e0b",
+                "accent_hover": "#d97706",
+                "accent_light": "#fbbf24",
+                "accent_glow": "rgba(245, 158, 11, 0.35)",
+                "border_subtle": "rgba(212, 175, 55, 0.12)",
+                "border_light": "rgba(212, 175, 55, 0.24)",
+                "border_glow": "rgba(212, 175, 55, 0.50)",
+                "ambient_grad_1": "radial-gradient(circle at 18% 12%, rgba(212, 175, 55, 0.14) 0px, transparent 55%)",
+                "ambient_grad_2": "radial-gradient(circle at 82% 88%, rgba(245, 158, 11, 0.08) 0px, transparent 48%)",
+                "btn_gradient": "linear-gradient(135deg, #d4af37 0%, #b45309 100%)",
+                "btn_gradient_hover": "linear-gradient(135deg, #f3e5ab 0%, #d4af37 100%)",
+                "brand_gradient": "linear-gradient(135deg, #f3e5ab 0%, #d4af37 100%)",
             }
-        elif dom == "subtitle":
+
+        # Crimson / Fire / Esport Gaming
+        if _has_kw(["crimson", "red", "qizil", "fire", "alanga", "olov", "blood", "game", "gaming", "esport", "battle", "jang", "dracula", "mars"]):
+            return {
+                "name": "Hyper Crimson & Magma Orange (Esports / High Action)",
+                "bg_canvas": "#0d0505",
+                "bg_main": "#0d0505",
+                "bg_surface": "#170a0a",
+                "bg_card": "rgba(28, 12, 12, 0.78)",
+                "bg_card_hover": "rgba(42, 18, 18, 0.92)",
+                "bg_drawer": "rgba(18, 7, 7, 0.96)",
+                "primary": "#ef4444",
+                "primary_hover": "#dc2626",
+                "primary_light": "#f87171",
+                "primary_glow": "rgba(239, 68, 68, 0.40)",
+                "accent": "#f97316",
+                "accent_hover": "#ea580c",
+                "accent_light": "#fb923c",
+                "accent_glow": "rgba(249, 115, 22, 0.35)",
+                "border_subtle": "rgba(239, 68, 68, 0.12)",
+                "border_light": "rgba(239, 68, 68, 0.25)",
+                "border_glow": "rgba(239, 68, 68, 0.50)",
+                "ambient_grad_1": "radial-gradient(circle at 15% 10%, rgba(239, 68, 68, 0.15) 0px, transparent 55%)",
+                "ambient_grad_2": "radial-gradient(circle at 85% 85%, rgba(249, 115, 22, 0.08) 0px, transparent 50%)",
+                "btn_gradient": "linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)",
+                "btn_gradient_hover": "linear-gradient(135deg, #f87171 0%, #ef4444 100%)",
+                "brand_gradient": "linear-gradient(135deg, #f87171 0%, #ef4444 100%)",
+            }
+
+        # Emerald / Mint / Nature / Fintech
+        if _has_kw(["emerald", "green", "yashil", "zumrad", "nature", "tabiat", "eco", "fintech", "finance", "moliya", "bank", "crypto", "forest", "wealth"]):
+            return {
+                "name": "Mint Emerald & Cyber Teal (Fintech / Eco)",
+                "bg_canvas": "#030d08",
+                "bg_main": "#030d08",
+                "bg_surface": "#07170f",
+                "bg_card": "rgba(11, 29, 20, 0.78)",
+                "bg_card_hover": "rgba(16, 42, 29, 0.92)",
+                "bg_drawer": "rgba(6, 18, 12, 0.96)",
+                "primary": "#10b981",
+                "primary_hover": "#059669",
+                "primary_light": "#34d399",
+                "primary_glow": "rgba(16, 185, 129, 0.40)",
+                "accent": "#06b6d4",
+                "accent_hover": "#0891b2",
+                "accent_light": "#22d3ee",
+                "accent_glow": "rgba(6, 182, 212, 0.35)",
+                "border_subtle": "rgba(16, 185, 129, 0.12)",
+                "border_light": "rgba(16, 185, 129, 0.25)",
+                "border_glow": "rgba(16, 185, 129, 0.50)",
+                "ambient_grad_1": "radial-gradient(circle at 18% 12%, rgba(16, 185, 129, 0.15) 0px, transparent 55%)",
+                "ambient_grad_2": "radial-gradient(circle at 82% 88%, rgba(6, 182, 212, 0.08) 0px, transparent 48%)",
+                "btn_gradient": "linear-gradient(135deg, #10b981 0%, #047857 100%)",
+                "btn_gradient_hover": "linear-gradient(135deg, #34d399 0%, #10b981 100%)",
+                "brand_gradient": "linear-gradient(135deg, #34d399 0%, #10b981 100%)",
+            }
+
+        # Solar / Sunset / Blaze Orange
+        if _has_kw(["solar", "sun", "quyosh", "orange", "sunset", "shafaq", "desert", "sahro", "blaze"]):
+            return {
+                "name": "Solar Blaze & Golden Sun (High Energy / Dynamic)",
+                "bg_canvas": "#0f0803",
+                "bg_main": "#0f0803",
+                "bg_surface": "#1a0e06",
+                "bg_card": "rgba(33, 18, 9, 0.78)",
+                "bg_card_hover": "rgba(48, 26, 13, 0.92)",
+                "bg_drawer": "rgba(20, 11, 5, 0.96)",
+                "primary": "#f97316",
+                "primary_hover": "#ea580c",
+                "primary_light": "#fb923c",
+                "primary_glow": "rgba(249, 115, 22, 0.40)",
+                "accent": "#fbbf24",
+                "accent_hover": "#f59e0b",
+                "accent_light": "#fde68a",
+                "accent_glow": "rgba(251, 191, 36, 0.35)",
+                "border_subtle": "rgba(249, 115, 22, 0.12)",
+                "border_light": "rgba(249, 115, 22, 0.25)",
+                "border_glow": "rgba(249, 115, 22, 0.50)",
+                "ambient_grad_1": "radial-gradient(circle at 18% 12%, rgba(249, 115, 22, 0.15) 0px, transparent 55%)",
+                "ambient_grad_2": "radial-gradient(circle at 82% 88%, rgba(251, 191, 36, 0.08) 0px, transparent 48%)",
+                "btn_gradient": "linear-gradient(135deg, #f97316 0%, #c2410c 100%)",
+                "btn_gradient_hover": "linear-gradient(135deg, #fb923c 0%, #f97316 100%)",
+                "brand_gradient": "linear-gradient(135deg, #fb923c 0%, #f97316 100%)",
+            }
+
+        # Cyberpunk / Laser Neon
+        if _has_kw(["cyberpunk", "neon", "arcade", "synthwave", "laser", "tokyo"]):
+            return {
+                "name": "Laser Fuchsia & Electric Cyan (Cyberpunk Noir)",
+                "bg_canvas": "#090414",
+                "bg_main": "#090414",
+                "bg_surface": "#120826",
+                "bg_card": "rgba(24, 11, 48, 0.78)",
+                "bg_card_hover": "rgba(36, 16, 72, 0.92)",
+                "bg_drawer": "rgba(14, 6, 28, 0.96)",
+                "primary": "#ff007f",
+                "primary_hover": "#e00070",
+                "primary_light": "#ff4da6",
+                "primary_glow": "rgba(255, 0, 127, 0.42)",
+                "accent": "#00f5ff",
+                "accent_hover": "#00d0db",
+                "accent_light": "#5df8ff",
+                "accent_glow": "rgba(0, 245, 255, 0.40)",
+                "border_subtle": "rgba(255, 0, 127, 0.15)",
+                "border_light": "rgba(255, 0, 127, 0.30)",
+                "border_glow": "rgba(255, 0, 127, 0.55)",
+                "ambient_grad_1": "radial-gradient(circle at 15% 10%, rgba(255, 0, 127, 0.16) 0px, transparent 55%)",
+                "ambient_grad_2": "radial-gradient(circle at 85% 85%, rgba(0, 245, 255, 0.10) 0px, transparent 50%)",
+                "btn_gradient": "linear-gradient(135deg, #ff007f 0%, #99004d 100%)",
+                "btn_gradient_hover": "linear-gradient(135deg, #ff4da6 0%, #ff007f 100%)",
+                "brand_gradient": "linear-gradient(135deg, #ff007f 0%, #00f5ff 100%)",
+            }
+
+        # Minimalist Monochrome / Slate / Architect
+        if _has_kw(["minimal", "monochrome", "oq-qora", "slate", "mono", "architect", "black and white", "apple"]):
+            return {
+                "name": "Titanium Ice & Pure Slate (Minimalist Ultra-Clean)",
+                "bg_canvas": "#09090b",
+                "bg_main": "#09090b",
+                "bg_surface": "#121216",
+                "bg_card": "rgba(24, 24, 30, 0.78)",
+                "bg_card_hover": "rgba(36, 36, 46, 0.92)",
+                "bg_drawer": "rgba(14, 14, 18, 0.96)",
+                "primary": "#f8fafc",
+                "primary_hover": "#e2e8f0",
+                "primary_light": "#ffffff",
+                "primary_glow": "rgba(248, 250, 252, 0.25)",
+                "accent": "#94a3b8",
+                "accent_hover": "#64748b",
+                "accent_light": "#cbd5e1",
+                "accent_glow": "rgba(148, 163, 184, 0.25)",
+                "border_subtle": "rgba(255, 255, 255, 0.10)",
+                "border_light": "rgba(255, 255, 255, 0.20)",
+                "border_glow": "rgba(255, 255, 255, 0.40)",
+                "ambient_grad_1": "radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.08) 0px, transparent 55%)",
+                "ambient_grad_2": "radial-gradient(circle at 80% 85%, rgba(148, 163, 184, 0.05) 0px, transparent 50%)",
+                "btn_gradient": "linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%)",
+                "btn_gradient_hover": "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
+                "brand_gradient": "linear-gradient(135deg, #ffffff 0%, #94a3b8 100%)",
+            }
+
+        # Rose / Beauty / Cosmetics / Spa
+        if _has_kw(["beauty", "cosmetic", "gozallik", "rose", "pink", "pushti", "spa", "fashion"]):
+            return {
+                "name": "Rose Quartz & Peach Glow (Editorial Luxury)",
+                "bg_canvas": "#0d0509",
+                "bg_main": "#0d0509",
+                "bg_surface": "#180a12",
+                "bg_card": "rgba(32, 14, 24, 0.78)",
+                "bg_card_hover": "rgba(48, 20, 36, 0.92)",
+                "bg_drawer": "rgba(20, 8, 15, 0.96)",
+                "primary": "#f43f5e",
+                "primary_hover": "#e11d48",
+                "primary_light": "#fb7185",
+                "primary_glow": "rgba(244, 63, 94, 0.38)",
+                "accent": "#fb7185",
+                "accent_hover": "#f43f5e",
+                "accent_light": "#fda4af",
+                "accent_glow": "rgba(251, 113, 133, 0.35)",
+                "border_subtle": "rgba(244, 63, 94, 0.12)",
+                "border_light": "rgba(244, 63, 94, 0.25)",
+                "border_glow": "rgba(244, 63, 94, 0.50)",
+                "ambient_grad_1": "radial-gradient(circle at 18% 12%, rgba(244, 63, 94, 0.14) 0px, transparent 55%)",
+                "ambient_grad_2": "radial-gradient(circle at 82% 88%, rgba(251, 113, 133, 0.08) 0px, transparent 48%)",
+                "btn_gradient": "linear-gradient(135deg, #f43f5e 0%, #be123c 100%)",
+                "btn_gradient_hover": "linear-gradient(135deg, #fb7185 0%, #f43f5e 100%)",
+                "brand_gradient": "linear-gradient(135deg, #fb7185 0%, #f43f5e 100%)",
+            }
+
+        # 2. Canonical Domain Defaults
+        if dom == "subtitle":
             # Cinematic Obsidian Darkroom (DaVinci/Premiere studio aesthetic)
             return {
+                "name": "Cinematic Obsidian & Sky/Amber (Studio Darkroom)",
                 "bg_canvas": "#07090e",
                 "bg_main": "#07090e",
                 "bg_surface": "#0d111a",
@@ -931,6 +1112,7 @@ class DataPipeline:
         elif dom == "ecommerce":
             # Royal Indigo & Emerald Luxury (Harmonious contrast)
             return {
+                "name": "Royal Indigo & Mint Emerald (Luxury Flagship Store)",
                 "bg_canvas": "#090a14",
                 "bg_main": "#090a14",
                 "bg_surface": "#101224",
@@ -957,6 +1139,7 @@ class DataPipeline:
         elif dom == "analytics":
             # Cyber Cobalt & Teal Intelligence
             return {
+                "name": "Cyber Cobalt & Teal (Real-time Analytics)",
                 "bg_canvas": "#070c18",
                 "bg_main": "#070c18",
                 "bg_surface": "#0c152a",
@@ -980,37 +1163,65 @@ class DataPipeline:
                 "btn_gradient_hover": "linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)",
                 "brand_gradient": "linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)",
             }
-        else:
-            # Titan Obsidian & Cyan Architecture
+        elif dom == "3d":
+            # Cosmic Obsidian & Quantum Cyan/Nebula Purple (Awwwards 3D WebGL Aesthetic)
             return {
+                "name": "Cosmic Obsidian & Quantum Cyan (Awwwards 3D WebGL)",
+                "bg_canvas": "#030712",
+                "bg_main": "#030712",
+                "bg_surface": "#080e1e",
+                "bg_card": "rgba(10, 16, 32, 0.72)",
+                "bg_card_hover": "rgba(16, 26, 50, 0.88)",
+                "bg_drawer": "rgba(6, 11, 24, 0.96)",
+                "primary": "#00f5ff",
+                "primary_hover": "#00d0db",
+                "primary_light": "#5df8ff",
+                "primary_glow": "rgba(0, 245, 255, 0.40)",
+                "accent": "#a855f7",
+                "accent_hover": "#9333ea",
+                "accent_light": "#c084fc",
+                "accent_glow": "rgba(168, 85, 247, 0.40)",
+                "border_subtle": "rgba(0, 245, 255, 0.12)",
+                "border_light": "rgba(0, 245, 255, 0.25)",
+                "border_glow": "rgba(0, 245, 255, 0.55)",
+                "ambient_grad_1": "radial-gradient(circle at 20% 15%, rgba(0, 245, 255, 0.15) 0px, transparent 55%)",
+                "ambient_grad_2": "radial-gradient(circle at 80% 85%, rgba(168, 85, 247, 0.12) 0px, transparent 50%)",
+                "btn_gradient": "linear-gradient(135deg, #00f5ff 0%, #0284c7 100%)",
+                "btn_gradient_hover": "linear-gradient(135deg, #5df8ff 0%, #00f5ff 100%)",
+                "brand_gradient": "linear-gradient(135deg, #00f5ff 0%, #a855f7 100%)",
+            }
+        else:
+            # Default: Sleek Cold Slate & Electric Sapphire (Anti-Purple Clean Precision)
+            return {
+                "name": "Titanium Slate & Electric Sapphire (Enterprise Clean)",
                 "bg_canvas": "#080a12",
                 "bg_main": "#080a12",
                 "bg_surface": "#0e1220",
                 "bg_card": "rgba(17, 23, 40, 0.75)",
                 "bg_card_hover": "rgba(25, 34, 58, 0.90)",
                 "bg_drawer": "rgba(12, 16, 28, 0.95)",
-                "primary": "#4f46e5",
-                "primary_hover": "#4338ca",
-                "primary_light": "#6366f1",
-                "primary_glow": "rgba(79, 70, 229, 0.35)",
+                "primary": "#3b82f6",
+                "primary_hover": "#2563eb",
+                "primary_light": "#60a5fa",
+                "primary_glow": "rgba(59, 130, 246, 0.35)",
                 "accent": "#06b6d4",
                 "accent_hover": "#0891b2",
                 "accent_light": "#22d3ee",
                 "accent_glow": "rgba(6, 182, 212, 0.35)",
-                "border_subtle": "rgba(79, 70, 229, 0.10)",
-                "border_light": "rgba(79, 70, 229, 0.20)",
-                "border_glow": "rgba(79, 70, 229, 0.45)",
-                "ambient_grad_1": "radial-gradient(circle at 15% 10%, rgba(79, 70, 229, 0.14) 0px, transparent 50%)",
+                "border_subtle": "rgba(59, 130, 246, 0.10)",
+                "border_light": "rgba(59, 130, 246, 0.20)",
+                "border_glow": "rgba(59, 130, 246, 0.45)",
+                "ambient_grad_1": "radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.14) 0px, transparent 50%)",
                 "ambient_grad_2": "radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.07) 0px, transparent 45%)",
-                "btn_gradient": "linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)",
-                "btn_gradient_hover": "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
-                "brand_gradient": "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
+                "btn_gradient": "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
+                "btn_gradient_hover": "linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)",
+                "brand_gradient": "linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)",
             }
 
     def synthesize_ui_css(self, task: str, lang: str = "uz") -> str:
         """Generates enterprise-grade, frosted-glass CSS styling tokens and components."""
         dom = self.detect_domain(task)
-        p = self.get_domain_palette(dom)
+        p = self.get_domain_palette(dom, task)
 
         root_and_body = f"""/* ==========================================================================
    HALLWRIGHT PREMIER DESIGN SYSTEM — Elena Rostova Master Edition
@@ -3183,6 +3394,8 @@ body {{
     def _synthesize_3d_html(self, task: str, lang: str = "uz") -> str:
         is_uz = lang == "uz"
         title = f"{task} — 3D Spatial Experience" if not is_uz else f"{task} — 3D Fazoviy WebGL Tajriba"
+        p = self.get_domain_palette("3d", task)
+        theme_name = p.get("name", "Awwwards WebGL 2.0")
         return f"""<!DOCTYPE html>
 <html lang="{lang}">
 <head>
@@ -3199,7 +3412,7 @@ body {{
   <div class="hud-overlay">
     <header class="hud-header glass-panel">
       <div class="brand-group">
-        <span class="hud-badge">✨ Awwwards WebGL 2.0</span>
+        <span class="hud-badge">✨ Awwwards WebGL 2.0 • {theme_name}</span>
         <h1 class="hud-title">{title}</h1>
       </div>
       <div class="hud-stats-group">
@@ -4560,39 +4773,46 @@ document.addEventListener("DOMContentLoaded", () => {
 """
 
     def _synthesize_3d_js(self, task: str, lang: str = "uz") -> str:
-        return """/**
+        p = self.get_domain_palette("3d", task)
+        bg_hex = "0x" + p["bg_canvas"].lstrip("#")
+        primary_hex = "0x" + p["primary"].lstrip("#")
+        accent_hex = "0x" + p["accent"].lstrip("#")
+        primary_light_hex = "0x" + p["primary_light"].lstrip("#")
+
+        code = f"""/**
  * Hallwright Awwwards-Grade Three.js WebGL Spatial Engine
  * Elena Rostova & Gabriel Frost Master Edition
+ * Palette Theme: {p.get('name', 'Harmonized Dynamic')}
  * High-performance PBR materials, ACES Filmic tone mapping, dynamic light rig,
  * interactive raycasting, particle nebulae, and OrbitControls.
  */
 
-(function () {
+(function () {{
   'use strict';
 
-  if (typeof THREE === 'undefined') {
+  if (typeof THREE === 'undefined') {{
     console.error('Three.js library is not loaded.');
     return;
-  }
+  }}
 
   const canvas = document.getElementById('webgl-canvas');
   if (!canvas) return;
 
-  // Scene & Fog Setup
+  // Scene & Fog Setup (Harmonized Background)
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x030712);
-  scene.fog = new THREE.FogExp2(0x030712, 0.022);
+  scene.background = new THREE.Color({bg_hex});
+  scene.fog = new THREE.FogExp2({bg_hex}, 0.022);
 
   // Camera Setup
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 1.4, 5.8);
 
   // Renderer Setup
-  const renderer = new THREE.WebGLRenderer({
+  const renderer = new THREE.WebGLRenderer({{
     canvas: canvas,
     antialias: true,
     powerPreference: 'high-performance'
-  });
+  }});
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -4601,15 +4821,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // OrbitControls
   let controls = null;
-  if (typeof THREE.OrbitControls !== 'undefined') {
+  if (typeof THREE.OrbitControls !== 'undefined') {{
     controls = new THREE.OrbitControls(camera, canvas);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 1.0;
-  }
+  }}
 
-  // Lighting Rig
+  // Lighting Rig (Chromatic Calibration)
   const ambientLight = new THREE.AmbientLight(0x0a1128, 0.9);
   scene.add(ambientLight);
 
@@ -4617,18 +4837,18 @@ document.addEventListener("DOMContentLoaded", () => {
   mainLight.position.set(6, 12, 8);
   scene.add(mainLight);
 
-  const cyanLight = new THREE.PointLight(0x00f5ff, 3.0, 35);
-  cyanLight.position.set(-5, 4, 3);
-  scene.add(cyanLight);
+  const primaryLight = new THREE.PointLight({primary_hex}, 3.0, 35);
+  primaryLight.position.set(-5, 4, 3);
+  scene.add(primaryLight);
 
-  const purpleLight = new THREE.PointLight(0xa855f7, 2.8, 35);
-  purpleLight.position.set(5, -3, -3);
-  scene.add(purpleLight);
+  const accentLight = new THREE.PointLight({accent_hex}, 2.8, 35);
+  accentLight.position.set(5, -3, -3);
+  scene.add(accentLight);
 
-  // Quantum Nexus Meshes
+  // Quantum Nexus Meshes (Primary Chromatic Material)
   const knotGeo = new THREE.TorusKnotGeometry(1.6, 0.42, 200, 36);
-  const knotMat = new THREE.MeshPhysicalMaterial({
-    color: 0x00f5ff,
+  const knotMat = new THREE.MeshPhysicalMaterial({{
+    color: {primary_hex},
     metalness: 0.25,
     roughness: 0.10,
     clearcoat: 1.0,
@@ -4636,38 +4856,36 @@ document.addEventListener("DOMContentLoaded", () => {
     transmission: 0.65,
     ior: 1.52,
     wireframe: false
-  });
+  }});
   const knotMesh = new THREE.Mesh(knotGeo, knotMat);
   scene.add(knotMesh);
 
-  // Orbiting Satellite Rings
+  // Orbiting Satellite Rings (Accent Chromatic Material)
   const ringGeo = new THREE.TorusGeometry(2.8, 0.035, 16, 100);
-  const ringMat = new THREE.MeshStandardMaterial({
-    color: 0xa855f7,
+  const ringMat = new THREE.MeshStandardMaterial({{
+    color: {accent_hex},
     metalness: 0.8,
-    roughness: 0.2,
-    emissive: 0x581c87,
-    emissiveIntensity: 0.5
-  });
+    roughness: 0.2
+  }});
   const ringMesh = new THREE.Mesh(ringGeo, ringMat);
   ringMesh.rotation.x = Math.PI / 3;
   scene.add(ringMesh);
 
-  // Particle Nebula
+  // Particle Nebula (High-atmosphere Particles)
   const particleCount = 3500;
   const particleGeo = new THREE.BufferGeometry();
   const positions = new Float32Array(particleCount * 3);
-  for (let i = 0; i < particleCount * 3; i++) {
+  for (let i = 0; i < particleCount * 3; i++) {{
     positions[i] = (Math.random() - 0.5) * 50;
-  }
+  }}
   particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const particleMat = new THREE.PointsMaterial({
+  const particleMat = new THREE.PointsMaterial({{
     size: 0.045,
-    color: 0x5df8ff,
+    color: {primary_light_hex},
     transparent: true,
     opacity: 0.75,
     blending: THREE.AdditiveBlending
-  });
+  }});
   const particles = new THREE.Points(particleGeo, particleMat);
   scene.add(particles);
 
@@ -4676,10 +4894,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const mouse = new THREE.Vector2(-999, -999);
   let isHovered = false;
 
-  window.addEventListener('mousemove', (e) => {
+  window.addEventListener('mousemove', (e) => {{
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-  });
+  }});
 
   // Metrics
   let lastTime = performance.now();
@@ -4687,7 +4905,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const fpsCounter = document.getElementById('fps-counter');
 
   // Animation Loop
-  function animate(now) {
+  function animate(now) {{
     requestAnimationFrame(animate);
 
     if (controls) controls.update();
@@ -4695,10 +4913,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const t = now * 0.001;
 
     // Light dynamic orbit
-    cyanLight.position.x = Math.sin(t * 0.7) * 6;
-    cyanLight.position.z = Math.cos(t * 0.7) * 6;
-    purpleLight.position.x = -Math.sin(t * 0.5) * 6;
-    purpleLight.position.z = -Math.cos(t * 0.5) * 6;
+    primaryLight.position.x = Math.sin(t * 0.7) * 6;
+    primaryLight.position.z = Math.cos(t * 0.7) * 6;
+    accentLight.position.x = -Math.sin(t * 0.5) * 6;
+    accentLight.position.z = -Math.cos(t * 0.5) * 6;
 
     // Mesh animations
     ringMesh.rotation.z = t * 0.15;
@@ -4707,83 +4925,85 @@ document.addEventListener("DOMContentLoaded", () => {
     // Raycast hover effect
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(knotMesh);
-    if (intersects.length > 0) {
-      if (!isHovered) {
+    if (intersects.length > 0) {{
+      if (!isHovered) {{
         document.body.style.cursor = 'pointer';
         isHovered = true;
-      }
+      }}
       knotMesh.scale.lerp(new THREE.Vector3(1.08, 1.08, 1.08), 0.1);
-    } else {
-      if (isHovered) {
+    }} else {{
+      if (isHovered) {{
         document.body.style.cursor = 'default';
         isHovered = false;
-      }
+      }}
       knotMesh.scale.lerp(new THREE.Vector3(1.0, 1.0, 1.0), 0.1);
-    }
+    }}
 
     // FPS calculation
     frameCount++;
-    if (now > lastTime + 1000) {
-      if (fpsCounter) {
+    if (now > lastTime + 1000) {{
+      if (fpsCounter) {{
         fpsCounter.textContent = String(Math.round((frameCount * 1000) / (now - lastTime)));
-      }
+      }}
       frameCount = 0;
       lastTime = now;
-    }
+    }}
 
     renderer.render(scene, camera);
-  }
+  }}
   animate(performance.now());
 
   // Window Resize
-  window.addEventListener('resize', () => {
+  window.addEventListener('resize', () => {{
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-  });
+  }});
 
   // HUD Controls
   const matSelect = document.getElementById('material-select');
-  if (matSelect) {
-    matSelect.addEventListener('change', (e) => {
+  if (matSelect) {{
+    matSelect.addEventListener('change', (e) => {{
       const mode = e.target.value;
-      if (mode === 'wireframe') {
+      if (mode === 'wireframe') {{
         knotMat.wireframe = true;
-        knotMat.color.setHex(0x5df8ff);
-      } else if (mode === 'obsidian') {
+        knotMat.color.setHex({primary_light_hex});
+      }} else if (mode === 'obsidian') {{
         knotMat.wireframe = false;
-        knotMat.color.setHex(0xd4af37);
+        knotMat.color.setHex({accent_hex});
         knotMat.metalness = 0.95;
         knotMat.roughness = 0.08;
         knotMat.transmission = 0.0;
-      } else {
+      }} else {{
         knotMat.wireframe = false;
-        knotMat.color.setHex(0x00f5ff);
+        knotMat.color.setHex({primary_hex});
         knotMat.metalness = 0.25;
         knotMat.roughness = 0.10;
         knotMat.transmission = 0.65;
-      }
-    });
-  }
+      }}
+    }});
+  }}
 
   const autorotateBtn = document.getElementById('toggle-autorotate-btn');
-  if (autorotateBtn && controls) {
-    autorotateBtn.addEventListener('click', () => {
+  if (autorotateBtn && controls) {{
+    autorotateBtn.addEventListener('click', () => {{
       controls.autoRotate = !controls.autoRotate;
       autorotateBtn.textContent = controls.autoRotate ? "Aylanishni To'xtatish" : "Aylantirish";
-    });
-  }
+    }});
+  }}
 
   const resetBtn = document.getElementById('reset-view-btn');
-  if (resetBtn && controls) {
-    resetBtn.addEventListener('click', () => {
+  if (resetBtn && controls) {{
+    resetBtn.addEventListener('click', () => {{
       camera.position.set(0, 1.4, 5.8);
       controls.target.set(0, 0, 0);
       controls.update();
-    });
-  }
-})();
+    }});
+  }}
+}})();
 """
+        return code
+
 
     def synthesize_3d_webgl(self, task: str, lang: str = "uz") -> str:
         """Synthesizes a self-contained, standalone production-ready Three.js WebGL HTML bundle."""

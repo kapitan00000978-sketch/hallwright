@@ -9,6 +9,13 @@
         "PYTHONUNBUFFERED": "1",
         "PYTHONIOENCODING": "utf-8"
       }
+    },
+    "threejs-devtools": {
+      "command": "npx.exe",
+      "args": [
+        "-y",
+        "threejs-devtools-mcp"
+      ]
     }
   }
 }

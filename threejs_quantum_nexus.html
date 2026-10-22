@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js Quantum Nexus — Awwwards Grade WebGL Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Three.js Core & OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <style>
+    :root {
+      --bg: #05070d;
+      --panel-bg: rgba(10, 15, 26, 0.72);
+      --border: rgba(255, 255, 255, 0.1);
+      --primary: #00f5ff;
+      --primary-glow: rgba(0, 245, 255, 0.4);
+      --accent: #a855f7;
+      --accent-glow: rgba(168, 85, 247, 0.35);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #webgl-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: block;
+    }
+
+    /* UI Glassmorphic Overlay Layer */
+    .ui-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+    }
+
+    .interactive {
+      pointer-events: auto;
+    }
+
+    /* Header Nav */
+    .header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      padding: 10px 20px;
+      border-radius: 9999px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .brand-pill .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 12px var(--primary);
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.6; }
+    }
+
+    .brand-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #fff 0%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .telemetry-card {
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      display: flex;
+      gap: 16px;
+      color: var(--muted);
+    }
+
+    .telemetry-card span b {
+      color: var(--primary);
+    }
+
+    /* Hero Headline Overlay */
+    .hero-center {
+      position: absolute;
+      top: 50%;
+      left: 60px;
+      transform: translateY(-50%);
+      max-width: 520px;
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--primary);
+      background: rgba(0, 245, 255, 0.1);
+      border: 1px solid rgba(0, 245, 255, 0.25);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      margin-bottom: 16px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-size: 3.4rem;
+      font-weight: 800;
+      line-height: 1.08;
+      margin-bottom: 16px;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 70%, #00f5ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #94a3b8;
+      margin-bottom: 24px;
+    }
+
+    /* Bottom Control Bar */
+    .control-dock {
+      align-self: center;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .dock-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dock-btn:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+      box-shadow: 0 0 20px var(--primary-glow);
+      transform: translateY(-2px);
+    }
+
+    .dock-btn.active {
+      background: linear-gradient(135deg, var(--primary) 0%, #0284c7 100%);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    /* Live Hover Hologram HUD */
+    .hologram-hud {
+      position: absolute;
+      right: 40px;
+      bottom: 40px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      width: 280px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+
+    .hud-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+
+    .hud-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      color: #94a3b8;
+    }
+
+    .hud-row span:last-child {
+      color: #00f5ff;
+      font-weight: 600;
+    }
+
+    /* Instruction Hint */
+    .interaction-hint {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- WebGL Rendering Canvas Target -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Luxury HUD Overlay -->
+  <div class="ui-layer">
+    <!-- Top Bar -->
+    <header class="header-nav">
+      <div class="brand-pill interactive">
+        <div class="dot"></div>
+        <span class="brand-title">Quantum Engine v1.0</span>
+      </div>
+
+      <div class="telemetry-card interactive" id="telemetry">
+        <span>FPS: <b id="val-fps">60</b></span>
+        <span>DRAWS: <b id="val-draws">4</b></span>
+        <span>VERTS: <b id="val-verts">14.2K</b></span>
+        <span>RENDERER: <b>WebGL 2.0</b></span>
+      </div>
+    </header>
+
+    <!-- Hero Content -->
+    <main class="hero-center">
+      <div class="hero-tag">Hardware Accelerated 3D</div>
+      <h1 class="hero-title">Spatial Computing Realm</h1>
+      <p class="hero-desc">Experience physically based rendering (PBR), dynamic point-light radiance, procedural vertex distortion, and real-time GPU orbital mechanics.</p>
+    </main>
+
+    <!-- Interactive Hint -->
+    <div class="interaction-hint">
+      <span>✦ Drag to Orbit 360° • Scroll to Zoom • Click Core to Pulse ✦</span>
+    </div>
+
+    <!-- Holographic Telemetry Inspector -->
+    <aside class="hologram-hud interactive">
+      <div class="hud-title">
+        <span>CORE TELEMETRY</span>
+        <span style="color: #00f5ff;">LIVE</span>
+      </div>
+      <div class="hud-row"><span>GEOMETRY</span><span>Torus Knot</span></div>
+      <div class="hud-row"><span>MATERIAL</span><span>MeshPhysical</span></div>
+      <div class="hud-row"><span>ROTATION X</span><span id="rot-x">0.00 rad</span></div>
+      <div class="hud-row"><span>ROTATION Y</span><span id="rot-y">0.00 rad</span></div>
+      <div class="hud-row"><span>STARDUST PARTICLES</span><span>2,500</span></div>
+      <div class="hud-row"><span>LIGHT RADIANCE</span><span id="light-val">300 lm</span></div>
+    </aside>
+
+    <!-- Bottom Controls Dock -->
+    <nav class="control-dock interactive">
+      <button class="dock-btn" id="btn-wireframe">
+        <span>⚡ Wireframe</span>
+      </button>
+      <button class="dock-btn active" id="btn-auto-orbit">
+        <span>🔄 Auto Orbit</span>
+      </button>
+      <button class="dock-btn" id="btn-theme-cyan">
+        <span>💎 Cyan</span>
+      </button>
+      <button class="dock-btn" id="btn-theme-purple">
+        <span>🔮 Nebula</span>
+      </button>
+      <button class="dock-btn" id="btn-theme-gold">
+        <span>☀️ Solar</span>
+      </button>
+    </nav>
+  </div>
+
+  <script>
+    // --- 1. Scene, Camera, & WebGL Hardware Renderer Setup ---
+    const canvas = document.getElementById('webgl-canvas');
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x05070d, 0.015);
+
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 4, 32);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: "high-performance"
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.25;
+
+    // --- 2. OrbitControls with Fluid Physical Inertia ---
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.maxDistance = 60;
+    controls.minDistance = 10;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 1.2;
+
+    // --- 3. Dynamic Multi-Point Physical Lighting Engine ---
+    const ambientLight = new THREE.AmbientLight(0x0d1527, 2.0);
+    scene.add(ambientLight);
+
+    // Cyan Key Light
+    const lightCyan = new THREE.PointLight(0x00f5ff, 5.0, 50);
+    lightCyan.position.set(12, 10, 12);
+    scene.add(lightCyan);
+
+    // Purple Accent Light
+    const lightPurple = new THREE.PointLight(0xa855f7, 4.5, 50);
+    lightPurple.position.set(-14, -8, -10);
+    scene.add(lightPurple);
+
+    // Warm Specular Rim Light
+    const lightWarm = new THREE.PointLight(0xf59e0b, 3.5, 40);
+    lightWarm.position.set(0, 16, -14);
+    scene.add(lightWarm);
+
+    // Directional Sunlight for specular sheen
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    dirLight.position.set(15, 25, 20);
+    scene.add(dirLight);
+
+    // Light Helper Spheres for visual radiance
+    const lightSphereMat1 = new THREE.MeshBasicMaterial({ color: 0x00f5ff });
+    const lightMesh1 = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), lightSphereMat1);
+    scene.add(lightMesh1);
+
+    const lightSphereMat2 = new THREE.MeshBasicMaterial({ color: 0xa855f7 });
+    const lightMesh2 = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), lightSphereMat2);
+    scene.add(lightMesh2);
+
+    // --- 4. Central Quantum Hero Core (PBR Torus Knot + Plasma Orb) ---
+    const heroGroup = new THREE.Group();
+    scene.add(heroGroup);
+
+    // Outer Torus Knot Geometry
+    const knotGeometry = new THREE.TorusKnotGeometry(6, 1.6, 160, 32, 2, 3);
+    const knotMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x111c33,
+      emissive: 0x002233,
+      roughness: 0.15,
+      metalness: 0.85,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.1,
+      wireframe: false,
+      transmission: 0.15,
+      reflectivity: 0.9
+    });
+    const knotMesh = new THREE.Mesh(knotGeometry, knotMaterial);
+    heroGroup.add(knotMesh);
+
+    // Inner Glowing Plasma Sphere
+    const innerGeometry = new THREE.IcosahedronGeometry(3.6, 4);
+    const innerMaterial = new THREE.MeshStandardMaterial({
+      color: 0x00f5ff,
+      emissive: 0x00a8cc,
+      emissiveIntensity: 0.8,
+      roughness: 0.3,
+      metalness: 0.2,
+      wireframe: true
+    });
+    const innerMesh = new THREE.Mesh(innerGeometry, innerMaterial);
+    heroGroup.add(innerMesh);
+
+    // Outer Orbital Gyroscope Rings
+    const ringGeo1 = new THREE.TorusGeometry(10.5, 0.08, 16, 100);
+    const ringMat1 = new THREE.MeshStandardMaterial({ color: 0x00f5ff, emissive: 0x00f5ff, roughness: 0.2 });
+    const ringMesh1 = new THREE.Mesh(ringGeo1, ringMat1);
+    ringMesh1.rotation.x = Math.PI / 3;
+    heroGroup.add(ringMesh1);
+
+    const ringGeo2 = new THREE.TorusGeometry(12.5, 0.06, 16, 100);
+    const ringMat2 = new THREE.MeshStandardMaterial({ color: 0xa855f7, emissive: 0xa855f7, roughness: 0.2 });
+    const ringMesh2 = new THREE.Mesh(ringGeo2, ringMat2);
+    ringMesh2.rotation.y = Math.PI / 4;
+    heroGroup.add(ringMesh2);
+
+    // --- 5. Interactive 2,500 Stardust Particles (Nebula Field) ---
+    const particleCount = 2500;
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleColors = new Float32Array(particleCount * 3);
+
+    const color1 = new THREE.Color(0x00f5ff);
+    const color2 = new THREE.Color(0xa855f7);
+    const color3 = new THREE.Color(0x38bdf8);
+
+    for (let i = 0; i < particleCount; i++) {
+      const radius = 20 + Math.random() * 60;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos((Math.random() * 2) - 1);
+
+      particlePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+      particlePositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      particlePositions[i * 3 + 2] = radius * Math.cos(phi);
+
+      const mixedColor = color1.clone().lerp(Math.random() > 0.5 ? color2 : color3, Math.random());
+      particleColors[i * 3] = mixedColor.r;
+      particleColors[i * 3 + 1] = mixedColor.g;
+      particleColors[i * 3 + 2] = mixedColor.b;
+    }
+
+    const particleGeometry = new THREE.BufferGeometry();
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+    // Custom circular particle alpha texture
+    const createCircleTexture = () => {
+      const c = document.createElement('canvas');
+      c.width = 64;
+      c.height = 64;
+      const ctx = c.getContext('2d');
+      const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+      gradient.addColorStop(0.3, 'rgba(0, 245, 255, 0.7)');
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 64, 64);
+      return new THREE.CanvasTexture(c);
+    };
+
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 0.9,
+      vertexColors: true,
+      map: createCircleTexture(),
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+
+    const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particleSystem);
+
+    // --- 6. Raycasting & Interaction Physics ---
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2(-1000, -1000);
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    // Shockwave pulse on click
+    let shockwaveScale = 0;
+    const shockwaveGeo = new THREE.RingGeometry(0.1, 0.4, 64);
+    const shockwaveMat = new THREE.MeshBasicMaterial({ color: 0x00f5ff, side: THREE.DoubleSide, transparent: true, opacity: 0 });
+    const shockwaveMesh = new THREE.Mesh(shockwaveGeo, shockwaveMat);
+    scene.add(shockwaveMesh);
+
+    window.addEventListener('click', (e) => {
+      if (e.target.closest('.interactive')) return;
+      shockwaveMesh.position.copy(knotMesh.position);
+      shockwaveMesh.lookAt(camera.position);
+      shockwaveScale = 1;
+      shockwaveMat.opacity = 0.9;
+    });
+
+    // --- 7. Real-Time Telemetry & UI Controllers ---
+    const rotXElem = document.getElementById('rot-x');
+    const rotYElem = document.getElementById('rot-y');
+    const fpsElem = document.getElementById('val-fps');
+
+    let lastTime = performance.now();
+    let frameCount = 0;
+
+    // Controls
+    const btnWireframe = document.getElementById('btn-wireframe');
+    btnWireframe.addEventListener('click', () => {
+      knotMaterial.wireframe = !knotMaterial.wireframe;
+      btnWireframe.classList.toggle('active', knotMaterial.wireframe);
+    });
+
+    const btnAutoOrbit = document.getElementById('btn-auto-orbit');
+    btnAutoOrbit.addEventListener('click', () => {
+      controls.autoRotate = !controls.autoRotate;
+      btnAutoOrbit.classList.toggle('active', controls.autoRotate);
+    });
+
+    // Color Theme Switching
+    const applyTheme = (keyColor, accentColor, emissiveColor) => {
+      lightCyan.color.setHex(keyColor);
+      lightPurple.color.setHex(accentColor);
+      lightMesh1.material.color.setHex(keyColor);
+      lightMesh2.material.color.setHex(accentColor);
+      innerMaterial.color.setHex(keyColor);
+      innerMaterial.emissive.setHex(emissiveColor);
+      ringMat1.color.setHex(keyColor);
+      ringMat1.emissive.setHex(keyColor);
+      ringMat2.color.setHex(accentColor);
+      ringMat2.emissive.setHex(accentColor);
+    };
+
+    document.getElementById('btn-theme-cyan').addEventListener('click', (e) => {
+      applyTheme(0x00f5ff, 0xa855f7, 0x00a8cc);
+      document.querySelectorAll('.control-dock .dock-btn').forEach(b => b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+    });
+
+    document.getElementById('btn-theme-purple').addEventListener('click', (e) => {
+      applyTheme(0xc084fc, 0xf43f5e, 0x9333ea);
+      document.querySelectorAll('.control-dock .dock-btn').forEach(b => b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+    });
+
+    document.getElementById('btn-theme-gold').addEventListener('click', (e) => {
+      applyTheme(0xf59e0b, 0xef4444, 0xd97706);
+      document.querySelectorAll('.control-dock .dock-btn').forEach(b => b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+    });
+
+    // --- 8. 60FPS Fluid Render Loop ---
+    let clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const elapsedTime = clock.getElapsedTime();
+
+      // Core Dynamic Geometry Rotations
+      knotMesh.rotation.x = elapsedTime * 0.25;
+      knotMesh.rotation.y = elapsedTime * 0.4;
+      innerMesh.rotation.x = -elapsedTime * 0.3;
+      innerMesh.rotation.y = -elapsedTime * 0.5;
+
+      ringMesh1.rotation.z = elapsedTime * 0.35;
+      ringMesh2.rotation.z = -elapsedTime * 0.25;
+
+      // Orbiting Point Lights
+      const lightRadius = 15;
+      lightCyan.position.x = Math.sin(elapsedTime * 0.8) * lightRadius;
+      lightCyan.position.z = Math.cos(elapsedTime * 0.8) * lightRadius;
+      lightMesh1.position.copy(lightCyan.position);
+
+      lightPurple.position.x = Math.cos(elapsedTime * 0.6) * -lightRadius;
+      lightPurple.position.z = Math.sin(elapsedTime * 0.6) * -lightRadius;
+      lightMesh2.position.copy(lightPurple.position);
+
+      // Particle Nebula Swirl
+      particleSystem.rotation.y = elapsedTime * 0.04;
+
+      // Shockwave Pulse Expansion
+      if (shockwaveScale > 0) {
+        shockwaveScale += 0.8;
+        shockwaveMesh.scale.set(shockwaveScale, shockwaveScale, 1);
+        shockwaveMat.opacity *= 0.94;
+        if (shockwaveMat.opacity < 0.01) shockwaveScale = 0;
+      }
+
+      // Raycasting interaction on core
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObject(knotMesh);
+      if (intersects.length > 0) {
+        knotMaterial.emissiveIntensity = 1.2;
+        document.body.style.cursor = 'pointer';
+      } else {
+        knotMaterial.emissiveIntensity = 0.2;
+        document.body.style.cursor = 'default';
+      }
+
+      // Update Controls & Telemetry
+      controls.update();
+
+      rotXElem.textContent = (knotMesh.rotation.x % (Math.PI * 2)).toFixed(2) + ' rad';
+      rotYElem.textContent = (knotMesh.rotation.y % (Math.PI * 2)).toFixed(2) + ' rad';
+
+      // FPS Counter
+      frameCount++;
+      const now = performance.now();
+      if (now - lastTime >= 1000) {
+        fpsElem.textContent = Math.round((frameCount * 1000) / (now - lastTime));
+        frameCount = 0;
+        lastTime = now;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // --- 9. Viewport Dynamic Resizing ---
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    });
+  </script>
+</body>
+</html>

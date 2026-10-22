@@ -327,5 +327,55 @@ def test_semantic_chromatic_mood_adaptation():
     assert "--accent: #94a3b8;" in mono_css
 
 
+def test_synthesize_enterprise_clean_architecture_service():
+    synth = DomainCodeSynthesizer()
+    code = synth.synthesize_code("Build high-throughput payment order processor with clean architecture and FastAPI", domain="enterprise")
+    parsed = ast.parse(code)
+    assert isinstance(parsed, ast.Module)
+    assert "class DomainError(Exception):" in code
+    assert "class EntityNotFoundError" in code
+    assert "class DomainValidationError" in code
+    assert "class ConcurrencyConflictError" in code
+    assert "class IRepository(ABC, Generic[T]):" in code
+    assert "class InMemoryRepository" in code
+    assert "class EnterpriseDomainService:" in code
+    assert "class FastAPIAdapter:" in code
+
+    # Test full execution of the synthesized enterprise service
+    local_scope = {}
+    exec(code, local_scope)
+    AdapterClass = local_scope["FastAPIAdapter"]
+    adapter = AdapterClass()
+
+    # 1. Create Record (POST 201)
+    res_post = adapter.handle_request("POST", "/records", {"name": "Titanium Order 101"})
+    assert res_post["status_code"] == 201
+    rec_id = res_post["body"]["id"]
+
+    # 2. Get Record (GET 200)
+    res_get = adapter.handle_request("GET", f"/records/{rec_id}")
+    assert res_get["status_code"] == 200
+    assert res_get["body"]["id"] == rec_id
+
+    # 3. Validation failure (POST 422)
+    res_invalid = adapter.handle_request("POST", "/records", {})
+    assert res_invalid["status_code"] == 422
+
+    # 4. Not found (GET 404)
+    res_not_found = adapter.handle_request("GET", "/records/unknown-id-999")
+    assert res_not_found["status_code"] == 404
+
+
+def test_synthesize_typescript_module():
+    synth = DomainCodeSynthesizer()
+    ts_code = synth.synthesize_code("TypeScript React Customer Dashboard", filename="CustomerDashboard.tsx")
+    assert "export interface DomainEntity" in ts_code
+    assert "export type AsyncState<T>" in ts_code
+    assert "export class Result<T, E = Error>" in ts_code
+    assert "useEntityResource" in ts_code
+    assert "AbortController" in ts_code
+
+
+
 
 

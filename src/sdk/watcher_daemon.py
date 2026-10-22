@@ -114,7 +114,8 @@ class WatcherDaemon:
         # 2. Gatekeeper scan
         try:
             from detector import scan_file
-            findings = scan_file(file_path)
+            scan_res = scan_file(file_path)
+            findings = scan_res.get("findings", []) if isinstance(scan_res, dict) else []
             flaws_count = len(findings)
             if findings:
                 # Trigger background evolution
@@ -124,10 +125,26 @@ class WatcherDaemon:
 
                 # Attempt remediation
                 if auto_heal:
-                    from remediator import remediate_file
-                    repaired = remediate_file(file_path)
-                    if repaired > 0:
-                        healed = True
+                    ext = os.path.splitext(file_path)[1].lower()
+                    if ext in (".html", ".htm") and any("DESIGN_" in f.get("rule_id", "") for f in findings):
+                        try:
+                            from visual_transmuter import VisualTransmuter
+                            transmuter = VisualTransmuter(workspace_root=self.workspace_root)
+                            bak_path = f"{file_path}.bak"
+                            if not os.path.exists(bak_path):
+                                with open(file_path, "r", encoding="utf-8") as rf:
+                                    with open(bak_path, "w", encoding="utf-8") as wf:
+                                        wf.write(rf.read())
+                            t_res = transmuter.transmute_file(file_path, output_path=file_path)
+                            if t_res.get("status") == "TRANSMUTED":
+                                healed = True
+                        except Exception as t_err:
+                            logger.debug("UI transmutation skipped on %s: %s", file_path, t_err)
+                    else:
+                        from remediator import remediate_file
+                        repaired = remediate_file(file_path)
+                        if repaired > 0:
+                            healed = True
         except Exception as scan_err:
             logger.debug("Gatekeeper scan skipped on %s: %s", file_path, scan_err)
 

@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "hallwright": {
+      "command": "python",
+      "args": [
+        "c:/Users/user/Videos/New folder (3)/mcp/server.py"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONIOENCODING": "utf-8"
+      }
+    }
+  }
+}

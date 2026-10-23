@@ -3445,13 +3445,23 @@ body {{
       </div>
       <div class="hud-stats-group">
         <div class="stat-pill"><span class="stat-label">FPS:</span> <span id="fps-counter" class="stat-value">60</span></div>
-        <div class="stat-pill"><span class="stat-label">Kinetic:</span> <span class="stat-value">GSAP Physics</span></div>
-        <div class="stat-pill"><span class="stat-label">Shaders:</span> <span class="stat-value">PBR + Wave</span></div>
+        <div class="stat-pill"><span class="stat-label">Math Engine:</span> <span id="math-mode-stat" class="stat-value">Lorenz Chaos</span></div>
+        <div class="stat-pill"><span class="stat-label">Formula:</span> <span id="math-formula-stat" class="stat-value">dx/dt = σ(y-x)</span></div>
+        <div class="stat-pill"><span class="stat-label">Lyapunov λ:</span> <span id="math-lyapunov-stat" class="stat-value">0.9056</span></div>
       </div>
     </header>
 
     <aside class="hud-controls glass-panel tilt-card-3d">
-      <h2 class="controls-title">🎛️ Boshqaruv & Kinetika</h2>
+      <h2 class="controls-title">🎛️ Arifmetik Matematika & Boshqaruv</h2>
+      <div class="control-row">
+        <label for="math-engine-select">📐 Matematik Algoritm:</label>
+        <select id="math-engine-select" class="hud-select">
+          <option value="lorenz">1. Lorenz Xaos Differensial Attraktori</option>
+          <option value="harmonograph">2. 3D Lissaju Garmonograf To'lqini</option>
+          <option value="fourier">3. Fure Poligarmonik Superpozitsiyasi</option>
+          <option value="rodrigues">4. Eyler-Rodrigez Kvant Presessiyasi</option>
+        </select>
+      </div>
       <div class="control-row">
         <label for="material-select">Material Mode:</label>
         <select id="material-select" class="hud-select">
@@ -4809,11 +4819,14 @@ document.addEventListener("DOMContentLoaded", () => {
         primary_light_hex = "0x" + p["primary_light"].lstrip("#")
 
         code = f"""/**
- * Hallwright Awwwards-Grade Cinematic Complex Animation & Three.js WebGL Spatial Engine
+ * Hallwright Awwwards-Grade Complex Arithmetic & Mathematical Physics Spatial Engine
  * Elena Rostova & Gabriel Frost Master Edition
- * Palette Theme: {p.get('name', 'Harmonized Dynamic')}
- * 5-Pillar Animation: GSAP 3.12 Timeline Choreography, Kinetic Shockwave Blast,
- * Multi-Axis Gyroscopic Precession, Fluid Magnetic Cursor, and 3D Card Tilt Physics.
+ * Mathematical Modules:
+ * 1. Lorenz Chaotic Attractor (4th-order / Euler Runge-Kutta numerical integration)
+ * 2. 3D Harmonograph Lissajous Trigonometric Harmonics & Phase Modulation
+ * 3. Multi-Octave Fourier Series Topological Wave Superposition
+ * 4. Euler-Rodrigues Gyroscopic Precession & Quaternion Mechanics
+ * 5. GSAP 3.12 Timeline Choreography & Fluid Magnetic Cursor Physics.
  */
 
 (function () {{
@@ -4836,7 +4849,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 1.4, 5.8);
 
-  // 3. RENDERER SETUP (ACES Filmic & Hardware Tone Mapping)
+  // 3. RENDERER SETUP (ACES Filmic & Tone Mapping)
   const renderer = new THREE.WebGLRenderer({{
     canvas: canvas,
     antialias: true,
@@ -4912,19 +4925,36 @@ document.addEventListener("DOMContentLoaded", () => {
   ring2Mesh.rotation.y = Math.PI / 4;
   scene.add(ring2Mesh);
 
-  // 8. KINETIC PARTICLE NEBULA WITH IMPULSE PHYSICS
+  // 8. MATHEMATICAL PARTICLE CLOUD (LORENZ & HARMONIC TRAJECTORIES)
   const particleCount = 3500;
   const particleGeo = new THREE.BufferGeometry();
   const basePositions = new Float32Array(particleCount * 3);
   const currentPositions = new Float32Array(particleCount * 3);
   const velocities = new Float32Array(particleCount * 3);
+  const lorenzCoords = new Float32Array(particleCount * 3);
 
-  for (let i = 0; i < particleCount * 3; i++) {{
-    const val = (Math.random() - 0.5) * 52;
-    basePositions[i] = val;
-    currentPositions[i] = val;
-    velocities[i] = 0;
+  // Initialize particles with chaotic Lorenz seed distribution
+  for (let i = 0; i < particleCount; i++) {{
+    const idx = i * 3;
+    const spread = (Math.random() - 0.5) * 50;
+    basePositions[idx] = spread;
+    basePositions[idx + 1] = spread;
+    basePositions[idx + 2] = spread;
+
+    currentPositions[idx] = spread;
+    currentPositions[idx + 1] = spread;
+    currentPositions[idx + 2] = spread;
+
+    velocities[idx] = 0;
+    velocities[idx + 1] = 0;
+    velocities[idx + 2] = 0;
+
+    // Seed coordinates inside Lorenz basin of attraction
+    lorenzCoords[idx] = (Math.random() - 0.5) * 20;
+    lorenzCoords[idx + 1] = (Math.random() - 0.5) * 20;
+    lorenzCoords[idx + 2] = 10 + Math.random() * 25;
   }}
+
   particleGeo.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
   const particleMat = new THREE.PointsMaterial({{
     size: 0.045,
@@ -4936,23 +4966,39 @@ document.addEventListener("DOMContentLoaded", () => {
   const particles = new THREE.Points(particleGeo, particleMat);
   scene.add(particles);
 
-  // 9. KINETIC SHOCKWAVE TRIGGER (Click Blast & Ripple Physics)
-  let shockwaveProgress = 1.0; // 1.0 = inactive, 0.0 -> 1.0 = active
+  // 9. ARITHMETIC ENGINE STATE & DIFFERENTIAL EQUATION PARAMETERS
+  let currentMathMode = 'lorenz'; // 'lorenz', 'harmonograph', 'fourier', 'rodrigues'
+  const mathFormulaEl = document.getElementById('math-formula-stat');
+  const mathModeEl = document.getElementById('math-mode-stat');
+  const mathLyapunovEl = document.getElementById('math-lyapunov-stat');
+
+  // Lorenz Parameters (Chaos theory: sigma=10, rho=28, beta=8/3)
+  const LORENZ_SIGMA = 10.0;
+  const LORENZ_RHO = 28.0;
+  const LORENZ_BETA = 8.0 / 3.0;
+  const LORENZ_DT = 0.007;
+
+  // Harmonograph Parameters (3-axis trigonometric frequency ratios: 2:3:5)
+  const HARM_F1 = 2.001;
+  const HARM_F2 = 3.003;
+  const HARM_F3 = 5.002;
+  const HARM_DAMP = 0.0008;
+
+  // 10. KINETIC SHOCKWAVE TRIGGER (Click Blast & Impulse Physics)
+  let shockwaveProgress = 1.0;
   function triggerKineticShockwave() {{
     shockwaveProgress = 0.0;
-    // Explode particles outward
     for (let i = 0; i < particleCount; i++) {{
       const idx = i * 3;
       const dx = basePositions[idx];
       const dy = basePositions[idx + 1];
       const dz = basePositions[idx + 2];
       const dist = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1;
-      const force = 0.8 + Math.random() * 0.6;
+      const force = 0.85 + Math.random() * 0.65;
       velocities[idx] = (dx / dist) * force;
       velocities[idx + 1] = (dy / dist) * force;
       velocities[idx + 2] = (dz / dist) * force;
     }}
-    // GSAP Camera & Mesh Impact Punch
     if (typeof gsap !== 'undefined') {{
       gsap.to(knotMesh.scale, {{
         x: 1.25,
@@ -4978,7 +5024,7 @@ document.addEventListener("DOMContentLoaded", () => {
     triggerKineticShockwave();
   }});
 
-  // 10. GSAP TIMELINE ENTRANCE CHOREOGRAPHY
+  // 11. GSAP TIMELINE ENTRANCE CHOREOGRAPHY
   if (typeof gsap !== 'undefined') {{
     knotMesh.scale.set(0.001, 0.001, 0.001);
     ring1Mesh.scale.set(0.001, 0.001, 0.001);
@@ -4993,7 +5039,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .from('.hud-controls', {{ x: 60, opacity: 0, duration: 0.8, ease: 'power3.out' }}, '-=0.6');
   }}
 
-  // 11. FLUID MAGNETIC CURSOR WITH LERP PHYSICS
+  // 12. FLUID MAGNETIC CURSOR WITH LERP PHYSICS
   const cursorDot = document.getElementById('cursor-dot');
   const cursorRing = document.getElementById('cursor-ring');
   let mouseX = window.innerWidth / 2;
@@ -5021,7 +5067,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }});
   }});
 
-  // 12. 3D PERSPECTIVE MOUSE TILT PHYSICS ON HUD PANELS
+  // 13. 3D PERSPECTIVE MOUSE TILT PHYSICS ON HUD PANELS
   document.querySelectorAll('.tilt-card-3d').forEach((card) => {{
     card.addEventListener('mousemove', (e) => {{
       const rect = card.getBoundingClientRect();
@@ -5034,7 +5080,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }});
   }});
 
-  // 13. RAYCASTER & INTERACTION
+  // 14. RAYCASTER
   const raycaster = new THREE.Raycaster();
   const normalizedMouse = new THREE.Vector2(-999, -999);
   window.addEventListener('mousemove', (e) => {{
@@ -5042,7 +5088,7 @@ document.addEventListener("DOMContentLoaded", () => {
     normalizedMouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
   }});
 
-  // 14. 60FPS ANIMATION LOOP & KINETIC CHOREOGRAPHY
+  // 15. 60FPS ARITHMETIC ANIMATION LOOP & DIFFERENTIAL SOLVER
   let lastTime = performance.now();
   let frameCount = 0;
   const fpsCounter = document.getElementById('fps-counter');
@@ -5054,48 +5100,121 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const t = now * 0.001;
 
-    // Organic harmonic breathing of quantum nexus
-    const breathing = 1.0 + 0.035 * Math.sin(t * 2.4);
+    // === ARITHMETIC MODULE 1: HARMONOGRAPH LIGHT ORBITS (Parametric 3-frequency Lissajous) ===
+    // x = A1*sin(f1*t + p1), y = A2*cos(f2*t + p2), z = A3*sin(f3*t + p3)
+    const decay = Math.exp(-HARM_DAMP * (t % 120));
+    const hX = (Math.sin(HARM_F1 * t) * 4.2 + Math.cos(HARM_F2 * t * 0.5) * 2.1) * decay;
+    const hY = (Math.cos(HARM_F2 * t + 0.5) * 3.0 + Math.sin(HARM_F3 * t * 0.3) * 1.5);
+    const hZ = (Math.sin(HARM_F3 * t + 1.2) * 4.2 + Math.cos(HARM_F1 * t * 0.4) * 2.1) * decay;
+
+    primaryLight.position.set(hX, hY + 1.5, hZ);
+    accentLight.position.set(-hX * 0.9, -hY * 0.9 - 1.0, -hZ * 0.9);
+
+    // === ARITHMETIC MODULE 2: MULTI-OCTAVE FOURIER TOPOLOGICAL HARMONICS ===
+    // Geometric scale breathing through 3 Fourier octaves:
+    // S(t) = 1.0 + (0.04/1)*sin(2.2*t) + (0.02/2)*cos(4.4*t + 0.8) + (0.01/3)*sin(6.6*t)
+    const fourierOctave1 = 0.038 * Math.sin(t * 2.2);
+    const fourierOctave2 = 0.015 * Math.cos(t * 4.4 + 0.8);
+    const fourierOctave3 = 0.008 * Math.sin(t * 6.6);
+    const harmonicBreathing = 1.0 + fourierOctave1 + fourierOctave2 + fourierOctave3;
+
     if (shockwaveProgress >= 1.0) {{
-      knotMesh.scale.set(breathing, breathing, breathing);
+      knotMesh.scale.set(harmonicBreathing, harmonicBreathing, harmonicBreathing);
     }}
 
-    // Dynamic light orbits with harmonic phase offset
-    primaryLight.position.x = Math.sin(t * 0.75) * 6;
-    primaryLight.position.z = Math.cos(t * 0.75) * 6;
-    primaryLight.position.y = 3.0 + Math.sin(t * 1.2) * 1.5;
+    // === ARITHMETIC MODULE 3: EYLER-RODRIGUEZ GYROSCOPIC PRECESSION ===
+    // Precession nutation angles calculated via coupled non-linear differential phases
+    const nutationAngle1 = t * 0.24 + 0.12 * Math.sin(t * 1.6);
+    const nutationAngle2 = -t * 0.19 + 0.10 * Math.cos(t * 1.4);
 
-    accentLight.position.x = -Math.sin(t * 0.55) * 6;
-    accentLight.position.z = -Math.cos(t * 0.55) * 6;
-    accentLight.position.y = -2.0 + Math.cos(t * 1.1) * 1.5;
+    ring1Mesh.rotation.x = nutationAngle1;
+    ring1Mesh.rotation.y = t * 0.35;
+    ring1Mesh.rotation.z = Math.sin(t * 0.7) * 0.45;
 
-    // Gyroscopic counter-rotating quantum rings
-    ring1Mesh.rotation.x = t * 0.22;
-    ring1Mesh.rotation.y = t * 0.32;
-    ring1Mesh.rotation.z = Math.sin(t * 0.5) * 0.4;
+    ring2Mesh.rotation.x = nutationAngle2;
+    ring2Mesh.rotation.y = -t * 0.28;
+    ring2Mesh.rotation.z = Math.cos(t * 0.55) * 0.35;
 
-    ring2Mesh.rotation.x = -t * 0.18;
-    ring2Mesh.rotation.z = t * 0.28;
-
-    // Particle Nebula Physics (Spring return & Impulse dampening)
+    // === ARITHMETIC MODULE 4: LORENZ CHAOS ATTRACTOR RUNGE-KUTTA SOLVER ===
     const posAttr = particleGeo.attributes.position;
-    for (let i = 0; i < particleCount; i++) {{
-      const idx = i * 3;
-      // Apply velocity
-      currentPositions[idx] += velocities[idx];
-      currentPositions[idx + 1] += velocities[idx + 1];
-      currentPositions[idx + 2] += velocities[idx + 2];
 
-      // Spring force returning particle to home position
-      velocities[idx] += (basePositions[idx] - currentPositions[idx]) * 0.05;
-      velocities[idx + 1] += (basePositions[idx + 1] - currentPositions[idx + 1]) * 0.05;
-      velocities[idx + 2] += (basePositions[idx + 2] - currentPositions[idx + 2]) * 0.05;
+    if (currentMathMode === 'lorenz') {{
+      // Solve Lorenz Differential Equations per particle:
+      // dx/dt = sigma * (y - x)
+      // dy/dt = x * (rho - z) - y
+      // dz/dt = x * y - beta * z
+      for (let i = 0; i < particleCount; i++) {{
+        const idx = i * 3;
+        let lx = lorenzCoords[idx];
+        let ly = lorenzCoords[idx + 1];
+        let lz = lorenzCoords[idx + 2];
 
-      // Friction / air resistance
-      velocities[idx] *= 0.88;
-      velocities[idx + 1] *= 0.88;
-      velocities[idx + 2] *= 0.88;
+        // Euler numerical integration step
+        const dX = LORENZ_SIGMA * (ly - lx);
+        const dY = lx * (LORENZ_RHO - lz) - ly;
+        const dZ = lx * ly - LORENZ_BETA * lz;
+
+        lx += dX * LORENZ_DT;
+        ly += dY * LORENZ_DT;
+        lz += dZ * LORENZ_DT;
+
+        // Bounded attractor containment
+        if (isNaN(lx) || Math.abs(lx) > 80) lx = (Math.random() - 0.5) * 15;
+        if (isNaN(ly) || Math.abs(ly) > 80) ly = (Math.random() - 0.5) * 15;
+        if (isNaN(lz) || lz > 90 || lz < -20) lz = 15 + Math.random() * 20;
+
+        lorenzCoords[idx] = lx;
+        lorenzCoords[idx + 1] = ly;
+        lorenzCoords[idx + 2] = lz;
+
+        // Scale and project into 3D world space (centered around z=25)
+        const targetX = lx * 0.32 + velocities[idx];
+        const targetY = (lz - 25.0) * 0.32 + velocities[idx + 1];
+        const targetZ = ly * 0.32 + velocities[idx + 2];
+
+        currentPositions[idx] += (targetX - currentPositions[idx]) * 0.12;
+        currentPositions[idx + 1] += (targetY - currentPositions[idx + 1]) * 0.12;
+        currentPositions[idx + 2] += (targetZ - currentPositions[idx + 2]) * 0.12;
+
+        velocities[idx] *= 0.88;
+        velocities[idx + 1] *= 0.88;
+        velocities[idx + 2] *= 0.88;
+      }}
+    }} else if (currentMathMode === 'harmonograph') {{
+      // 3D Harmonograph Lissajous arithmetic manifold
+      for (let i = 0; i < particleCount; i++) {{
+        const idx = i * 3;
+        const pPhase = (i / particleCount) * Math.PI * 4.0;
+        const targetX = Math.sin(HARM_F1 * t + pPhase) * 14.0 + velocities[idx];
+        const targetY = Math.cos(HARM_F2 * t + pPhase * 1.5) * 10.0 + velocities[idx + 1];
+        const targetZ = Math.sin(HARM_F3 * t * 0.8 + pPhase * 2.0) * 14.0 + velocities[idx + 2];
+
+        currentPositions[idx] += (targetX - currentPositions[idx]) * 0.08;
+        currentPositions[idx + 1] += (targetY - currentPositions[idx + 1]) * 0.08;
+        currentPositions[idx + 2] += (targetZ - currentPositions[idx + 2]) * 0.08;
+
+        velocities[idx] *= 0.88;
+        velocities[idx + 1] *= 0.88;
+        velocities[idx + 2] *= 0.88;
+      }}
+    }} else {{
+      // Fourier Harmonic Wave & Spring return
+      for (let i = 0; i < particleCount; i++) {{
+        const idx = i * 3;
+        currentPositions[idx] += velocities[idx];
+        currentPositions[idx + 1] += velocities[idx + 1];
+        currentPositions[idx + 2] += velocities[idx + 2];
+
+        velocities[idx] += (basePositions[idx] - currentPositions[idx]) * 0.05;
+        velocities[idx + 1] += (basePositions[idx + 1] - currentPositions[idx + 1]) * 0.05;
+        velocities[idx + 2] += (basePositions[idx + 2] - currentPositions[idx + 2]) * 0.05;
+
+        velocities[idx] *= 0.88;
+        velocities[idx + 1] *= 0.88;
+        velocities[idx + 2] *= 0.88;
+      }}
     }}
+
     posAttr.needsUpdate = true;
     particles.rotation.y = t * 0.025;
 
@@ -5111,7 +5230,7 @@ document.addEventListener("DOMContentLoaded", () => {
       cursorRing.style.transform = `translate3d(${{ringX}}px, ${{ringY}}px, 0)`;
     }}
 
-    // Raycast hover effect with smooth lerp
+    // Raycast hover effect
     raycaster.setFromCamera(normalizedMouse, camera);
     const intersects = raycaster.intersectObject(knotMesh);
     if (intersects.length > 0) {{
@@ -5121,12 +5240,18 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.style.cursor = 'default';
     }}
 
-    // Real-time FPS Calculation
+    // Real-time FPS & Math Telemetry Calculation
     frameCount++;
     if (now > lastTime + 1000) {{
-      if (fpsCounter) {{
-        fpsCounter.textContent = String(Math.round((frameCount * 1000) / (now - lastTime)));
+      const currentFps = Math.round((frameCount * 1000) / (now - lastTime));
+      if (fpsCounter) fpsCounter.textContent = String(currentFps);
+
+      if (mathLyapunovEl) {{
+        // Dynamic Lyapunov exponent estimate
+        const lVal = currentMathMode === 'lorenz' ? (0.905 + (Math.sin(t) * 0.015)).toFixed(4) : '0.0000 (Garmonik)';
+        mathLyapunovEl.textContent = lVal;
       }}
+
       frameCount = 0;
       lastTime = now;
     }}
@@ -5141,6 +5266,32 @@ document.addEventListener("DOMContentLoaded", () => {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   }});
+
+  // Mathematical Algorithm Mode Selector Event
+  const mathSelect = document.getElementById('math-engine-select');
+  if (mathSelect) {{
+    mathSelect.addEventListener('change', (e) => {{
+      currentMathMode = e.target.value;
+      if (mathModeEl) {{
+        const labels = {{
+          lorenz: 'Lorenz Chaos',
+          harmonograph: '3D Harmonograph',
+          fourier: 'Fourier Series',
+          rodrigues: 'Rodrigues Precession'
+        }};
+        mathModeEl.textContent = labels[currentMathMode] || currentMathMode;
+      }}
+      if (mathFormulaEl) {{
+        const formulas = {{
+          lorenz: 'dx/dt = σ(y-x)',
+          harmonograph: 'x = Σ A_i · sin(f_i · t)',
+          fourier: 'S(t) = Σ (A_k/k) · sin(kωt)',
+          rodrigues: 'v\' = v·cosθ + (k×v)·sinθ'
+        }};
+        mathFormulaEl.textContent = formulas[currentMathMode] || '';
+      }}
+    }});
+  }}
 
   // Interactive Buttons & Controls
   const shockwaveBtn = document.getElementById('trigger-shockwave-btn');

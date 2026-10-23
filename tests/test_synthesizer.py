@@ -392,7 +392,17 @@ def test_complex_animation_and_physics_synthesis():
     assert "tilt-card-3d" in webgl_bundle
     assert "elastic.out" in webgl_bundle
 
-    # 2. CSS Animation tokens verification
+    # 2. Arithmetic & Mathematical physics engine verification
+    assert "LORENZ_SIGMA" in webgl_bundle
+    assert "LORENZ_RHO" in webgl_bundle
+    assert "LORENZ_BETA" in webgl_bundle
+    assert "math-engine-select" in webgl_bundle
+    assert "math-formula-stat" in webgl_bundle
+    assert "HARM_F1" in webgl_bundle
+    assert "fourierOctave1" in webgl_bundle
+    assert "nutationAngle1" in webgl_bundle
+
+    # 3. CSS Animation tokens verification
     css = synth.synthesize_ui_css(task)
     assert "magic-shimmer-sweep" in css
     assert "@keyframes magicShimmerSweep" in css

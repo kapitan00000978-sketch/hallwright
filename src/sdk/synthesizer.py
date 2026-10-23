@@ -2819,6 +2819,7 @@ body {{
   font-weight: 700;
 }
 """
+        rest_of_css += "\n/* --- Awwwards Complex Animation & Fluid Magnetic Cursor Tokens --- */\n.cursor-dot {\n  position: fixed;\n  top: -4px;\n  left: -4px;\n  width: 8px;\n  height: 8px;\n  background: var(--primary, #00f5ff);\n  border-radius: 50%;\n  pointer-events: none;\n  z-index: 10000;\n  will-change: transform;\n}\n\n.cursor-ring {\n  position: fixed;\n  top: -18px;\n  left: -18px;\n  width: 36px;\n  height: 36px;\n  border: 1.5px solid var(--primary-glow, rgba(0, 245, 255, 0.5));\n  border-radius: 50%;\n  pointer-events: none;\n  z-index: 9999;\n  transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background 0.2s ease;\n  will-change: transform;\n}\n\n.cursor-ring.cursor-expanded {\n  top: -28px;\n  left: -28px;\n  width: 56px;\n  height: 56px;\n  background: rgba(0, 245, 255, 0.08);\n  border-color: var(--primary, #00f5ff);\n  backdrop-filter: blur(2px);\n}\n\n.tilt-card-3d {\n  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s ease;\n  transform-style: preserve-3d;\n  will-change: transform;\n}\n\n@keyframes magicShimmerSweep {\n  0% { transform: translateX(-100%); }\n  100% { transform: translateX(200%); }\n}\n\n.magic-shimmer-sweep {\n  position: relative;\n  overflow: hidden;\n}\n\n.magic-shimmer-sweep::after {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 50%;\n  height: 100%;\n  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);\n  animation: magicShimmerSweep 3.5s infinite;\n  pointer-events: none;\n}\n"
         return root_and_body + rest_of_css
 
 
@@ -3427,25 +3428,30 @@ body {{
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 </head>
 <body class="spatial-experience">
   <canvas id="webgl-canvas"></canvas>
 
+  <!-- Fluid Magnetic Cursor -->
+  <div id="cursor-dot" class="cursor-dot"></div>
+  <div id="cursor-ring" class="cursor-ring"></div>
+
   <div class="hud-overlay">
-    <header class="hud-header glass-panel">
+    <header class="hud-header glass-panel tilt-card-3d">
       <div class="brand-group">
         <span class="hud-badge">✨ Awwwards WebGL 2.0 • {theme_name}</span>
         <h1 class="hud-title">{title}</h1>
       </div>
       <div class="hud-stats-group">
         <div class="stat-pill"><span class="stat-label">FPS:</span> <span id="fps-counter" class="stat-value">60</span></div>
-        <div class="stat-pill"><span class="stat-label">Verts:</span> <span id="verts-counter" class="stat-value">24,560</span></div>
-        <div class="stat-pill"><span class="stat-label">Draws:</span> <span id="draws-counter" class="stat-value">6</span></div>
+        <div class="stat-pill"><span class="stat-label">Kinetic:</span> <span class="stat-value">GSAP Physics</span></div>
+        <div class="stat-pill"><span class="stat-label">Shaders:</span> <span class="stat-value">PBR + Wave</span></div>
       </div>
     </header>
 
-    <aside class="hud-controls glass-panel">
-      <h2 class="controls-title">🎛️ Boshqaruv Markazi</h2>
+    <aside class="hud-controls glass-panel tilt-card-3d">
+      <h2 class="controls-title">🎛️ Boshqaruv & Kinetika</h2>
       <div class="control-row">
         <label for="material-select">Material Mode:</label>
         <select id="material-select" class="hud-select">
@@ -3459,8 +3465,9 @@ body {{
         <input type="range" id="particle-density" min="1000" max="8000" value="3500" class="hud-slider">
       </div>
       <div class="control-actions">
-        <button id="toggle-autorotate-btn" class="btn btn-primary">Aylanishni To'xtatish</button>
-        <button id="reset-view-btn" class="btn btn-secondary">Kamerani Qaytarish</button>
+        <button id="trigger-shockwave-btn" class="btn btn-accent magnetic-target">⚡ Kinetik To'lqin</button>
+        <button id="toggle-autorotate-btn" class="btn btn-primary magnetic-target">Aylanishni To'xtatish</button>
+        <button id="reset-view-btn" class="btn btn-secondary magnetic-target">Kamerani Qaytarish</button>
       </div>
     </aside>
   </div>
@@ -4802,11 +4809,11 @@ document.addEventListener("DOMContentLoaded", () => {
         primary_light_hex = "0x" + p["primary_light"].lstrip("#")
 
         code = f"""/**
- * Hallwright Awwwards-Grade Three.js WebGL Spatial Engine
+ * Hallwright Awwwards-Grade Cinematic Complex Animation & Three.js WebGL Spatial Engine
  * Elena Rostova & Gabriel Frost Master Edition
  * Palette Theme: {p.get('name', 'Harmonized Dynamic')}
- * High-performance PBR materials, ACES Filmic tone mapping, dynamic light rig,
- * interactive raycasting, particle nebulae, and OrbitControls.
+ * 5-Pillar Animation: GSAP 3.12 Timeline Choreography, Kinetic Shockwave Blast,
+ * Multi-Axis Gyroscopic Precession, Fluid Magnetic Cursor, and 3D Card Tilt Physics.
  */
 
 (function () {{
@@ -4820,16 +4827,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById('webgl-canvas');
   if (!canvas) return;
 
-  // Scene & Fog Setup (Harmonized Background)
+  // 1. SCENE & ATMOSPHERIC FOG
   const scene = new THREE.Scene();
   scene.background = new THREE.Color({bg_hex});
   scene.fog = new THREE.FogExp2({bg_hex}, 0.022);
 
-  // Camera Setup
+  // 2. CAMERA SETUP
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 1.4, 5.8);
 
-  // Renderer Setup
+  // 3. RENDERER SETUP (ACES Filmic & Hardware Tone Mapping)
   const renderer = new THREE.WebGLRenderer({{
     canvas: canvas,
     antialias: true,
@@ -4838,10 +4845,10 @@ document.addEventListener("DOMContentLoaded", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.2;
+  renderer.toneMappingExposure = 1.25;
   renderer.outputEncoding = THREE.sRGBEncoding;
 
-  // OrbitControls
+  // 4. ORBIT CONTROLS
   let controls = null;
   if (typeof THREE.OrbitControls !== 'undefined') {{
     controls = new THREE.OrbitControls(camera, canvas);
@@ -4851,7 +4858,7 @@ document.addEventListener("DOMContentLoaded", () => {
     controls.autoRotateSpeed = 1.0;
   }}
 
-  // Lighting Rig (Chromatic Calibration)
+  // 5. CHROMATIC MULTI-POINT LIGHT RIG
   const ambientLight = new THREE.AmbientLight(0x0a1128, 0.9);
   scene.add(ambientLight);
 
@@ -4867,8 +4874,8 @@ document.addEventListener("DOMContentLoaded", () => {
   accentLight.position.set(5, -3, -3);
   scene.add(accentLight);
 
-  // Quantum Nexus Meshes (Primary Chromatic Material)
-  const knotGeo = new THREE.TorusKnotGeometry(1.6, 0.42, 200, 36);
+  // 6. HERO QUANTUM NEXUS (MeshPhysicalMaterial with PBR Clarity)
+  const knotGeo = new THREE.TorusKnotGeometry(1.6, 0.42, 220, 40);
   const knotMat = new THREE.MeshPhysicalMaterial({{
     color: {primary_hex},
     metalness: 0.25,
@@ -4882,25 +4889,43 @@ document.addEventListener("DOMContentLoaded", () => {
   const knotMesh = new THREE.Mesh(knotGeo, knotMat);
   scene.add(knotMesh);
 
-  // Orbiting Satellite Rings (Accent Chromatic Material)
-  const ringGeo = new THREE.TorusGeometry(2.8, 0.035, 16, 100);
-  const ringMat = new THREE.MeshStandardMaterial({{
+  // 7. GYROSCOPIC QUANTUM SATELLITE RINGS (Counter-Rotating in 3 Axes)
+  const ring1Geo = new THREE.TorusGeometry(2.8, 0.035, 16, 120);
+  const ring1Mat = new THREE.MeshStandardMaterial({{
     color: {accent_hex},
-    metalness: 0.8,
+    metalness: 0.85,
     roughness: 0.2
   }});
-  const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-  ringMesh.rotation.x = Math.PI / 3;
-  scene.add(ringMesh);
+  const ring1Mesh = new THREE.Mesh(ring1Geo, ring1Mat);
+  ring1Mesh.rotation.x = Math.PI / 3;
+  scene.add(ring1Mesh);
 
-  // Particle Nebula (High-atmosphere Particles)
+  const ring2Geo = new THREE.TorusGeometry(3.3, 0.025, 16, 120);
+  const ring2Mat = new THREE.MeshStandardMaterial({{
+    color: {primary_light_hex},
+    metalness: 0.9,
+    roughness: 0.15,
+    transparent: true,
+    opacity: 0.7
+  }});
+  const ring2Mesh = new THREE.Mesh(ring2Geo, ring2Mat);
+  ring2Mesh.rotation.y = Math.PI / 4;
+  scene.add(ring2Mesh);
+
+  // 8. KINETIC PARTICLE NEBULA WITH IMPULSE PHYSICS
   const particleCount = 3500;
   const particleGeo = new THREE.BufferGeometry();
-  const positions = new Float32Array(particleCount * 3);
+  const basePositions = new Float32Array(particleCount * 3);
+  const currentPositions = new Float32Array(particleCount * 3);
+  const velocities = new Float32Array(particleCount * 3);
+
   for (let i = 0; i < particleCount * 3; i++) {{
-    positions[i] = (Math.random() - 0.5) * 50;
+    const val = (Math.random() - 0.5) * 52;
+    basePositions[i] = val;
+    currentPositions[i] = val;
+    velocities[i] = 0;
   }}
-  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
   const particleMat = new THREE.PointsMaterial({{
     size: 0.045,
     color: {primary_light_hex},
@@ -4911,22 +4936,117 @@ document.addEventListener("DOMContentLoaded", () => {
   const particles = new THREE.Points(particleGeo, particleMat);
   scene.add(particles);
 
-  // Interaction Raycaster
-  const raycaster = new THREE.Raycaster();
-  const mouse = new THREE.Vector2(-999, -999);
-  let isHovered = false;
+  // 9. KINETIC SHOCKWAVE TRIGGER (Click Blast & Ripple Physics)
+  let shockwaveProgress = 1.0; // 1.0 = inactive, 0.0 -> 1.0 = active
+  function triggerKineticShockwave() {{
+    shockwaveProgress = 0.0;
+    // Explode particles outward
+    for (let i = 0; i < particleCount; i++) {{
+      const idx = i * 3;
+      const dx = basePositions[idx];
+      const dy = basePositions[idx + 1];
+      const dz = basePositions[idx + 2];
+      const dist = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1;
+      const force = 0.8 + Math.random() * 0.6;
+      velocities[idx] = (dx / dist) * force;
+      velocities[idx + 1] = (dy / dist) * force;
+      velocities[idx + 2] = (dz / dist) * force;
+    }}
+    // GSAP Camera & Mesh Impact Punch
+    if (typeof gsap !== 'undefined') {{
+      gsap.to(knotMesh.scale, {{
+        x: 1.25,
+        y: 1.25,
+        z: 1.25,
+        duration: 0.12,
+        yoyo: true,
+        repeat: 1,
+        ease: 'power2.out'
+      }});
+      gsap.to(camera.position, {{
+        z: camera.position.z - 0.5,
+        duration: 0.18,
+        yoyo: true,
+        repeat: 1,
+        ease: 'power3.out'
+      }});
+    }}
+  }}
 
-  window.addEventListener('mousemove', (e) => {{
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  window.addEventListener('pointerdown', (e) => {{
+    if (e.target.closest('.hud-controls') || e.target.closest('.hud-header')) return;
+    triggerKineticShockwave();
   }});
 
-  // Metrics
+  // 10. GSAP TIMELINE ENTRANCE CHOREOGRAPHY
+  if (typeof gsap !== 'undefined') {{
+    knotMesh.scale.set(0.001, 0.001, 0.001);
+    ring1Mesh.scale.set(0.001, 0.001, 0.001);
+    ring2Mesh.scale.set(0.001, 0.001, 0.001);
+
+    const introTl = gsap.timeline({{ defaults: {{ ease: 'power4.out' }} }});
+    introTl
+      .to(knotMesh.scale, {{ x: 1, y: 1, z: 1, duration: 1.6, ease: 'elastic.out(1, 0.75)' }})
+      .to(ring1Mesh.scale, {{ x: 1, y: 1, z: 1, duration: 1.4 }}, '-=1.2')
+      .to(ring2Mesh.scale, {{ x: 1, y: 1, z: 1, duration: 1.4 }}, '-=1.1')
+      .from('.hud-header', {{ y: -60, opacity: 0, duration: 0.8, ease: 'power3.out' }}, '-=0.8')
+      .from('.hud-controls', {{ x: 60, opacity: 0, duration: 0.8, ease: 'power3.out' }}, '-=0.6');
+  }}
+
+  // 11. FLUID MAGNETIC CURSOR WITH LERP PHYSICS
+  const cursorDot = document.getElementById('cursor-dot');
+  const cursorRing = document.getElementById('cursor-ring');
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let ringX = mouseX;
+  let ringY = mouseY;
+  let isPointerHovered = false;
+
+  window.addEventListener('mousemove', (e) => {{
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (cursorDot) {{
+      cursorDot.style.transform = `translate3d(${{mouseX}}px, ${{mouseY}}px, 0)`;
+    }}
+  }});
+
+  document.querySelectorAll('button, select, .magnetic-target').forEach((el) => {{
+    el.addEventListener('mouseenter', () => {{
+      isPointerHovered = true;
+      if (cursorRing) cursorRing.classList.add('cursor-expanded');
+    }});
+    el.addEventListener('mouseleave', () => {{
+      isPointerHovered = false;
+      if (cursorRing) cursorRing.classList.remove('cursor-expanded');
+    }});
+  }});
+
+  // 12. 3D PERSPECTIVE MOUSE TILT PHYSICS ON HUD PANELS
+  document.querySelectorAll('.tilt-card-3d').forEach((card) => {{
+    card.addEventListener('mousemove', (e) => {{
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = `perspective(1000px) rotateY(${{x * 16}}deg) rotateX(${{-y * 16}}deg) translateZ(10px)`;
+    }});
+    card.addEventListener('mouseleave', () => {{
+      card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateZ(0px)';
+    }});
+  }});
+
+  // 13. RAYCASTER & INTERACTION
+  const raycaster = new THREE.Raycaster();
+  const normalizedMouse = new THREE.Vector2(-999, -999);
+  window.addEventListener('mousemove', (e) => {{
+    normalizedMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    normalizedMouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  }});
+
+  // 14. 60FPS ANIMATION LOOP & KINETIC CHOREOGRAPHY
   let lastTime = performance.now();
   let frameCount = 0;
   const fpsCounter = document.getElementById('fps-counter');
 
-  // Animation Loop
   function animate(now) {{
     requestAnimationFrame(animate);
 
@@ -4934,34 +5054,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const t = now * 0.001;
 
-    // Light dynamic orbit
-    primaryLight.position.x = Math.sin(t * 0.7) * 6;
-    primaryLight.position.z = Math.cos(t * 0.7) * 6;
-    accentLight.position.x = -Math.sin(t * 0.5) * 6;
-    accentLight.position.z = -Math.cos(t * 0.5) * 6;
-
-    // Mesh animations
-    ringMesh.rotation.z = t * 0.15;
-    particles.rotation.y = t * 0.025;
-
-    // Raycast hover effect
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObject(knotMesh);
-    if (intersects.length > 0) {{
-      if (!isHovered) {{
-        document.body.style.cursor = 'pointer';
-        isHovered = true;
-      }}
-      knotMesh.scale.lerp(new THREE.Vector3(1.08, 1.08, 1.08), 0.1);
-    }} else {{
-      if (isHovered) {{
-        document.body.style.cursor = 'default';
-        isHovered = false;
-      }}
-      knotMesh.scale.lerp(new THREE.Vector3(1.0, 1.0, 1.0), 0.1);
+    // Organic harmonic breathing of quantum nexus
+    const breathing = 1.0 + 0.035 * Math.sin(t * 2.4);
+    if (shockwaveProgress >= 1.0) {{
+      knotMesh.scale.set(breathing, breathing, breathing);
     }}
 
-    // FPS calculation
+    // Dynamic light orbits with harmonic phase offset
+    primaryLight.position.x = Math.sin(t * 0.75) * 6;
+    primaryLight.position.z = Math.cos(t * 0.75) * 6;
+    primaryLight.position.y = 3.0 + Math.sin(t * 1.2) * 1.5;
+
+    accentLight.position.x = -Math.sin(t * 0.55) * 6;
+    accentLight.position.z = -Math.cos(t * 0.55) * 6;
+    accentLight.position.y = -2.0 + Math.cos(t * 1.1) * 1.5;
+
+    // Gyroscopic counter-rotating quantum rings
+    ring1Mesh.rotation.x = t * 0.22;
+    ring1Mesh.rotation.y = t * 0.32;
+    ring1Mesh.rotation.z = Math.sin(t * 0.5) * 0.4;
+
+    ring2Mesh.rotation.x = -t * 0.18;
+    ring2Mesh.rotation.z = t * 0.28;
+
+    // Particle Nebula Physics (Spring return & Impulse dampening)
+    const posAttr = particleGeo.attributes.position;
+    for (let i = 0; i < particleCount; i++) {{
+      const idx = i * 3;
+      // Apply velocity
+      currentPositions[idx] += velocities[idx];
+      currentPositions[idx + 1] += velocities[idx + 1];
+      currentPositions[idx + 2] += velocities[idx + 2];
+
+      // Spring force returning particle to home position
+      velocities[idx] += (basePositions[idx] - currentPositions[idx]) * 0.05;
+      velocities[idx + 1] += (basePositions[idx + 1] - currentPositions[idx + 1]) * 0.05;
+      velocities[idx + 2] += (basePositions[idx + 2] - currentPositions[idx + 2]) * 0.05;
+
+      // Friction / air resistance
+      velocities[idx] *= 0.88;
+      velocities[idx + 1] *= 0.88;
+      velocities[idx + 2] *= 0.88;
+    }}
+    posAttr.needsUpdate = true;
+    particles.rotation.y = t * 0.025;
+
+    // Shockwave progress increment
+    if (shockwaveProgress < 1.0) {{
+      shockwaveProgress += 0.04;
+    }}
+
+    // Smooth Cursor Physics Lerp
+    ringX += (mouseX - ringX) * 0.14;
+    ringY += (mouseY - ringY) * 0.14;
+    if (cursorRing) {{
+      cursorRing.style.transform = `translate3d(${{ringX}}px, ${{ringY}}px, 0)`;
+    }}
+
+    // Raycast hover effect with smooth lerp
+    raycaster.setFromCamera(normalizedMouse, camera);
+    const intersects = raycaster.intersectObject(knotMesh);
+    if (intersects.length > 0) {{
+      document.body.style.cursor = 'pointer';
+      knotMesh.rotation.y += 0.02;
+    }} else {{
+      document.body.style.cursor = 'default';
+    }}
+
+    // Real-time FPS Calculation
     frameCount++;
     if (now > lastTime + 1000) {{
       if (fpsCounter) {{
@@ -4982,7 +5142,12 @@ document.addEventListener("DOMContentLoaded", () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
   }});
 
-  // HUD Controls
+  // Interactive Buttons & Controls
+  const shockwaveBtn = document.getElementById('trigger-shockwave-btn');
+  if (shockwaveBtn) {{
+    shockwaveBtn.addEventListener('click', () => triggerKineticShockwave());
+  }}
+
   const matSelect = document.getElementById('material-select');
   if (matSelect) {{
     matSelect.addEventListener('change', (e) => {{
@@ -5017,9 +5182,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const resetBtn = document.getElementById('reset-view-btn');
   if (resetBtn && controls) {{
     resetBtn.addEventListener('click', () => {{
-      camera.position.set(0, 1.4, 5.8);
-      controls.target.set(0, 0, 0);
-      controls.update();
+      if (typeof gsap !== 'undefined') {{
+        gsap.to(camera.position, {{ x: 0, y: 1.4, z: 5.8, duration: 1.0, ease: 'power3.inOut' }});
+        gsap.to(controls.target, {{ x: 0, y: 0, z: 0, duration: 1.0, ease: 'power3.inOut' }});
+      }} else {{
+        camera.position.set(0, 1.4, 5.8);
+        controls.target.set(0, 0, 0);
+        controls.update();
+      }}
     }});
   }}
 }})();

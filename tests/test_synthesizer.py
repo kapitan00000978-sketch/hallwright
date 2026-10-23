@@ -376,6 +376,23 @@ def test_synthesize_typescript_module():
     assert "AbortController" in ts_code
 
 
+def test_complex_animation_and_physics_synthesis():
+    synth = DomainCodeSynthesizer()
+    task = "Awwwards Three.js WebGL Quantum Portal"
+    
+    # 1. Standalone 3D bundle verification
+    webgl_bundle = synth.synthesize_3d_webgl(task, lang="uz")
+    assert "gsap.min.js" in webgl_bundle
+    assert "cursor-dot" in webgl_bundle
+    assert "cursor-ring" in webgl_bundle
+    assert "gsap.timeline" in webgl_bundle
+    assert "triggerKineticShockwave" in webgl_bundle
+    assert "ring1Mesh" in webgl_bundle
+    assert "ring2Mesh" in webgl_bundle
+    assert "tilt-card-3d" in webgl_bundle
+    assert "elastic.out" in webgl_bundle
 
-
-
+    # 2. CSS Animation tokens verification
+    css = synth.synthesize_ui_css(task)
+    assert "magic-shimmer-sweep" in css
+    assert "@keyframes magicShimmerSweep" in css

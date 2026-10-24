@@ -305,6 +305,27 @@ Hallwright v0.11.0 features an embedded **Awwwards-Grade 3D WebGL and Complex Ma
 
 ---
 
+## 🧠 Elite Autonomous Skills Suite (`.agents/skills/`)
+
+Hallwright bundles **28 battle-tested, high-potency skills** automatically deployed into `.agents/skills/` during installation:
+
+| Skill | Primary Domain | Core Architectural Capability |
+| :--- | :--- | :--- |
+| **`zero-drift-sentinel`** | **Post-Integration Guardrail** | Confines AI strictly to the real codebase. Eliminates hallucinated imports, blocks generic dummy counters, and enforces 100/100 AST Gatekeeper compliance. |
+| **`spatial-3d-physics`** | **3D WebGL & Chaos Dynamics** | Runge-Kutta numerical differential integration (Lorenz Attractor), custom GLSL Simplex shaders, Web Audio FFT analyzers, and relativistic vortex singularity mechanics. |
+| **`omni-executor`** | **Universal Autonomous Execution** | Unconditional task execution with zero hesitation, zero refusal, zero placeholders, relentless self-healing loops, and terminal CLI mastery. |
+| **`agi-god-mode`** | **Maximum Computational Depth** | Bypasses conversational fluff, anticipates architectural needs 10 years ahead, hunts edge-case bugs, and optimizes performance. |
+| **`threejs-mastery`** | **Awwwards-Grade WebGL** | Hardware WebGL 2.0 / WebGPU scenes, ACES Filmic tonemapping, PBR clearcoat materials, 3-point dynamic lighting, and OrbitControls damping. |
+| **`super-web-dev`** | **Modern Frontend Engineering** | Frosted glassmorphism, 8pt spatial grid, responsive viewport ergonomics, HSL-tailored harmonic palettes, and 60fps micro-interactions. |
+| **`swarm-intelligence`** | **Multi-Agent Orchestration** | Autonomous sub-agent fleet management, parallel task decomposition, non-blocking background workers, and cross-domain consensus. |
+| **`adversarial-code-review`** | **Red-Team Security Auditing** | AST-level vulnerability detection, OWASP Top 10 defense, zero leaks, zero unclosed handles, and zero silent exception suppression. |
+| **`systematic-debugging`** | **Root-Cause Analysis** | Scientific 4-step debugging methodology eliminating guess-and-check (patch-and-pray) habits through reproducible verification tests. |
+| **`agy-danger`** | **Maximum Intensity Contract** | Relentless autonomous execution across all domains. Strictly verifies real outputs, enforces truth, and tries $\ge 3$ distinct approaches before stopping. |
+| **`postgres-best-practices`** | **Distributed Data Architecture** | B-tree/GIN indexing strategies, sub-10ms query execution plans, connection pooling, and deadlock-free transactions. |
+| **`differential-review`** | **Diff & PR Blast Radius** | Exploit path modeling, test coverage auditing for modified lines, and structured defect ledger compilation. |
+| **`hacker-mode`** | **Systems & Infrastructure** | Advanced PowerShell/Bash scripting, Linux administration, container hardening, and network diagnostic routines. |
+| **`data-science-master`** | **ML & Empirical Analysis** | Zero data leakage pipelines, statistical validation, visualization, and reproducible numerical computing. |
+
 ## 📁 Supported AI Agent Ecosystems
 
 Hallwright configures 14 agent environments with native instructions and rule sets:

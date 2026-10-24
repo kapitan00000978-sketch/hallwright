@@ -101,7 +101,10 @@ if (command === 'init' || command === 'install') {
   copyFileSafe('opencode-agent/OPENCODE.md', 'OPENCODE.md');
   copyFileSafe('pie-agent/PIE.md', 'PIE.md');
 
-  // 5. Automatically install git pre-commit hook if in git repository
+  // 5. Elite Autonomous Skills Suite
+  copyDirSafe('.agents/skills', '.agents/skills');
+
+  // 6. Automatically install git pre-commit hook if in git repository
   const gitDir = path.join(targetDir, '.git');
   if (fs.existsSync(gitDir)) {
     const hookScript = path.join(packageRoot, 'scripts', 'install_git_hook.py');

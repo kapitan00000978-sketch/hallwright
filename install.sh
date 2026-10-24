@@ -119,8 +119,51 @@ if [[ "$AGENT_TARGET" == "pie" || "$AGENT_TARGET" == "all" ]]; then
     curl -fsSL "${REPO_RAW}/pie-agent/PIE.md" -o "${TARGET_DIR}/PIE.md"
 fi
 
+# ==============================================================================
+# Elite Autonomous Skills Suite Installation
+# ==============================================================================
+echo "[+] Installing Elite Autonomous Skills Suite into .agents/skills/..."
+mkdir -p "${TARGET_DIR}/.agents/skills"
+
+SKILLS=(
+    "zero-drift-sentinel"
+    "spatial-3d-physics"
+    "omni-executor"
+    "agi-god-mode"
+    "threejs-mastery"
+    "super-web-dev"
+    "swarm-intelligence"
+    "hacker-mode"
+    "data-science-master"
+    "differential-review"
+    "postgres-best-practices"
+    "audit-context-building"
+    "creative-pipeline-conductor"
+    "game-developer"
+    "next-best-practices"
+    "reverse-engineer-anything"
+    "adversarial-code-review"
+    "brainstorming"
+    "craftsman-evaluator"
+    "flaw-remediator"
+    "hallwright-memory"
+    "persona-activator"
+    "subagent-driven-development"
+    "systematic-debugging"
+    "test-driven-development"
+    "writing-plans"
+    "agy-danger"
+    "prompt-first"
+)
+
+for skill in "${SKILLS[@]}"; do
+    mkdir -p "${TARGET_DIR}/.agents/skills/${skill}"
+    curl -fsSL "${REPO_RAW}/.agents/skills/${skill}/SKILL.md" -o "${TARGET_DIR}/.agents/skills/${skill}/SKILL.md" 2>/dev/null || true
+done
+
 echo ""
 echo "=================================================================="
 echo "  ✅ Hallwright successfully installed!"
-echo "     Strict Post-Integration AI Protocols (Zero Drift) active."
+echo "     Strict Post-Integration AI Protocols (Zero Drift) &"
+echo "     Elite Autonomous Skills Suite (28 Skills) active."
 echo "=================================================================="

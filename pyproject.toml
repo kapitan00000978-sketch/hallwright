@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hallwright"
-version = "0.10.87"
-description = "Hallwright: A guardrail layer for AI coding agents: pre-commit gate, project memory, and subagent definitions"
+version = "0.11.0"
+description = "Hallwright: Autonomous Quality Protocol, Pre-Commit Craftsmanship Gate, Living Memory, and Awwwards-Grade 3D Spatial Physics Synthesis"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }

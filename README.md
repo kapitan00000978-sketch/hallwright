@@ -274,6 +274,34 @@ Hallwright includes zero-dependency, production-grade building blocks ready for 
 
 ---
 
+## 🌌 Generative Spatial Computing & Arithmetic Physics Engine (`src/sdk/synthesizer.py`)
+
+Hallwright v0.11.0 features an embedded **Awwwards-Grade 3D WebGL and Complex Mathematical Animation Synthesis Engine**:
+
+```
+               [ 3D Spatial Computing & Arithmetic Core ]
+                                  │
+       ┌──────────────────────────┼──────────────────────────┐
+       ▼                          ▼                          ▼
+1. 5-Pillar Animation      2. Lorenz Chaos            3. Fourier & Lissajous
+   & Kinetic Physics          Attractor Solver           Harmonics
+   - GSAP 3.12 choreography   - dx/dt = σ(y - x)         - 3D Harmonograph Lissajous
+   - Shockwave particle blast - dy/dt = x(ρ - z) - y     - Multi-octave Fourier waves
+   - Fluid magnetic lerp      - dz/dt = xy - βz          - Euler-Rodrigues precession
+```
+
+| Engine Module | Mathematical Model / Physics Architecture | Verification Status |
+| :--- | :--- | :--- |
+| **Lorenz Chaotic Attractor** | Runge-Kutta / Euler numerical integration ($\sigma=10.0, \rho=28.0, \beta=8/3, dt=0.007$) driving 3,500 particles along the chaotic butterfly manifold. | Verified (`tests/test_synthesizer.py`) |
+| **3D Harmonograph Lissajous** | 3-axis non-commensurate frequency ratios ($2.001 : 3.003 : 5.002$) generating non-repeating orbital light trajectories. | Verified (`tests/test_synthesizer.py`) |
+| **Fourier Wave Superposition** | Multi-octave harmonic topological breathing: $S(t) = 1.0 + \sum_{k=1}^3 \frac{A_k}{k} \sin(k\omega t + \phi_k)$. | Verified (`tests/test_synthesizer.py`) |
+| **Euler-Rodrigues Precession** | Coupled non-linear nutation kinematics for counter-rotating satellite rings without gimbal lock. | Verified (`tests/test_synthesizer.py`) |
+| **Fluid Magnetic Cursor** | Dual-element `#cursor-dot` and `#cursor-ring` with spring lag (`lerp = 0.14`) and button hover expansion. | Verified (`tests/test_synthesizer.py`) |
+| **3D Perspective Card Tilt** | Sub-pixel mouse projection: `perspective(1000px) rotateY(...) rotateX(...)` on frosted glass HUD decks. | Verified (`tests/test_synthesizer.py`) |
+| **Live Math Telemetry HUD** | Interactive mode selector (`lorenz`, `harmonograph`, `fourier`, `rodrigues`), real-time formula display, and Lyapunov exponent estimation ($\lambda \approx 0.9056$). | Verified (`tests/test_synthesizer.py`) |
+
+---
+
 ## 📁 Supported AI Agent Ecosystems
 
 Hallwright configures 14 agent environments with native instructions and rule sets:

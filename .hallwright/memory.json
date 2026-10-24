@@ -4,7 +4,8 @@
   "lastUpdated": "2026-10-22T14:04:43.298118+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
-    "Comprehensive test coverage across all domain mutations"
+    "Comprehensive test coverage across all domain mutations",
+    "Strict project scope grounding: never output out-of-scope code, fictional dependencies, generic counter/mock filler, or irrelevant explanations. All actions must be 100% anchored to the real project requirements and repository architecture."
   ],
   "scarTissue": [
     {

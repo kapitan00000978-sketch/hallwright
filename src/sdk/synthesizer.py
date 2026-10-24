@@ -3463,6 +3463,8 @@ body {{
           <option value="fourier">3. Fure Poligarmonik Superpozitsiyasi</option>
           <option value="rodrigues">4. Eyler-Rodrigez Kvant Presessiyasi</option>
           <option value="singularity">5. N-Body Gravitatsion Qora Tuynuk</option>
+          <option value="bloch_sphere">6. Kvant Qubit Bloch Sferasi & Superpozitsiya</option>
+          <option value="neuromorphic">7. Spiking Neyromorfik Neyron Sinaps To'lqini</option>
         </select>
       </div>
 
@@ -5412,6 +5414,46 @@ document.addEventListener("DOMContentLoaded", () => {
         velocities[idx + 1] *= 0.88;
         velocities[idx + 2] *= 0.88;
       }}
+    }} else if (currentMathMode === 'bloch_sphere') {{
+      for (let i = 0; i < particleCount; i++) {{
+        const idx = i * 3;
+        const u = (i / particleCount);
+        const theta = Math.acos(2.0 * u - 1.0) + Math.sin(t * 0.5 + i * 0.01) * 0.2;
+        const phi = (i * 137.5 * (Math.PI / 180.0)) + t * 0.8;
+        const radius = 16.0 + Math.sin(t * 2.0 + u * 10.0) * 1.5;
+
+        const targetX = radius * Math.sin(theta) * Math.cos(phi) + velocities[idx];
+        const targetY = radius * Math.cos(theta) + velocities[idx + 1];
+        const targetZ = radius * Math.sin(theta) * Math.sin(phi) + velocities[idx + 2];
+
+        currentPositions[idx] += (targetX - currentPositions[idx]) * 0.10;
+        currentPositions[idx + 1] += (targetY - currentPositions[idx + 1]) * 0.10;
+        currentPositions[idx + 2] += (targetZ - currentPositions[idx + 2]) * 0.10;
+
+        velocities[idx] *= 0.88;
+        velocities[idx + 1] *= 0.88;
+        velocities[idx + 2] *= 0.88;
+      }}
+    }} else if (currentMathMode === 'neuromorphic') {{
+      for (let i = 0; i < particleCount; i++) {{
+        const idx = i * 3;
+        const cluster = i % 8;
+        const angle = (cluster / 8.0) * Math.PI * 2.0;
+        const impulse = (Math.sin(t * 4.0 + cluster * 1.2) > 0.7) ? 2.2 : 0.9;
+        const rSnn = 12.0 * impulse;
+
+        const targetX = Math.cos(angle) * rSnn + (Math.sin(t * 3.0 + i) * 3.0) + velocities[idx];
+        const targetY = Math.sin(t * 2.0 + cluster) * 8.0 + velocities[idx + 1];
+        const targetZ = Math.sin(angle) * rSnn + (Math.cos(t * 3.0 + i) * 3.0) + velocities[idx + 2];
+
+        currentPositions[idx] += (targetX - currentPositions[idx]) * 0.12;
+        currentPositions[idx + 1] += (targetY - currentPositions[idx + 1]) * 0.12;
+        currentPositions[idx + 2] += (targetZ - currentPositions[idx + 2]) * 0.12;
+
+        velocities[idx] *= 0.88;
+        velocities[idx + 1] *= 0.88;
+        velocities[idx + 2] *= 0.88;
+      }}
     }} else {{
       for (let i = 0; i < particleCount; i++) {{
         const idx = i * 3;
@@ -5477,7 +5519,9 @@ document.addEventListener("DOMContentLoaded", () => {
           harmonograph: '3D Harmonograph',
           fourier: 'Fourier Series',
           rodrigues: 'Rodrigues Precession',
-          singularity: 'N-Body Singularity'
+          singularity: 'N-Body Singularity',
+          bloch_sphere: 'Quantum Bloch Sphere',
+          neuromorphic: 'Neuromorphic Spiking SNN'
         }};
         mathModeEl.textContent = labels[currentMathMode] || currentMathMode;
       }}
@@ -5487,7 +5531,9 @@ document.addEventListener("DOMContentLoaded", () => {
           harmonograph: 'x = Σ A_i · sin(f_i · t)',
           fourier: 'S(t) = Σ (A_k/k) · sin(kωt)',
           rodrigues: 'v\' = v·cosθ + (k×v)·sinθ',
-          singularity: 'F = G·M / (r² + ε²)¹.⁵'
+          singularity: 'F = G·M / (r² + ε²)¹.⁵',
+          bloch_sphere: '|ψ⟩ = cos(θ/2)|0⟩ + e^{{iφ}}sin(θ/2)|1⟩',
+          neuromorphic: 'dv/dt = 0.04v² + 5v + 140 - u + I'
         }};
         mathFormulaEl.textContent = formulas[currentMathMode] || '';
       }}

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hallwright"
-version = "0.12.0"
-description = "Hallwright: Autonomous Quality Protocol, Pre-Commit Craftsmanship Gate, Living Memory, Elite Autonomous Skills Suite, and Awwwards-Grade 3D Spatial Physics Synthesis"
+version = "0.13.0"
+description = "Hallwright: Autonomous Quality Protocol, Pre-Commit Craftsmanship Gate, Immune Engine, Combat Arena, Visual Verifier, Project Doctor, Web HUD, and Quantum 3D Synthesis"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }

@@ -175,21 +175,49 @@ if (command === 'init' || command === 'install') {
     process.exit(1);
   }
 } else if (command === 'doctor') {
-  console.log(`🩺 [HALLWRIGHT DOCTOR] Inspecting system and project health...\n`);
-  const checks = [
-    { name: 'Core Protocol (AGENTS.md)', pass: fs.existsSync(path.join(targetDir, 'AGENTS.md')) },
-    { name: 'Memory Ledger (.hallwright/memory.json)', pass: fs.existsSync(path.join(targetDir, '.hallwright', 'memory.json')) },
-    { name: 'Cursor Rules (.cursorrules)', pass: fs.existsSync(path.join(targetDir, '.cursorrules')) },
-    { name: 'Claude Code (CLAUDE.md)', pass: fs.existsSync(path.join(targetDir, 'CLAUDE.md')) },
-    { name: 'Copilot Instructions (.github/copilot-instructions.md)', pass: fs.existsSync(path.join(targetDir, '.github', 'copilot-instructions.md')) },
-    { name: 'Git Pre-Commit Hook (.git/hooks/pre-commit)', pass: fs.existsSync(path.join(targetDir, '.git', 'hooks', 'pre-commit')) }
-  ];
-
-  for (const c of checks) {
-    console.log(`  ${c.pass ? '✅' : '⚠️'}  ${c.name}: ${c.pass ? 'CONFIGURED' : 'NOT FOUND'}`);
+  const doctorScript = path.join(packageRoot, 'src', 'sdk', 'project_doctor.py');
+  if (fs.existsSync(doctorScript) && PYTHON_CMD) {
+    const res = spawnSync(PYTHON_CMD, [doctorScript, ...args.slice(1)], { stdio: 'inherit' });
+    process.exit(res.status || 0);
+  } else {
+    console.log(`🩺 [HALLWRIGHT DOCTOR] Inspecting system and project health...\n`);
+    const checks = [
+      { name: 'Core Protocol (AGENTS.md)', pass: fs.existsSync(path.join(targetDir, 'AGENTS.md')) },
+      { name: 'Post-Integration Protocol', pass: fs.existsSync(path.join(targetDir, 'docs', 'POST_INTEGRATION_PROTOCOL.md')) },
+      { name: 'Skills Suite (.agents/skills)', pass: fs.existsSync(path.join(targetDir, '.agents', 'skills')) },
+      { name: 'Memory Ledger (.hallwright/memory.json)', pass: fs.existsSync(path.join(targetDir, '.hallwright', 'memory.json')) },
+      { name: 'Cursor Rules (.cursorrules)', pass: fs.existsSync(path.join(targetDir, '.cursorrules')) },
+      { name: 'Claude Code (CLAUDE.md)', pass: fs.existsSync(path.join(targetDir, 'CLAUDE.md')) },
+      { name: 'Copilot Instructions (.github/copilot-instructions.md)', pass: fs.existsSync(path.join(targetDir, '.github', 'copilot-instructions.md')) },
+      { name: 'Git Pre-Commit Hook (.git/hooks/pre-commit)', pass: fs.existsSync(path.join(targetDir, '.git', 'hooks', 'pre-commit')) }
+    ];
+    for (const c of checks) {
+      console.log(`  ${c.pass ? '✅' : '⚠️'}  ${c.name}: ${c.pass ? 'CONFIGURED' : 'NOT FOUND'}`);
+    }
+    console.log(`\nTo auto-heal project, run: npx hallwright doctor --heal`);
+    console.log(`To install missing rules, run: npx hallwright init\n`);
   }
-  console.log(`\nTo install missing rules, run: npx hallwright init`);
-  console.log(`To install git pre-commit hook, run: npx hallwright hook\n`);
+} else if (command === 'verify' || command === 'visual') {
+  console.log(`👁️ [HALLWRIGHT VISUAL VERIFIER] Inspecting UI / 3D Layout...`);
+  const verifyScript = path.join(packageRoot, 'src', 'sdk', 'visual_verifier.py');
+  if (fs.existsSync(verifyScript) && PYTHON_CMD) {
+    const res = spawnSync(PYTHON_CMD, [verifyScript, ...args.slice(1)], { stdio: 'inherit' });
+    process.exit(res.status || 0);
+  }
+} else if (command === 'arena' || command === 'combat') {
+  console.log(`🥊 [HALLWRIGHT COMBAT ARENA] Running Red-Team Security Assault...`);
+  const arenaScript = path.join(packageRoot, 'src', 'sdk', 'combat_arena.py');
+  if (fs.existsSync(arenaScript) && PYTHON_CMD) {
+    const res = spawnSync(PYTHON_CMD, [arenaScript, ...args.slice(1)], { stdio: 'inherit' });
+    process.exit(res.status || 0);
+  }
+} else if (command === 'immune' || command === 'vaccine') {
+  console.log(`🧬 [HALLWRIGHT IMMUNE SYSTEM] Scanning codebase antibodies...`);
+  const immuneScript = path.join(packageRoot, 'src', 'sdk', 'immune_engine.py');
+  if (fs.existsSync(immuneScript) && PYTHON_CMD) {
+    const res = spawnSync(PYTHON_CMD, [immuneScript, ...args.slice(1)], { stdio: 'inherit' });
+    process.exit(res.status || 0);
+  }
 } else if (command === 'watch' || command === 'daemon') {
   console.log(`👁️ [HALLWRIGHT WATCHDOG] Starting file sentinel...`);
   const scriptPath = path.join(packageRoot, 'scripts', 'watchdog.py');
@@ -227,6 +255,13 @@ if (command === 'init' || command === 'install') {
     process.exit(1);
   }
 } else if (command === 'hud') {
+  if (args.includes('--web')) {
+    const webHudScript = path.join(packageRoot, 'src', 'sdk', 'web_hud.py');
+    if (fs.existsSync(webHudScript) && PYTHON_CMD) {
+      spawnSync(PYTHON_CMD, [webHudScript], { stdio: 'inherit' });
+      process.exit(0);
+    }
+  }
   const hudScript = path.join(packageRoot, 'cli', 'dashboard.py');
   if (fs.existsSync(hudScript)) {
     spawnSync(PYTHON_CMD, [hudScript], { stdio: 'inherit' });

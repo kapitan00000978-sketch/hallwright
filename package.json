@@ -1,7 +1,7 @@
 {
   "name": "hallwright",
-  "version": "0.12.0",
-  "description": "Hallwright: Autonomous Quality Protocol, Pre-Commit Craftsmanship Gate, Living Memory, Elite Autonomous Skills Suite, and Awwwards-Grade 3D Spatial Physics Synthesis.",
+  "version": "0.13.0",
+  "description": "Hallwright: Autonomous Quality Protocol, Pre-Commit Craftsmanship Gate, Immune Engine, Combat Arena, Visual Verifier, Project Doctor, Web HUD, and Quantum 3D Synthesis.",
   "main": "bin/hallwright.js",
   "bin": {
     "hallwright": "./bin/hallwright.js"
@@ -12,7 +12,13 @@
     "fix": "node bin/hallwright.js fix",
     "memory": "node bin/hallwright.js memory",
     "status": "node bin/hallwright.js status",
+    "doctor": "node bin/hallwright.js doctor",
+    "doctor:heal": "node bin/hallwright.js doctor --heal",
+    "verify": "node bin/hallwright.js verify",
+    "arena": "node bin/hallwright.js arena",
+    "immune": "node bin/hallwright.js immune",
     "hud": "python cli/dashboard.py",
+    "hud:web": "node bin/hallwright.js hud --web",
     "watchdog": "python scripts/watchdog.py",
     "gatekeeper": "python scripts/pre-commit-gatekeeper.py",
     "metrics": "python scripts/roi_tracker.py",

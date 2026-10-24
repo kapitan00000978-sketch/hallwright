@@ -301,7 +301,23 @@ Hallwright v0.11.0 features an embedded **Awwwards-Grade 3D WebGL and Complex Ma
 | **Euler-Rodrigues Precession** | Coupled non-linear nutation kinematics for counter-rotating satellite rings without gimbal lock. | Verified (`tests/test_synthesizer.py`) |
 | **Fluid Magnetic Cursor** | Dual-element `#cursor-dot` and `#cursor-ring` with spring lag (`lerp = 0.14`) and button hover expansion. | Verified (`tests/test_synthesizer.py`) |
 | **3D Perspective Card Tilt** | Sub-pixel mouse projection: `perspective(1000px) rotateY(...) rotateX(...)` on frosted glass HUD decks. | Verified (`tests/test_synthesizer.py`) |
-| **Live Math Telemetry HUD** | Interactive mode selector (`lorenz`, `harmonograph`, `fourier`, `rodrigues`, `singularity`), real-time formula display, and Lyapunov exponent estimation ($\lambda \approx 0.9056$). | Verified (`tests/test_synthesizer.py`) |
+| **Live Math Telemetry HUD** | Interactive mode selector (`lorenz`, `harmonograph`, `fourier`, `rodrigues`, `singularity`, `bloch_sphere`, `neuromorphic`), real-time formula display, and Lyapunov exponent estimation ($\lambda \approx 0.9056$). | Verified (`tests/test_synthesizer.py`) |
+| **Quantum Bloch Sphere** | Qubit state vector superposition $|\psi\rangle = \cos(\theta/2)|0\rangle + e^{i\phi}\sin(\theta/2)|1\rangle$ and entangled Bell pair orbital dynamics. | Verified (`tests/test_synthesizer.py`) |
+| **Neuromorphic Spiking SNN** | Izhikevich differential action potential equations ($dv/dt = 0.04v^2 + 5v + 140 - u + I$) driving 3D synaptic impulses. | Verified (`tests/test_synthesizer.py`) |
+
+---
+
+## ⚡ Titan-Tier Autonomous Engines (v0.13.0)
+
+Hallwright v0.13.0 introduces 5 standalone autonomous engines engineered to secure, stress-test, heal, and monitor codebases with zero human babysitting:
+
+| Engine | CLI Command | Core Architectural Capability |
+| :--- | :--- | :--- |
+| **Autonomous Visual Verifier** | `hallwright verify <file>` | Headless DOM & WebGL inspection. Validates console errors, viewport ergonomics across mobile/tablet/desktop, layout overflows, and renders interactive HTML audit reports (`docs/visual_audit_report.html`). |
+| **Multi-Agent Combat Arena** | `hallwright arena <file>` | Pits Blue Team (Builder) against Red Team (Breaker) to assault code with OWASP attack vectors (SQLi, Polyglot XSS, SSRF metadata probes, ReDoS, race conditions, memory leaks). Outputs survival coefficient ledger. |
+| **Evolving Immune System** | `hallwright immune` | Project antibody vaccine engine. Captures bug patterns, synthesizes AST antibodies in `.hallwright/immune/`, and auto-generates permanent regression vaccine tests in `tests/immune/` to make bugs mathematically unrepeatable. |
+| **Real-Time Web HUD** | `hallwright hud --web` | Cyberpunk frosted glass real-time telemetry dashboard (port 7331). Displays live differential Lorenz chaos trajectory, pre-commit gatekeeper gauges (100/100), active antibodies, and connected agent fleet status. |
+| **Universal Project Doctor** | `hallwright doctor --heal` | Full-repository diagnostic physician. Audits dependency manifests, licensing, silent exception swallows, and agent configs. With `--heal`, autonomously refactors and repairs violations in 1-click. |
 
 ---
 

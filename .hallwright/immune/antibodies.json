@@ -1,0 +1,57 @@
+[
+  {
+    "id": "ANTIBODY-001-SILENT-EXCEPT",
+    "name": "Silent Error Suppression Vaccine",
+    "category": "STABILITY",
+    "pattern": "except\\s*(?:Exception)?\\s*:\\s*(?:pass|\\.\\.\\.)",
+    "remedy_template": "except SpecificException as err: logger.error('Context', exc_info=err)",
+    "created_at": 1792866007.8464744,
+    "description": "Intercepts bare except: pass suppressing critical production tracebacks.",
+    "source_file": null,
+    "vaccine_test_path": null
+  },
+  {
+    "id": "ANTIBODY-002-RAW-SQL-CONCAT",
+    "name": "Raw SQL Injection Neutralizer",
+    "category": "SECURITY",
+    "pattern": "(?:execute|query)\\s*\\(\\s*f[\"\\'].*SELECT.*\\{",
+    "remedy_template": "cursor.execute('SELECT ... WHERE col = %s', (val,))",
+    "created_at": 1792866007.8464744,
+    "description": "Intercepts Python f-string interpolation directly into SQL execution.",
+    "source_file": null,
+    "vaccine_test_path": null
+  },
+  {
+    "id": "ANTIBODY-003-INNERHTML-INJECTION",
+    "name": "DOM XSS Invariant Antibody",
+    "category": "SECURITY",
+    "pattern": "\\.innerHTML\\s*=\\s*[a-zA-Z0-9_]+",
+    "remedy_template": "element.textContent = sanitizedVal; or DOMPurify.sanitize()",
+    "created_at": 1792866007.8464744,
+    "description": "Intercepts direct unsanitized variable assignment to innerHTML.",
+    "source_file": null,
+    "vaccine_test_path": null
+  },
+  {
+    "id": "ANTIBODY-004-UNBOUNDED-TODO-STUB",
+    "name": "Production Todo Stub Neutralizer",
+    "category": "ARCHITECTURE",
+    "pattern": "(?://|#)\\s*(?:TODO|FIXME)\\b.*",
+    "remedy_template": "Implement complete production logic with exhaustive edge-case defense.",
+    "created_at": 1792866007.8464744,
+    "description": "Intercepts unresolved placeholder stubs left in delivered code.",
+    "source_file": null,
+    "vaccine_test_path": null
+  },
+  {
+    "id": "ANTIBODY-B34F4B86",
+    "name": "Test Anti-Leak Antibody",
+    "category": "SECURITY",
+    "pattern": "LEAK_TOKEN_KEY_[0-9]+",
+    "remedy_template": "Use os.getenv('TOKEN_KEY')",
+    "created_at": 1792866007.8504994,
+    "description": "Prevents leak token variables.",
+    "source_file": null,
+    "vaccine_test_path": "C:\\Users\\user\\Videos\\New folder (3)\\tests\\immune\\test_vaccine_antibody_b34f4b86.py"
+  }
+]

@@ -401,6 +401,10 @@ def test_complex_animation_and_physics_synthesis():
     assert "HARM_F1" in webgl_bundle
     assert "fourierOctave1" in webgl_bundle
     assert "nutationAngle1" in webgl_bundle
+    assert "bloch_sphere" in webgl_bundle
+    assert "neuromorphic" in webgl_bundle
+    assert "Quantum Bloch Sphere" in webgl_bundle
+    assert "Neuromorphic Spiking SNN" in webgl_bundle
 
     # 3. Super-Complexity Bleeding-Edge Engine verification (GLSL Shaders, Web Audio FFT, N-Body Singularity)
     assert "glslVertexShader" in webgl_bundle

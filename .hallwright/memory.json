@@ -1,7 +1,7 @@
 {
   "version": "2.0.0",
   "project": "Hallwright Engineering Core",
-  "lastUpdated": "2026-10-22T14:04:43.298118+00:00",
+  "lastUpdated": "2026-10-24T18:23:24.156449+00:00",
   "userPreferences": [
     "Clean architecture, zero empty catch blocks, zero TODO comments in production",
     "Comprehensive test coverage across all domain mutations",
@@ -94,10 +94,10 @@
       "id": "mis-0007",
       "category": "stub",
       "pattern": "Unfinished stub or placeholder detected. Complete all logic end-to-end.",
-      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\prompt_engine.py:338). Resolve Unfinished stub or placeholder detected. Complete all logic end-to-end. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\immune_engine.py:112). Resolve Unfinished stub or placeholder detected. Complete all logic end-to-end. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-15T20:23:54.516059+00:00",
-      "updatedAt": "2026-10-20T05:00:55.375395+00:00"
+      "updatedAt": "2026-10-24T18:20:29.071496+00:00"
     },
     {
       "id": "mis-0008",
@@ -164,10 +164,10 @@
       "id": "mis-0015",
       "category": "stub",
       "pattern": "Silent exception suppression detected. Log or handle errors.",
-      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\evolution.py:121). Resolve Silent exception suppression detected. Log or handle errors. before committing.",
+      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\project_doctor.py:182). Resolve Silent exception suppression detected. Log or handle errors. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-18T02:35:32.998172+00:00",
-      "updatedAt": "2026-10-20T06:37:55.639876+00:00"
+      "updatedAt": "2026-10-24T18:23:24.156449+00:00"
     },
     {
       "id": "mis-0016",
@@ -193,6 +193,14 @@
       "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\search_engine.py:441). Resolve Silent exception suppression. Log or handle errors. before committing.",
       "severity": "medium",
       "recordedAt": "2026-10-20T04:20:13.886378+00:00"
+    },
+    {
+      "id": "mis-0019",
+      "category": "dangerous",
+      "pattern": "Potential Server-Side Request Forgery (SSRF) via unvalidated dynamic URL parameter. Validate URL against allowlist.",
+      "lesson": "Rejected in pre-commit audit (.\\src\\sdk\\combat_arena.py:132). Resolve Potential Server-Side Request Forgery (SSRF) via unvalidated dynamic URL parameter. Validate URL against allowlist. before committing.",
+      "severity": "medium",
+      "recordedAt": "2026-10-24T18:20:28.965434+00:00"
     }
   ],
   "successes": [

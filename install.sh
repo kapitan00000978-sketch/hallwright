@@ -34,9 +34,11 @@ echo "[*] Target Directory : ${TARGET_DIR}"
 echo "[*] Target Agent(s)  : ${AGENT_TARGET}"
 
 mkdir -p "${TARGET_DIR}/.hallwright"
+mkdir -p "${TARGET_DIR}/docs"
 
-echo "[+] Downloading core Hallwright protocol..."
+echo "[+] Downloading core Hallwright protocol & post-integration rules..."
 curl -fsSL "${REPO_RAW}/AGENTS.md" -o "${TARGET_DIR}/AGENTS.md"
+curl -fsSL "${REPO_RAW}/docs/POST_INTEGRATION_PROTOCOL.md" -o "${TARGET_DIR}/docs/POST_INTEGRATION_PROTOCOL.md"
 
 # Safe memory preservation: never overwrite existing user memory
 if [[ ! -f "${TARGET_DIR}/.hallwright/memory.json" ]]; then
@@ -92,8 +94,33 @@ if [[ "$AGENT_TARGET" == "kilo" || "$AGENT_TARGET" == "all" ]]; then
     curl -fsSL "${REPO_RAW}/kilo-agent/KILO.md" -o "${TARGET_DIR}/KILO.md"
 fi
 
+if [[ "$AGENT_TARGET" == "hermes" || "$AGENT_TARGET" == "all" ]]; then
+    echo "[+] Installing Hermes Agent Directives (HERMES.md)..."
+    curl -fsSL "${REPO_RAW}/hermes-agent/HERMES.md" -o "${TARGET_DIR}/HERMES.md"
+fi
+
+if [[ "$AGENT_TARGET" == "codex" || "$AGENT_TARGET" == "all" ]]; then
+    echo "[+] Installing OpenAI Codex Directives (CODEX.md)..."
+    curl -fsSL "${REPO_RAW}/codex-agent/CODEX.md" -o "${TARGET_DIR}/CODEX.md"
+fi
+
+if [[ "$AGENT_TARGET" == "openclaw" || "$AGENT_TARGET" == "all" ]]; then
+    echo "[+] Installing OpenClaw Directives (OPENCLAW.md)..."
+    curl -fsSL "${REPO_RAW}/openclaw-agent/OPENCLAW.md" -o "${TARGET_DIR}/OPENCLAW.md"
+fi
+
+if [[ "$AGENT_TARGET" == "opencode" || "$AGENT_TARGET" == "all" ]]; then
+    echo "[+] Installing OpenCode Directives (OPENCODE.md)..."
+    curl -fsSL "${REPO_RAW}/opencode-agent/OPENCODE.md" -o "${TARGET_DIR}/OPENCODE.md"
+fi
+
+if [[ "$AGENT_TARGET" == "pie" || "$AGENT_TARGET" == "all" ]]; then
+    echo "[+] Installing Pie Agent Directives (PIE.md)..."
+    curl -fsSL "${REPO_RAW}/pie-agent/PIE.md" -o "${TARGET_DIR}/PIE.md"
+fi
+
 echo ""
 echo "=================================================================="
 echo "  ✅ Hallwright successfully installed!"
-echo "     Quality and craftsmanship rules are now active."
+echo "     Strict Post-Integration AI Protocols (Zero Drift) active."
 echo "=================================================================="

@@ -36,3 +36,19 @@ Before any code or solution reaches the user's screen, autonomously inspect it a
 ## 🎯 4. ZERO BABYSITTING & ZERO CONVERSATIONAL BLOAT
 - **Production-Ready Delivery:** The user never has to micromanage, prompt-engineer, or babysit the agent.
 - **High-Signal Conciseness:** No long theatrical preambles, no patronizing lectures, and no bureaucratic roleplay headers. Deliver clean, elegant, bulletproof code and direct explanations.
+
+---
+
+## 🔒 5. STRICT PROJECT GROUNDING & ZERO IRRELEVANT DRIFT (LOYIHA BUTUNLIGI)
+- **Zero Hallucinated Dependencies:** Absolute ban on introducing uninstalled, fictional, or unapproved external packages.
+- **Zero Generic Off-Topic Filler:** Never generate generic `counter`, `todo-app`, `pet-store`, or irrelevant boilerplate code unrelated to this repository.
+- **Direct Scope Alignment:** Every single line of code, suggestion, and file must strictly serve the verified project architecture and user objective.
+
+---
+
+## 🚨 6. MANDATORY POST-INTEGRATION AI PROTOCOL
+When Hallwright is installed into this repository, all AI agents must follow the 4-Stage Operational Law:
+1. **Fact Grounding:** Read manifests (`package.json`, `pyproject.toml`, etc.) and directory trees before proposing modifications.
+2. **Domain Confinement:** Confine all outputs to existing project conventions and concrete code paths.
+3. **Zero-Defect Quality:** Zero placeholders (`// TODO`), zero silent catches (`catch {}`), 100% complete logic.
+4. **Closed-Loop Verification:** Silently audit code against the pre-commit gatekeeper before user delivery.

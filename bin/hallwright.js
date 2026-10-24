@@ -78,6 +78,7 @@ if (command === 'init' || command === 'install') {
 
   // 1. Core protocol
   copyFileSafe('AGENTS.md', 'AGENTS.md');
+  copyFileSafe('docs/POST_INTEGRATION_PROTOCOL.md', 'docs/POST_INTEGRATION_PROTOCOL.md');
   copyFileSafe('.hallwright/memory.json', '.hallwright/memory.json', false);
   copyFileSafe('.hallwright/memory.md', '.hallwright/memory.md', false);
 

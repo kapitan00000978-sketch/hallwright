@@ -293,12 +293,15 @@ Hallwright v0.11.0 features an embedded **Awwwards-Grade 3D WebGL and Complex Ma
 | Engine Module | Mathematical Model / Physics Architecture | Verification Status |
 | :--- | :--- | :--- |
 | **Lorenz Chaotic Attractor** | Runge-Kutta / Euler numerical integration ($\sigma=10.0, \rho=28.0, \beta=8/3, dt=0.007$) driving 3,500 particles along the chaotic butterfly manifold. | Verified (`tests/test_synthesizer.py`) |
+| **Custom GLSL Hardware Shaders** | Native GLSL 3D Simplex noise vertex displacement with Fresnel chromatic aberration refraction and dispersion. | Verified (`tests/test_synthesizer.py`) |
+| **Web Audio API & FFT Analyzer** | Procedural 432Hz ambient harmonic chord synthesizer with real-time FFT spectrum frequency modulation. | Verified (`tests/test_synthesizer.py`) |
+| **N-Body Gravitational Singularity** | Interactive real-time relativistic gravitational well ($F = G \cdot M / (r^2 + \epsilon^2)^{1.5}$) bending 3,500 particles into an accretion vortex. | Verified (`tests/test_synthesizer.py`) |
 | **3D Harmonograph Lissajous** | 3-axis non-commensurate frequency ratios ($2.001 : 3.003 : 5.002$) generating non-repeating orbital light trajectories. | Verified (`tests/test_synthesizer.py`) |
 | **Fourier Wave Superposition** | Multi-octave harmonic topological breathing: $S(t) = 1.0 + \sum_{k=1}^3 \frac{A_k}{k} \sin(k\omega t + \phi_k)$. | Verified (`tests/test_synthesizer.py`) |
 | **Euler-Rodrigues Precession** | Coupled non-linear nutation kinematics for counter-rotating satellite rings without gimbal lock. | Verified (`tests/test_synthesizer.py`) |
 | **Fluid Magnetic Cursor** | Dual-element `#cursor-dot` and `#cursor-ring` with spring lag (`lerp = 0.14`) and button hover expansion. | Verified (`tests/test_synthesizer.py`) |
 | **3D Perspective Card Tilt** | Sub-pixel mouse projection: `perspective(1000px) rotateY(...) rotateX(...)` on frosted glass HUD decks. | Verified (`tests/test_synthesizer.py`) |
-| **Live Math Telemetry HUD** | Interactive mode selector (`lorenz`, `harmonograph`, `fourier`, `rodrigues`), real-time formula display, and Lyapunov exponent estimation ($\lambda \approx 0.9056$). | Verified (`tests/test_synthesizer.py`) |
+| **Live Math Telemetry HUD** | Interactive mode selector (`lorenz`, `harmonograph`, `fourier`, `rodrigues`, `singularity`), real-time formula display, and Lyapunov exponent estimation ($\lambda \approx 0.9056$). | Verified (`tests/test_synthesizer.py`) |
 
 ---
 

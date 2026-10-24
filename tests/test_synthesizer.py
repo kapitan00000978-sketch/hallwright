@@ -402,7 +402,18 @@ def test_complex_animation_and_physics_synthesis():
     assert "fourierOctave1" in webgl_bundle
     assert "nutationAngle1" in webgl_bundle
 
-    # 3. CSS Animation tokens verification
+    # 3. Super-Complexity Bleeding-Edge Engine verification (GLSL Shaders, Web Audio FFT, N-Body Singularity)
+    assert "glslVertexShader" in webgl_bundle
+    assert "glslFragmentShader" in webgl_bundle
+    assert "snoise" in webgl_bundle
+    assert "THREE.ShaderMaterial" in webgl_bundle
+    assert "AudioContext" in webgl_bundle
+    assert "audioAnalyser" in webgl_bundle
+    assert "toggle-audio-reactive-btn" in webgl_bundle
+    assert "gravitationalSingularity" in webgl_bundle
+    assert "singularity-stat" in webgl_bundle
+
+    # 4. CSS Animation tokens verification
     css = synth.synthesize_ui_css(task)
     assert "magic-shimmer-sweep" in css
     assert "@keyframes magicShimmerSweep" in css

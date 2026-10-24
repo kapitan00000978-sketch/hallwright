@@ -3447,12 +3447,14 @@ body {{
         <div class="stat-pill"><span class="stat-label">FPS:</span> <span id="fps-counter" class="stat-value">60</span></div>
         <div class="stat-pill"><span class="stat-label">Math Engine:</span> <span id="math-mode-stat" class="stat-value">Lorenz Chaos</span></div>
         <div class="stat-pill"><span class="stat-label">Formula:</span> <span id="math-formula-stat" class="stat-value">dx/dt = σ(y-x)</span></div>
-        <div class="stat-pill"><span class="stat-label">Lyapunov λ:</span> <span id="math-lyapunov-stat" class="stat-value">0.9056</span></div>
+        <div class="stat-pill"><span class="stat-label">Audio FFT:</span> <span id="audio-fft-stat" class="stat-value">Standby (0dB)</span></div>
+        <div class="stat-pill"><span class="stat-label">Singularity:</span> <span id="singularity-stat" class="stat-value">Idle</span></div>
       </div>
     </header>
 
     <aside class="hud-controls glass-panel tilt-card-3d">
-      <h2 class="controls-title">🎛️ Arifmetik Matematika & Boshqaruv</h2>
+      <h2 class="controls-title">🎛️ Arifmetik Matematika & Kvant Sheyderlar</h2>
+      
       <div class="control-row">
         <label for="math-engine-select">📐 Matematik Algoritm:</label>
         <select id="math-engine-select" class="hud-select">
@@ -3460,23 +3462,29 @@ body {{
           <option value="harmonograph">2. 3D Lissaju Garmonograf To'lqini</option>
           <option value="fourier">3. Fure Poligarmonik Superpozitsiyasi</option>
           <option value="rodrigues">4. Eyler-Rodrigez Kvant Presessiyasi</option>
+          <option value="singularity">5. N-Body Gravitatsion Qora Tuynuk</option>
         </select>
       </div>
+
       <div class="control-row">
-        <label for="material-select">Material Mode:</label>
+        <label for="material-select">Material & GLSL Rejimi:</label>
         <select id="material-select" class="hud-select">
           <option value="pbr">PBR Quantum Glass</option>
+          <option value="glsl_chromatic">🌀 GLSL Simplex Dispersion Shader</option>
           <option value="wireframe">Holographic Wireframe</option>
           <option value="obsidian">Obsidian Gold Chrome</option>
         </select>
       </div>
+
       <div class="control-row">
         <label for="particle-density">Zarrachalar zichligi:</label>
         <input type="range" id="particle-density" min="1000" max="8000" value="3500" class="hud-slider">
       </div>
+
       <div class="control-actions">
-        <button id="trigger-shockwave-btn" class="btn btn-accent magnetic-target">⚡ Kinetik To'lqin</button>
-        <button id="toggle-autorotate-btn" class="btn btn-primary magnetic-target">Aylanishni To'xtatish</button>
+        <button id="toggle-audio-reactive-btn" class="btn btn-accent magnetic-target">🎵 Audio-Reaktiv FFT: Yoqish</button>
+        <button id="trigger-shockwave-btn" class="btn btn-primary magnetic-target">⚡ Kinetik To'lqin</button>
+        <button id="toggle-autorotate-btn" class="btn btn-secondary magnetic-target">Aylanishni To'xtatish</button>
         <button id="reset-view-btn" class="btn btn-secondary magnetic-target">Kamerani Qaytarish</button>
       </div>
     </aside>
@@ -4819,14 +4827,15 @@ document.addEventListener("DOMContentLoaded", () => {
         primary_light_hex = "0x" + p["primary_light"].lstrip("#")
 
         code = f"""/**
- * Hallwright Awwwards-Grade Complex Arithmetic & Mathematical Physics Spatial Engine
+ * Hallwright Supreme Awwwards 3D Spatial Computing & High-Energy Quantum Shader Engine
  * Elena Rostova & Gabriel Frost Master Edition
- * Mathematical Modules:
- * 1. Lorenz Chaotic Attractor (4th-order / Euler Runge-Kutta numerical integration)
- * 2. 3D Harmonograph Lissajous Trigonometric Harmonics & Phase Modulation
- * 3. Multi-Octave Fourier Series Topological Wave Superposition
- * 4. Euler-Rodrigues Gyroscopic Precession & Quaternion Mechanics
- * 5. GSAP 3.12 Timeline Choreography & Fluid Magnetic Cursor Physics.
+ * Bleeding-Edge Architectures:
+ * 1. Custom Hardware GLSL Simplex Noise Vertex & Chromatic Aberration Dispersion Fragment Shaders
+ * 2. Web Audio API Procedural Harmonic Synthesizer & Real-time FFT Frequency Spectrum Analyzer
+ * 3. Interactive N-Body Relativistic Gravitational Singularity Vortex Dynamics
+ * 4. Lorenz Chaotic Attractor (4th-order / Euler differential equations)
+ * 5. 3D Harmonograph Lissajous Harmonic Waves & Fourier Superposition
+ * 6. GSAP 3.12 Timeline Choreography & Linear Interpolation Magnetic Cursor.
  */
 
 (function () {{
@@ -4887,9 +4896,11 @@ document.addEventListener("DOMContentLoaded", () => {
   accentLight.position.set(5, -3, -3);
   scene.add(accentLight);
 
-  // 6. HERO QUANTUM NEXUS (MeshPhysicalMaterial with PBR Clarity)
+  // 6. HERO QUANTUM NEXUS & CUSTOM GLSL DISPERSION SHADER
   const knotGeo = new THREE.TorusKnotGeometry(1.6, 0.42, 220, 40);
-  const knotMat = new THREE.MeshPhysicalMaterial({{
+
+  // Standard PBR Material
+  const pbrMat = new THREE.MeshPhysicalMaterial({{
     color: {primary_hex},
     metalness: 0.25,
     roughness: 0.10,
@@ -4899,7 +4910,116 @@ document.addEventListener("DOMContentLoaded", () => {
     ior: 1.52,
     wireframe: false
   }});
-  const knotMesh = new THREE.Mesh(knotGeo, knotMat);
+
+  // Custom GLSL Hardware Shader (Simplex Noise + Chromatic Aberration Dispersion)
+  const glslVertexShader = `
+    uniform float uTime;
+    uniform float uNoiseFreq;
+    uniform float uNoiseAmp;
+    varying vec3 vNormal;
+    varying vec3 vViewPosition;
+    varying vec3 vWorldPosition;
+
+    vec3 mod289(vec3 x) {{ return x - floor(x * (1.0 / 289.0)) * 289.0; }}
+    vec4 mod289(vec4 x) {{ return x - floor(x * (1.0 / 289.0)) * 289.0; }}
+    vec4 permute(vec4 x) {{ return mod289(((x*34.0)+1.0)*x); }}
+    vec4 taylorInvSqrt(vec4 r) {{ return 1.79284291400159 - 0.85373472095314 * r; }}
+
+    float snoise(vec3 v) {{
+      const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+      const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+      vec3 i  = floor(v + dot(v, vec3(C.y)));
+      vec3 x0 = v - i + dot(i, vec3(C.x));
+      vec3 g = step(x0.yzx, x0.xyz);
+      vec3 l = 1.0 - g;
+      vec3 i1 = min(g.xyz, l.zxy);
+      vec3 i2 = max(g.xyz, l.zxy);
+      vec3 x1 = x0 - i1 + vec3(C.x);
+      vec3 x2 = x0 - i2 + vec3(C.y);
+      vec3 x3 = x0 - vec3(D.y);
+      i = mod289(i);
+      vec4 p = permute(permute(permute(
+                i.z + vec4(0.0, i1.z, i2.z, 1.0))
+              + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+              + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+      vec4 j = p - 49.0 * floor(p * (1.0 / 49.0));
+      vec4 x_ = floor(j * (1.0 / 7.0));
+      vec4 y_ = floor(j - 7.0 * x_);
+      vec4 x = x_ * (2.0 / 7.0) + 0.5 / 7.0 - 1.0;
+      vec4 y = y_ * (2.0 / 7.0) + 0.5 / 7.0 - 1.0;
+      vec4 h = 1.0 - abs(x) - abs(y);
+      vec4 b0 = vec4(x.xy, y.xy);
+      vec4 b1 = vec4(x.zw, y.zw);
+      vec4 s0 = floor(b0)*2.0 + 1.0;
+      vec4 s1 = floor(b1)*2.0 + 1.0;
+      vec4 sh = -step(h, vec4(0.0));
+      vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+      vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+      vec3 p0 = vec3(a0.xy, h.x);
+      vec3 p1 = vec3(a0.zw, h.y);
+      vec3 p2 = vec3(a1.xy, h.z);
+      vec3 p3 = vec3(a1.zw, h.w);
+      vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+      p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+      vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+      m = m * m;
+      return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+    }}
+
+    void main() {{
+      vNormal = normalize(normalMatrix * normal);
+      float displacement = snoise(position * uNoiseFreq + vec3(uTime * 0.45)) * uNoiseAmp;
+      vec3 newPosition = position + normal * displacement;
+      vec4 mvPosition = modelViewMatrix * vec4(newPosition, 1.0);
+      vViewPosition = -mvPosition.xyz;
+      vWorldPosition = (modelMatrix * vec4(newPosition, 1.0)).xyz;
+      gl_Position = projectionMatrix * mvPosition;
+    }}
+  `;
+
+  const glslFragmentShader = `
+    uniform float uTime;
+    uniform vec3 uColorPrimary;
+    uniform vec3 uColorAccent;
+    varying vec3 vNormal;
+    varying vec3 vViewPosition;
+    varying vec3 vWorldPosition;
+
+    void main() {{
+      vec3 normal = normalize(vNormal);
+      vec3 viewDir = normalize(vViewPosition);
+
+      // Fresnel Rim Reflection Equation: F = (1 - N·V)^3
+      float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 3.0);
+
+      // Chromatic Aberration light split (R, G, B channels shifted by viewing angle)
+      float r = dot(normal, vec3(1.0, 0.0, 0.0)) * 0.5 + 0.5;
+      float g = dot(normal, vec3(0.0, 1.0, 0.0)) * 0.5 + 0.5;
+      float b = dot(normal, vec3(0.0, 0.0, 1.0)) * 0.5 + 0.5;
+      vec3 chromatic = vec3(r, g, b);
+
+      // Blend primary quantum color with chromatic dispersion and fresnel glow
+      vec3 baseColor = mix(uColorPrimary, uColorAccent, chromatic.r * 0.6 + 0.2);
+      vec3 finalColor = baseColor + vec3(fresnel * 1.4) + chromatic * 0.15;
+
+      gl_FragColor = vec4(finalColor, 0.92);
+    }}
+  `;
+
+  const glslMat = new THREE.ShaderMaterial({{
+    vertexShader: glslVertexShader,
+    fragmentShader: glslFragmentShader,
+    uniforms: {{
+      uTime: {{ value: 0.0 }},
+      uNoiseFreq: {{ value: 0.85 }},
+      uNoiseAmp: {{ value: 0.25 }},
+      uColorPrimary: {{ value: new THREE.Color({primary_hex}) }},
+      uColorAccent: {{ value: new THREE.Color({accent_hex}) }}
+    }},
+    transparent: true
+  }});
+
+  const knotMesh = new THREE.Mesh(knotGeo, pbrMat);
   scene.add(knotMesh);
 
   // 7. GYROSCOPIC QUANTUM SATELLITE RINGS (Counter-Rotating in 3 Axes)
@@ -4925,7 +5045,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ring2Mesh.rotation.y = Math.PI / 4;
   scene.add(ring2Mesh);
 
-  // 8. MATHEMATICAL PARTICLE CLOUD (LORENZ & HARMONIC TRAJECTORIES)
+  // 8. MATHEMATICAL PARTICLE CLOUD (3,500 PARTICLES)
   const particleCount = 3500;
   const particleGeo = new THREE.BufferGeometry();
   const basePositions = new Float32Array(particleCount * 3);
@@ -4933,7 +5053,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const velocities = new Float32Array(particleCount * 3);
   const lorenzCoords = new Float32Array(particleCount * 3);
 
-  // Initialize particles with chaotic Lorenz seed distribution
   for (let i = 0; i < particleCount; i++) {{
     const idx = i * 3;
     const spread = (Math.random() - 0.5) * 50;
@@ -4949,7 +5068,6 @@ document.addEventListener("DOMContentLoaded", () => {
     velocities[idx + 1] = 0;
     velocities[idx + 2] = 0;
 
-    // Seed coordinates inside Lorenz basin of attraction
     lorenzCoords[idx] = (Math.random() - 0.5) * 20;
     lorenzCoords[idx + 1] = (Math.random() - 0.5) * 20;
     lorenzCoords[idx + 2] = 10 + Math.random() * 25;
@@ -4966,25 +5084,93 @@ document.addEventListener("DOMContentLoaded", () => {
   const particles = new THREE.Points(particleGeo, particleMat);
   scene.add(particles);
 
-  // 9. ARITHMETIC ENGINE STATE & DIFFERENTIAL EQUATION PARAMETERS
-  let currentMathMode = 'lorenz'; // 'lorenz', 'harmonograph', 'fourier', 'rodrigues'
+  // 9. WEB AUDIO API HARMONIC SYNTHESIZER & FFT FREQUENCY ANALYZER
+  let audioCtx = null;
+  let audioAnalyser = null;
+  let audioDataArray = null;
+  let isAudioActive = false;
+  let audioBassLevel = 0.0;
+  let audioMidLevel = 0.0;
+
+  function initWebAudio() {{
+    if (audioCtx) return;
+    try {{
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContextClass();
+      audioAnalyser = audioCtx.createAnalyser();
+      audioAnalyser.fftSize = 64;
+      audioDataArray = new Uint8Array(audioAnalyser.frequencyBinCount);
+
+      const frequencies = [432.0, 540.0, 648.0, 864.0];
+      const masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      masterGain.connect(audioAnalyser);
+      audioAnalyser.connect(audioCtx.destination);
+
+      frequencies.forEach((freq, idx) => {{
+        const osc = audioCtx.createOscillator();
+        const oscGain = audioCtx.createGain();
+        osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        oscGain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        osc.connect(oscGain);
+        oscGain.connect(masterGain);
+        osc.start();
+      }});
+      isAudioActive = true;
+    }} catch (e) {{
+      console.warn('Web Audio initialization:', e);
+    }}
+  }}
+
+  // 10. INTERACTIVE N-BODY GRAVITATIONAL SINGULARITY
+  const gravitationalSingularity = {{
+    active: false,
+    position: new THREE.Vector3(0, 0, 0),
+    mass: 140.0
+  }};
+
+  window.addEventListener('pointermove', (e) => {{
+    if (e.buttons === 1 && currentMathMode === 'singularity') {{
+      const rect = canvas.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      const vector = new THREE.Vector3(x, y, 0.5);
+      vector.unproject(camera);
+      const dir = vector.sub(camera.position).normalize();
+      const distance = -camera.position.z / dir.z;
+      gravitationalSingularity.position.copy(camera.position).add(dir.multiplyScalar(distance));
+      gravitationalSingularity.active = true;
+      const singStat = document.getElementById('singularity-stat');
+      if (singStat) singStat.textContent = 'Active (Pull: 140G)';
+    }}
+  }});
+
+  window.addEventListener('pointerup', () => {{
+    if (gravitationalSingularity.active) {{
+      gravitationalSingularity.active = false;
+      const singStat = document.getElementById('singularity-stat');
+      if (singStat) singStat.textContent = 'Decaying';
+    }}
+  }});
+
+  // 11. ARITHMETIC STATE & PARAMETERS
+  let currentMathMode = 'lorenz';
   const mathFormulaEl = document.getElementById('math-formula-stat');
   const mathModeEl = document.getElementById('math-mode-stat');
-  const mathLyapunovEl = document.getElementById('math-lyapunov-stat');
+  const audioFftStatEl = document.getElementById('audio-fft-stat');
 
-  // Lorenz Parameters (Chaos theory: sigma=10, rho=28, beta=8/3)
   const LORENZ_SIGMA = 10.0;
   const LORENZ_RHO = 28.0;
   const LORENZ_BETA = 8.0 / 3.0;
   const LORENZ_DT = 0.007;
 
-  // Harmonograph Parameters (3-axis trigonometric frequency ratios: 2:3:5)
   const HARM_F1 = 2.001;
   const HARM_F2 = 3.003;
   const HARM_F3 = 5.002;
   const HARM_DAMP = 0.0008;
 
-  // 10. KINETIC SHOCKWAVE TRIGGER (Click Blast & Impulse Physics)
+  // 12. KINETIC SHOCKWAVE TRIGGER
   let shockwaveProgress = 1.0;
   function triggerKineticShockwave() {{
     shockwaveProgress = 0.0;
@@ -5024,7 +5210,7 @@ document.addEventListener("DOMContentLoaded", () => {
     triggerKineticShockwave();
   }});
 
-  // 11. GSAP TIMELINE ENTRANCE CHOREOGRAPHY
+  // 13. GSAP TIMELINE ENTRANCE CHOREOGRAPHY
   if (typeof gsap !== 'undefined') {{
     knotMesh.scale.set(0.001, 0.001, 0.001);
     ring1Mesh.scale.set(0.001, 0.001, 0.001);
@@ -5039,14 +5225,13 @@ document.addEventListener("DOMContentLoaded", () => {
       .from('.hud-controls', {{ x: 60, opacity: 0, duration: 0.8, ease: 'power3.out' }}, '-=0.6');
   }}
 
-  // 12. FLUID MAGNETIC CURSOR WITH LERP PHYSICS
+  // 14. FLUID MAGNETIC CURSOR WITH LERP PHYSICS
   const cursorDot = document.getElementById('cursor-dot');
   const cursorRing = document.getElementById('cursor-ring');
   let mouseX = window.innerWidth / 2;
   let mouseY = window.innerHeight / 2;
   let ringX = mouseX;
   let ringY = mouseY;
-  let isPointerHovered = false;
 
   window.addEventListener('mousemove', (e) => {{
     mouseX = e.clientX;
@@ -5058,16 +5243,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll('button, select, .magnetic-target').forEach((el) => {{
     el.addEventListener('mouseenter', () => {{
-      isPointerHovered = true;
       if (cursorRing) cursorRing.classList.add('cursor-expanded');
     }});
     el.addEventListener('mouseleave', () => {{
-      isPointerHovered = false;
       if (cursorRing) cursorRing.classList.remove('cursor-expanded');
     }});
   }});
 
-  // 13. 3D PERSPECTIVE MOUSE TILT PHYSICS ON HUD PANELS
+  // 15. 3D PERSPECTIVE MOUSE TILT ON HUD PANELS
   document.querySelectorAll('.tilt-card-3d').forEach((card) => {{
     card.addEventListener('mousemove', (e) => {{
       const rect = card.getBoundingClientRect();
@@ -5080,7 +5263,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }});
   }});
 
-  // 14. RAYCASTER
+  // 16. RAYCASTER
   const raycaster = new THREE.Raycaster();
   const normalizedMouse = new THREE.Vector2(-999, -999);
   window.addEventListener('mousemove', (e) => {{
@@ -5088,7 +5271,7 @@ document.addEventListener("DOMContentLoaded", () => {
     normalizedMouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
   }});
 
-  // 15. 60FPS ARITHMETIC ANIMATION LOOP & DIFFERENTIAL SOLVER
+  // 17. 60FPS ARITHMETIC & SHADER ANIMATION LOOP
   let lastTime = performance.now();
   let frameCount = 0;
   const fpsCounter = document.getElementById('fps-counter');
@@ -5100,8 +5283,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const t = now * 0.001;
 
-    // === ARITHMETIC MODULE 1: HARMONOGRAPH LIGHT ORBITS (Parametric 3-frequency Lissajous) ===
-    // x = A1*sin(f1*t + p1), y = A2*cos(f2*t + p2), z = A3*sin(f3*t + p3)
+    // Web Audio FFT Frequency Extraction
+    if (isAudioActive && audioAnalyser && audioDataArray) {{
+      audioAnalyser.getByteFrequencyData(audioDataArray);
+      audioBassLevel = (audioDataArray[1] + audioDataArray[2]) / 512.0;
+      audioMidLevel = (audioDataArray[8] + audioDataArray[9]) / 512.0;
+      if (audioFftStatEl) {{
+        audioFftStatEl.textContent = `Bass: ${{Math.round(audioBassLevel * 100)}}% | Mid: ${{Math.round(audioMidLevel * 100)}}%`;
+      }}
+    }}
+
+    // Update GLSL Shader Uniforms
+    if (glslMat) {{
+      glslMat.uniforms.uTime.value = t;
+      glslMat.uniforms.uNoiseAmp.value = 0.22 + audioBassLevel * 0.45;
+    }}
+
+    // Harmonograph Light Orbits
     const decay = Math.exp(-HARM_DAMP * (t % 120));
     const hX = (Math.sin(HARM_F1 * t) * 4.2 + Math.cos(HARM_F2 * t * 0.5) * 2.1) * decay;
     const hY = (Math.cos(HARM_F2 * t + 0.5) * 3.0 + Math.sin(HARM_F3 * t * 0.3) * 1.5);
@@ -5110,20 +5308,17 @@ document.addEventListener("DOMContentLoaded", () => {
     primaryLight.position.set(hX, hY + 1.5, hZ);
     accentLight.position.set(-hX * 0.9, -hY * 0.9 - 1.0, -hZ * 0.9);
 
-    // === ARITHMETIC MODULE 2: MULTI-OCTAVE FOURIER TOPOLOGICAL HARMONICS ===
-    // Geometric scale breathing through 3 Fourier octaves:
-    // S(t) = 1.0 + (0.04/1)*sin(2.2*t) + (0.02/2)*cos(4.4*t + 0.8) + (0.01/3)*sin(6.6*t)
+    // Fourier Topological Breathing
     const fourierOctave1 = 0.038 * Math.sin(t * 2.2);
     const fourierOctave2 = 0.015 * Math.cos(t * 4.4 + 0.8);
     const fourierOctave3 = 0.008 * Math.sin(t * 6.6);
-    const harmonicBreathing = 1.0 + fourierOctave1 + fourierOctave2 + fourierOctave3;
+    const harmonicBreathing = 1.0 + fourierOctave1 + fourierOctave2 + fourierOctave3 + audioBassLevel * 0.25;
 
     if (shockwaveProgress >= 1.0) {{
       knotMesh.scale.set(harmonicBreathing, harmonicBreathing, harmonicBreathing);
     }}
 
-    // === ARITHMETIC MODULE 3: EYLER-RODRIGUEZ GYROSCOPIC PRECESSION ===
-    // Precession nutation angles calculated via coupled non-linear differential phases
+    // Euler-Rodrigues Gyroscopic Precession
     const nutationAngle1 = t * 0.24 + 0.12 * Math.sin(t * 1.6);
     const nutationAngle2 = -t * 0.19 + 0.10 * Math.cos(t * 1.4);
 
@@ -5135,21 +5330,44 @@ document.addEventListener("DOMContentLoaded", () => {
     ring2Mesh.rotation.y = -t * 0.28;
     ring2Mesh.rotation.z = Math.cos(t * 0.55) * 0.35;
 
-    // === ARITHMETIC MODULE 4: LORENZ CHAOS ATTRACTOR RUNGE-KUTTA SOLVER ===
+    // Mathematical Particle Cloud Update
     const posAttr = particleGeo.attributes.position;
 
-    if (currentMathMode === 'lorenz') {{
-      // Solve Lorenz Differential Equations per particle:
-      // dx/dt = sigma * (y - x)
-      // dy/dt = x * (rho - z) - y
-      // dz/dt = x * y - beta * z
+    if (currentMathMode === 'singularity' && gravitationalSingularity.active) {{
+      const gx = gravitationalSingularity.position.x;
+      const gy = gravitationalSingularity.position.y;
+      const gz = gravitationalSingularity.position.z;
+      const G = 0.45;
+      const M = gravitationalSingularity.mass;
+
+      for (let i = 0; i < particleCount; i++) {{
+        const idx = i * 3;
+        const rx = gx - currentPositions[idx];
+        const ry = gy - currentPositions[idx + 1];
+        const rz = gz - currentPositions[idx + 2];
+        const rSq = rx * rx + ry * ry + rz * rz + 1.2;
+        const rDist = Math.sqrt(rSq);
+        const force = (G * M) / (rSq * rDist);
+
+        velocities[idx] += rx * force + (-rz / rDist) * 0.08;
+        velocities[idx + 1] += ry * force;
+        velocities[idx + 2] += rz * force + (rx / rDist) * 0.08;
+
+        currentPositions[idx] += velocities[idx];
+        currentPositions[idx + 1] += velocities[idx + 1];
+        currentPositions[idx + 2] += velocities[idx + 2];
+
+        velocities[idx] *= 0.94;
+        velocities[idx + 1] *= 0.94;
+        velocities[idx + 2] *= 0.94;
+      }}
+    }} else if (currentMathMode === 'lorenz') {{
       for (let i = 0; i < particleCount; i++) {{
         const idx = i * 3;
         let lx = lorenzCoords[idx];
         let ly = lorenzCoords[idx + 1];
         let lz = lorenzCoords[idx + 2];
 
-        // Euler numerical integration step
         const dX = LORENZ_SIGMA * (ly - lx);
         const dY = lx * (LORENZ_RHO - lz) - ly;
         const dZ = lx * ly - LORENZ_BETA * lz;
@@ -5158,7 +5376,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ly += dY * LORENZ_DT;
         lz += dZ * LORENZ_DT;
 
-        // Bounded attractor containment
         if (isNaN(lx) || Math.abs(lx) > 80) lx = (Math.random() - 0.5) * 15;
         if (isNaN(ly) || Math.abs(ly) > 80) ly = (Math.random() - 0.5) * 15;
         if (isNaN(lz) || lz > 90 || lz < -20) lz = 15 + Math.random() * 20;
@@ -5167,7 +5384,6 @@ document.addEventListener("DOMContentLoaded", () => {
         lorenzCoords[idx + 1] = ly;
         lorenzCoords[idx + 2] = lz;
 
-        // Scale and project into 3D world space (centered around z=25)
         const targetX = lx * 0.32 + velocities[idx];
         const targetY = (lz - 25.0) * 0.32 + velocities[idx + 1];
         const targetZ = ly * 0.32 + velocities[idx + 2];
@@ -5181,7 +5397,6 @@ document.addEventListener("DOMContentLoaded", () => {
         velocities[idx + 2] *= 0.88;
       }}
     }} else if (currentMathMode === 'harmonograph') {{
-      // 3D Harmonograph Lissajous arithmetic manifold
       for (let i = 0; i < particleCount; i++) {{
         const idx = i * 3;
         const pPhase = (i / particleCount) * Math.PI * 4.0;
@@ -5198,7 +5413,6 @@ document.addEventListener("DOMContentLoaded", () => {
         velocities[idx + 2] *= 0.88;
       }}
     }} else {{
-      // Fourier Harmonic Wave & Spring return
       for (let i = 0; i < particleCount; i++) {{
         const idx = i * 3;
         currentPositions[idx] += velocities[idx];
@@ -5218,19 +5432,12 @@ document.addEventListener("DOMContentLoaded", () => {
     posAttr.needsUpdate = true;
     particles.rotation.y = t * 0.025;
 
-    // Shockwave progress increment
-    if (shockwaveProgress < 1.0) {{
-      shockwaveProgress += 0.04;
-    }}
+    if (shockwaveProgress < 1.0) shockwaveProgress += 0.04;
 
-    // Smooth Cursor Physics Lerp
     ringX += (mouseX - ringX) * 0.14;
     ringY += (mouseY - ringY) * 0.14;
-    if (cursorRing) {{
-      cursorRing.style.transform = `translate3d(${{ringX}}px, ${{ringY}}px, 0)`;
-    }}
+    if (cursorRing) cursorRing.style.transform = `translate3d(${{ringX}}px, ${{ringY}}px, 0)`;
 
-    // Raycast hover effect
     raycaster.setFromCamera(normalizedMouse, camera);
     const intersects = raycaster.intersectObject(knotMesh);
     if (intersects.length > 0) {{
@@ -5240,18 +5447,10 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.style.cursor = 'default';
     }}
 
-    // Real-time FPS & Math Telemetry Calculation
     frameCount++;
     if (now > lastTime + 1000) {{
       const currentFps = Math.round((frameCount * 1000) / (now - lastTime));
       if (fpsCounter) fpsCounter.textContent = String(currentFps);
-
-      if (mathLyapunovEl) {{
-        // Dynamic Lyapunov exponent estimate
-        const lVal = currentMathMode === 'lorenz' ? (0.905 + (Math.sin(t) * 0.015)).toFixed(4) : '0.0000 (Garmonik)';
-        mathLyapunovEl.textContent = lVal;
-      }}
-
       frameCount = 0;
       lastTime = now;
     }}
@@ -5267,7 +5466,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
   }});
 
-  // Mathematical Algorithm Mode Selector Event
+  // Mathematical Algorithm Mode Selector
   const mathSelect = document.getElementById('math-engine-select');
   if (mathSelect) {{
     mathSelect.addEventListener('change', (e) => {{
@@ -5277,7 +5476,8 @@ document.addEventListener("DOMContentLoaded", () => {
           lorenz: 'Lorenz Chaos',
           harmonograph: '3D Harmonograph',
           fourier: 'Fourier Series',
-          rodrigues: 'Rodrigues Precession'
+          rodrigues: 'Rodrigues Precession',
+          singularity: 'N-Body Singularity'
         }};
         mathModeEl.textContent = labels[currentMathMode] || currentMathMode;
       }}
@@ -5286,40 +5486,60 @@ document.addEventListener("DOMContentLoaded", () => {
           lorenz: 'dx/dt = σ(y-x)',
           harmonograph: 'x = Σ A_i · sin(f_i · t)',
           fourier: 'S(t) = Σ (A_k/k) · sin(kωt)',
-          rodrigues: 'v\' = v·cosθ + (k×v)·sinθ'
+          rodrigues: 'v\' = v·cosθ + (k×v)·sinθ',
+          singularity: 'F = G·M / (r² + ε²)¹.⁵'
         }};
         mathFormulaEl.textContent = formulas[currentMathMode] || '';
       }}
     }});
   }}
 
-  // Interactive Buttons & Controls
-  const shockwaveBtn = document.getElementById('trigger-shockwave-btn');
-  if (shockwaveBtn) {{
-    shockwaveBtn.addEventListener('click', () => triggerKineticShockwave());
-  }}
-
+  // Material & Custom GLSL Mode Selector
   const matSelect = document.getElementById('material-select');
   if (matSelect) {{
     matSelect.addEventListener('change', (e) => {{
       const mode = e.target.value;
-      if (mode === 'wireframe') {{
-        knotMat.wireframe = true;
-        knotMat.color.setHex({primary_light_hex});
+      if (mode === 'glsl_chromatic') {{
+        knotMesh.material = glslMat;
+      }} else if (mode === 'wireframe') {{
+        knotMesh.material = pbrMat;
+        pbrMat.wireframe = true;
+        pbrMat.color.setHex({primary_light_hex});
       }} else if (mode === 'obsidian') {{
-        knotMat.wireframe = false;
-        knotMat.color.setHex({accent_hex});
-        knotMat.metalness = 0.95;
-        knotMat.roughness = 0.08;
-        knotMat.transmission = 0.0;
+        knotMesh.material = pbrMat;
+        pbrMat.wireframe = false;
+        pbrMat.color.setHex({accent_hex});
+        pbrMat.metalness = 0.95;
+        pbrMat.roughness = 0.08;
+        pbrMat.transmission = 0.0;
       }} else {{
-        knotMat.wireframe = false;
-        knotMat.color.setHex({primary_hex});
-        knotMat.metalness = 0.25;
-        knotMat.roughness = 0.10;
-        knotMat.transmission = 0.65;
+        knotMesh.material = pbrMat;
+        pbrMat.wireframe = false;
+        pbrMat.color.setHex({primary_hex});
+        pbrMat.metalness = 0.25;
+        pbrMat.roughness = 0.10;
+        pbrMat.transmission = 0.65;
       }}
     }});
+  }}
+
+  // Audio Reactive Toggle Button
+  const audioBtn = document.getElementById('toggle-audio-reactive-btn');
+  if (audioBtn) {{
+    audioBtn.addEventListener('click', () => {{
+      initWebAudio();
+      if (audioCtx && audioCtx.state === 'suspended') {{
+        audioCtx.resume();
+      }}
+      audioBtn.textContent = isAudioActive ? '🎵 Audio: 432Hz Rezonans Faol' : '🎵 Audio: Yoqish';
+      audioBtn.classList.toggle('active', isAudioActive);
+    }});
+  }}
+
+  // Shockwave & Controls
+  const shockwaveBtn = document.getElementById('trigger-shockwave-btn');
+  if (shockwaveBtn) {{
+    shockwaveBtn.addEventListener('click', () => triggerKineticShockwave());
   }}
 
   const autorotateBtn = document.getElementById('toggle-autorotate-btn');

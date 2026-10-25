@@ -577,9 +577,10 @@ class SearchEngine:
         return hits[:limit]
 
     def search_web(self, query: str, limit: int = 5, timeout: float = 4.0) -> List[SearchHit]:
-        """Perform real-time web and technical documentation search via DuckDuckGo HTML endpoint.
+        """Perform real-time web and technical documentation search via DuckDuckGo with resilient multi-tier fallback.
 
         Features:
+        - Multi-tier fallback (DDG HTML -> DDG Lite POST -> Empty on complete offline).
         - Zero third-party dependencies (pure Python standard library).
         - Automatic decoding of target URLs from redirect wrappers.
         - Clean HTML stripping and entity unescaping.
@@ -590,64 +591,126 @@ class SearchEngine:
             return []
 
         hits: List[SearchHit] = []
-        encoded_query = urllib.parse.quote_plus(clean_q)
-        url = f"https://html.duckduckgo.com/html/?q={encoded_query}"
-        req = urllib.request.Request(
-            url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                "Accept-Language": "en-US,en;q=0.5",
-            }
-        )
 
+        # Tier 1: DuckDuckGo HTML Endpoint
         try:
+            encoded_query = urllib.parse.quote_plus(clean_q)
+            url = f"https://html.duckduckgo.com/html/?q={encoded_query}"
+            req = urllib.request.Request(
+                url,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                    "Accept-Language": "en-US,en;q=0.5",
+                }
+            )
             with urllib.request.urlopen(req, timeout=timeout) as resp:
                 content = resp.read().decode("utf-8", errors="replace")
+
+            title_matches = re.findall(
+                r'<a[^>]+class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>',
+                content,
+                re.DOTALL
+            )
+            snippet_matches = re.findall(
+                r'<a[^>]+class="result__snippet"[^>]*>(.*?)</a>',
+                content,
+                re.DOTALL
+            )
+
+            for idx, (raw_href, raw_title) in enumerate(title_matches[:limit]):
+                clean_title = html.unescape(re.sub(r'<[^>]+>', '', raw_title)).strip()
+                if not clean_title:
+                    continue
+
+                raw_snippet = snippet_matches[idx] if idx < len(snippet_matches) else ""
+                clean_snippet = html.unescape(re.sub(r'<[^>]+>', '', raw_snippet)).strip()
+
+                final_url = raw_href
+                if "uddg=" in raw_href:
+                    try:
+                        parsed = urllib.parse.urlparse(raw_href)
+                        qs = urllib.parse.parse_qs(parsed.query)
+                        if "uddg" in qs and qs["uddg"]:
+                            final_url = qs["uddg"][0]
+                    except Exception as parse_exc:
+                        logger.debug("URL parsing skipped: %s", parse_exc)
+
+                score = max(50.0, 88.0 - (idx * 3.0))
+                hits.append(SearchHit(
+                    category="web",
+                    title=clean_title,
+                    score=score,
+                    snippet=clean_snippet,
+                    metadata={"url": final_url, "engine": "duckduckgo_html"}
+                ))
+            if hits:
+                return hits
         except Exception as exc:
-            logger.debug("Live web search unavailable or timed out for %r: %s", clean_q, exc)
-            return hits
+            logger.debug("DDG HTML search failed or offline: %s", exc)
 
-        title_matches = re.findall(
-            r'<a[^>]+class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>',
-            content,
-            re.DOTALL
-        )
-        snippet_matches = re.findall(
-            r'<a[^>]+class="result__snippet"[^>]*>(.*?)</a>',
-            content,
-            re.DOTALL
-        )
+        # Tier 2: DuckDuckGo Lite Endpoint (Failover)
+        try:
+            body = urllib.parse.urlencode({"q": clean_q}).encode("utf-8")
+            req = urllib.request.Request(
+                "https://lite.duckduckgo.com/lite/",
+                data=body,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Accept": "text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.8"
+                }
+            )
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                content = resp.read().decode("utf-8", errors="replace")
 
-        for idx, (raw_href, raw_title) in enumerate(title_matches[:limit]):
-            clean_title = html.unescape(re.sub(r'<[^>]+>', '', raw_title)).strip()
-            if not clean_title:
-                continue
+            link_matches = re.findall(
+                r'<a[^>]+href=[\'"]([^\'"]+)[\'"][^>]*class=[\'"]result-link[\'"][^>]*>(.*?)</a>',
+                content,
+                re.DOTALL
+            )
+            if not link_matches:
+                link_matches = re.findall(
+                    r'<a[^>]+class=[\'"]result-link[\'"][^>]*href=[\'"]([^\'"]+)[\'"][^>]*>(.*?)</a>',
+                    content,
+                    re.DOTALL
+                )
+            snippet_matches = re.findall(
+                r'<td[^>]+class=[\'"]result-snippet[\'"][^>]*>(.*?)</td>',
+                content,
+                re.DOTALL
+            )
 
-            raw_snippet = snippet_matches[idx] if idx < len(snippet_matches) else ""
-            clean_snippet = html.unescape(re.sub(r'<[^>]+>', '', raw_snippet)).strip()
+            for idx, (raw_href, raw_title) in enumerate(link_matches[:limit]):
+                clean_title = html.unescape(re.sub(r'<[^>]+>', '', raw_title)).strip()
+                if not clean_title:
+                    continue
 
-            # Decode target destination from DDG redirect url
-            final_url = raw_href
-            if "uddg=" in raw_href:
-                try:
-                    parsed = urllib.parse.urlparse(raw_href)
-                    qs = urllib.parse.parse_qs(parsed.query)
-                    if "uddg" in qs and qs["uddg"]:
-                        final_url = qs["uddg"][0]
-                except Exception as parse_exc:
-                    logger.debug("Failed to decode target url %r: %s", raw_href, parse_exc)
+                raw_snippet = snippet_matches[idx] if idx < len(snippet_matches) else ""
+                clean_snippet = html.unescape(re.sub(r'<[^>]+>', '', raw_snippet)).strip()
 
-            # Score web results: top hit starts at 88.0, decaying slightly
-            score = max(50.0, 88.0 - (idx * 3.0))
+                final_url = raw_href
+                if "uddg=" in raw_href:
+                    try:
+                        parsed = urllib.parse.urlparse(raw_href)
+                        qs = urllib.parse.parse_qs(parsed.query)
+                        if "uddg" in qs and qs["uddg"]:
+                            final_url = qs["uddg"][0]
+                    except Exception as parse_exc:
+                        logger.debug("URL parsing skipped: %s", parse_exc)
 
-            hits.append(SearchHit(
-                category="web",
-                title=clean_title,
-                score=score,
-                snippet=clean_snippet,
-                metadata={"url": final_url, "engine": "duckduckgo_live"}
-            ))
+                score = max(50.0, 88.0 - (idx * 3.0))
+                hits.append(SearchHit(
+                    category="web",
+                    title=clean_title,
+                    score=score,
+                    snippet=clean_snippet,
+                    metadata={"url": final_url, "engine": "duckduckgo_lite"}
+                ))
+            if hits:
+                return hits
+        except Exception as exc:
+            logger.debug("DDG Lite search failed or offline: %s", exc)
 
         return hits
 

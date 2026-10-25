@@ -1,6 +1,6 @@
 {
   "name": "hallwright",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "Hallwright: Autonomous Quality Protocol, Pre-Commit Craftsmanship Gate, Immune Engine, Combat Arena, Visual Verifier, Project Doctor, Web HUD, and Quantum 3D Synthesis.",
   "main": "bin/hallwright.js",
   "bin": {
@@ -22,6 +22,8 @@
     "watchdog": "python scripts/watchdog.py",
     "gatekeeper": "python scripts/pre-commit-gatekeeper.py",
     "metrics": "python scripts/roi_tracker.py",
+    "search": "node bin/hallwright.js search",
+    "websearch": "node bin/hallwright.js websearch",
     "mcp": "python mcp/server.py",
     "test": "pytest tests/"
   },

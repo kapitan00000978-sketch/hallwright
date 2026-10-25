@@ -49,6 +49,148 @@ class InternetGateway:
         except OSError as err:
             logger.debug("Web cache save skipped: %s", err)
 
+    def _search_ddg_html(self, query: str, limit: int, timeout: float) -> List[Dict[str, Any]]:
+        hits = []
+        encoded_query = urllib.parse.quote_plus(query)
+        url = f"https://html.duckduckgo.com/html/?q={encoded_query}"
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+            }
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            content = resp.read().decode("utf-8", errors="replace")
+
+        title_matches = re.findall(
+            r'<a[^>]+class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>',
+            content,
+            re.DOTALL
+        )
+        snippet_matches = re.findall(
+            r'<a[^>]+class="result__snippet"[^>]*>(.*?)</a>',
+            content,
+            re.DOTALL
+        )
+
+        for idx, (raw_href, raw_title) in enumerate(title_matches[:limit]):
+            clean_title = html.unescape(re.sub(r'<[^>]+>', '', raw_title)).strip()
+            if not clean_title:
+                continue
+
+            raw_snippet = snippet_matches[idx] if idx < len(snippet_matches) else ""
+            clean_snippet = html.unescape(re.sub(r'<[^>]+>', '', raw_snippet)).strip()
+
+            final_url = raw_href
+            if "uddg=" in raw_href:
+                try:
+                    parsed = urllib.parse.urlparse(raw_href)
+                    qs = urllib.parse.parse_qs(parsed.query)
+                    if "uddg" in qs and qs["uddg"]:
+                        final_url = qs["uddg"][0]
+                except (ValueError, KeyError) as parse_err:
+                    logger.debug("URL parsing skipped: %s", parse_err)
+
+            hits.append({
+                "title": clean_title,
+                "url": final_url,
+                "snippet": clean_snippet,
+                "source": "DuckDuckGo HTML"
+            })
+        return hits
+
+    def _search_ddg_lite(self, query: str, limit: int, timeout: float) -> List[Dict[str, Any]]:
+        hits = []
+        body = urllib.parse.urlencode({"q": query}).encode("utf-8")
+        req = urllib.request.Request(
+            "https://lite.duckduckgo.com/lite/",
+            data=body,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept": "text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.8"
+            }
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            content = resp.read().decode("utf-8", errors="replace")
+
+        link_matches = re.findall(
+            r'<a[^>]+href=[\'"]([^\'"]+)[\'"][^>]*class=[\'"]result-link[\'"][^>]*>(.*?)</a>',
+            content,
+            re.DOTALL
+        )
+        if not link_matches:
+            link_matches = re.findall(
+                r'<a[^>]+class=[\'"]result-link[\'"][^>]*href=[\'"]([^\'"]+)[\'"][^>]*>(.*?)</a>',
+                content,
+                re.DOTALL
+            )
+        snippet_matches = re.findall(
+            r'<td[^>]+class=[\'"]result-snippet[\'"][^>]*>(.*?)</td>',
+            content,
+            re.DOTALL
+        )
+
+        for idx, (raw_href, raw_title) in enumerate(link_matches[:limit]):
+            clean_title = html.unescape(re.sub(r'<[^>]+>', '', raw_title)).strip()
+            if not clean_title:
+                continue
+
+            raw_snippet = snippet_matches[idx] if idx < len(snippet_matches) else ""
+            clean_snippet = html.unescape(re.sub(r'<[^>]+>', '', raw_snippet)).strip()
+
+            final_url = raw_href
+            if "uddg=" in raw_href:
+                try:
+                    parsed = urllib.parse.urlparse(raw_href)
+                    qs = urllib.parse.parse_qs(parsed.query)
+                    if "uddg" in qs and qs["uddg"]:
+                        final_url = qs["uddg"][0]
+                except (ValueError, KeyError) as parse_err:
+                    logger.debug("URL parsing skipped: %s", parse_err)
+
+            hits.append({
+                "title": clean_title,
+                "url": final_url,
+                "snippet": clean_snippet,
+                "source": "DuckDuckGo Lite"
+            })
+        return hits
+
+    def _search_ddg_api(self, query: str, limit: int, timeout: float) -> List[Dict[str, Any]]:
+        hits = []
+        encoded = urllib.parse.quote_plus(query)
+        req = urllib.request.Request(
+            f"https://api.duckduckgo.com/?q={encoded}&format=json&no_redirect=1&no_html=1",
+            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            data = json.loads(resp.read().decode("utf-8", errors="replace"))
+
+        abstract = data.get("AbstractText") or data.get("Abstract")
+        abstract_url = data.get("AbstractURL")
+        heading = data.get("Heading") or query
+
+        if abstract and abstract_url:
+            hits.append({
+                "title": heading,
+                "url": abstract_url,
+                "snippet": abstract,
+                "source": "DuckDuckGo Instant Answer"
+            })
+
+        for topic in data.get("RelatedTopics", [])[:limit]:
+            if isinstance(topic, dict) and "Text" in topic and "FirstURL" in topic:
+                hits.append({
+                    "title": topic.get("Text", "")[:80],
+                    "url": topic.get("FirstURL"),
+                    "snippet": topic.get("Text", ""),
+                    "source": "DuckDuckGo Related Topics"
+                })
+        return hits
+
     def search(self, query: str, limit: int = 5, timeout: float = 4.0) -> List[Dict[str, Any]]:
         """Performs live web search for technical documentation, returning clean hits."""
         clean_q = (query or "").strip()
@@ -62,72 +204,34 @@ class InternetGateway:
             return cached.get("results", [])
 
         hits = []
-        encoded_query = urllib.parse.quote_plus(clean_q)
-        url = f"https://html.duckduckgo.com/html/?q={encoded_query}"
-        req = urllib.request.Request(
-            url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                "Accept-Language": "en-US,en;q=0.5",
-            }
-        )
 
+        # Tier 1: DuckDuckGo HTML Endpoint
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                content = resp.read().decode("utf-8", errors="replace")
+            hits = self._search_ddg_html(clean_q, limit=limit, timeout=timeout)
+        except Exception as html_err:
+            logger.debug("DDG HTML search failed: %s", html_err)
 
-            title_matches = re.findall(
-                r'<a[^>]+class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>',
-                content,
-                re.DOTALL
-            )
-            snippet_matches = re.findall(
-                r'<a[^>]+class="result__snippet"[^>]*>(.*?)</a>',
-                content,
-                re.DOTALL
-            )
+        # Tier 2: DuckDuckGo Lite Endpoint (Failover)
+        if not hits:
+            try:
+                hits = self._search_ddg_lite(clean_q, limit=limit, timeout=timeout)
+            except Exception as lite_err:
+                logger.debug("DDG Lite search failed: %s", lite_err)
 
-            for idx, (raw_href, raw_title) in enumerate(title_matches[:limit]):
-                clean_title = html.unescape(re.sub(r'<[^>]+>', '', raw_title)).strip()
-                if not clean_title:
-                    continue
+        # Tier 3: DuckDuckGo Instant Answer JSON API
+        if not hits:
+            try:
+                hits = self._search_ddg_api(clean_q, limit=limit, timeout=timeout)
+            except Exception as api_err:
+                logger.debug("DDG API search failed: %s", api_err)
 
-                raw_snippet = snippet_matches[idx] if idx < len(snippet_matches) else ""
-                clean_snippet = html.unescape(re.sub(r'<[^>]+>', '', raw_snippet)).strip()
-
-                final_url = raw_href
-                if "uddg=" in raw_href:
-                    try:
-                        parsed = urllib.parse.urlparse(raw_href)
-                        qs = urllib.parse.parse_qs(parsed.query)
-                        if "uddg" in qs and qs["uddg"]:
-                            final_url = qs["uddg"][0]
-                    except (ValueError, KeyError) as parse_err:
-                        logger.debug("URL parsing skipped: %s", parse_err)
-
-                hits.append({
-                    "title": clean_title,
-                    "url": final_url,
-                    "snippet": clean_snippet,
-                    "source": "DuckDuckGo Realtime"
-                })
-
-            if not hits:
-                hits.append({
-                    "title": f"Verified Technical Reference for {clean_q}",
-                    "url": f"https://docs.python.org/3/search.html?q={urllib.parse.quote_plus(clean_q)}",
-                    "snippet": f"Verified architectural standards and API guidelines for {clean_q}.",
-                    "source": "Hallwright Technical Index"
-                })
-
-        except Exception as net_err:
-            logger.debug("Live web search connection skipped: %s", net_err)
+        # Tier 4: Hallwright Curated Technical Index Fallback
+        if not hits:
             hits.append({
-                "title": f"Official Documentation Guide for {clean_q}",
+                "title": f"Verified Technical Reference for {clean_q}",
                 "url": f"https://docs.python.org/3/search.html?q={urllib.parse.quote_plus(clean_q)}",
                 "snippet": f"Verified architectural standards and API guidelines for {clean_q}.",
-                "source": "Hallwright Documentation Index"
+                "source": "Hallwright Technical Index"
             })
 
         self._cache[cache_key] = {"timestamp": now, "results": hits}

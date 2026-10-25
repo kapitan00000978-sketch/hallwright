@@ -245,7 +245,7 @@ if (command === 'init' || command === 'install') {
     const res = spawnSync(PYTHON_CMD, [memScript, 'memory', ...extraArgs], { stdio: 'inherit' });
     process.exit(res.status || 0);
   }
-} else if (['resume', 'checkpoint', 'lib', 'library', 'libraries', 'swarm', 'review', 'mutate', 'context', 'prompt', '3d', 'spatial', 'studio'].includes(command)) {
+} else if (['resume', 'checkpoint', 'lib', 'library', 'libraries', 'swarm', 'review', 'mutate', 'context', 'prompt', '3d', 'spatial', 'studio', 'search', 'find', 'qidiruv', 'web', 'websearch', 'web-search', 'internet', 'net', 'sovereign', 'run', 'execute', 'ijro', 'bajar', 'tier', 'daraja', 'access', 'mode', 'heal', 'davola', 'evolve', 'vaccine', 'compress', 'strip', 'teja', 'minify', 'transmute', 'upgrade-ui', 'learn-pc'].includes(command)) {
   const cliScript = path.join(packageRoot, 'hallwright_cli.py');
   if (fs.existsSync(cliScript)) {
     const res = spawnSync(PYTHON_CMD, [cliScript, command, ...args.slice(1)], { stdio: 'inherit' });
@@ -281,6 +281,9 @@ if (command === 'init' || command === 'install') {
   console.log(`  hallwright hook         # Install Git pre-commit quality gate hook`);
   console.log(`  hallwright audit        # Run quality & security audit (--staged for diff)`);
   console.log(`  hallwright fix          # Auto-remediate silent catches and stubs`);
+  console.log(`  hallwright search <q>   # Multi-index search across Council, memory, code & live web`);
+  console.log(`  hallwright websearch <q># Real-time internet documentation search & technical retrieval`);
+  console.log(`  hallwright sovereign <t># Run Tier 3 Sovereign Autonomous loop end-to-end`);
   console.log(`  hallwright resume       # Resume cross-agent progress and context handoff`);
   console.log(`  hallwright checkpoint   # Record progress checkpoint for subsequent AI agents`);
   console.log(`  hallwright lib          # Explore and scaffold enterprise domain libraries`);
@@ -290,8 +293,11 @@ if (command === 'init' || command === 'install') {
   console.log(`  hallwright mutate       # Run AST mutation testing on code and test suite`);
   console.log(`  hallwright memory       # Inspect persistent learning memory and scar tissue`);
   console.log(`  hallwright doctor       # Check configuration and environment health`);
+  console.log(`  hallwright verify       # Visually verify UI, layout, and WebGL physics`);
+  console.log(`  hallwright arena        # Run Red-Team security assault simulation`);
+  console.log(`  hallwright immune       # Scan and synthesize codebase antibodies`);
   console.log(`  hallwright mcp          # Launch MCP JSON-RPC Server`);
-  console.log(`  hallwright hud          # Launch interactive terminal HUD`);
+  console.log(`  hallwright hud          # Launch interactive terminal HUD (--web for Cyber HUD)`);
   console.log(`  hallwright watch        # Run continuous background watchdog sentinel`);
-  console.log(`  hallwright status       # Check Hallwright protocol status`);
+  console.log(`  hallwright status       # Check Hallwright protocol status\n`);
 }

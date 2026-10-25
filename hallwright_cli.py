@@ -17,7 +17,7 @@ from typing import List, Dict, Any, Optional
 
 logger = logging.getLogger("hallwright.cli")
 
-__version__ = "0.10.87"
+__version__ = "0.13.1"
 
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding="utf-8")
@@ -887,8 +887,14 @@ def cmd_web(args: argparse.Namespace) -> int:
     action = getattr(args, "action", "search") or "search"
     as_json = getattr(args, "json", False)
 
-    if action in ("search", "qidir"):
+    # Intelligently detect if the user passed search terms directly
+    if action not in ("search", "qidir", "fetch", "get", "docs", "doc"):
+        query = f"{action} {getattr(args, 'query', '')}".strip()
+        action = "search"
+    else:
         query = getattr(args, "query", "") or ""
+
+    if action in ("search", "qidir"):
         limit = getattr(args, "limit", 5) or 5
         hits = gateway.search(query=query, limit=limit)
         if as_json:
@@ -1881,9 +1887,9 @@ def main():
     p_sk.add_argument("target", nargs="?", help="Target file or context for skill execution")
     p_sk.add_argument("--json", "-j", action="store_true", help="Output result in JSON format")
 
-    # web / internet
-    p_web = subparsers.add_parser("web", aliases=["internet", "net"], help="Query live web technical search and fetch documentation")
-    p_web.add_argument("action", nargs="?", default="search", choices=["search", "fetch", "get", "docs", "doc", "qidir"], help="Action: search, fetch, docs")
+    # web / internet / websearch / web-search
+    p_web = subparsers.add_parser("web", aliases=["internet", "net", "websearch", "web-search"], help="Query live web technical search and fetch documentation")
+    p_web.add_argument("action", nargs="?", default="search", help="Action (search, fetch, docs) or direct search query")
     p_web.add_argument("query", nargs="?", default="", help="Search query, target URL, or technology name")
     p_web.add_argument("topic", nargs="?", default="", help="Documentation topic when using docs action")
     p_web.add_argument("--limit", "-l", type=int, default=5, help="Maximum results to return")
@@ -2042,7 +2048,7 @@ def main():
         return cmd_swarm(args)
     elif args.subcommand in ("skill", "skills"):
         return cmd_skill(args)
-    elif args.subcommand in ("web", "internet", "net"):
+    elif args.subcommand in ("web", "internet", "net", "websearch", "web-search"):
         return cmd_web(args)
 
     elif args.subcommand == "resume":
